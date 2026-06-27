@@ -1,0 +1,1762 @@
+[
+  {
+    "id": "42911d00f964a520f5231fe3",
+    "name": "Train Station",
+    "category": "Transit",
+    "lat": 40.750794799423865,
+    "lng": -73.99357639021292,
+    "checkins": 1134
+  },
+  {
+    "id": "42829c80f964a5206a221fe3",
+    "name": "Train Station",
+    "category": "Transit",
+    "lat": 40.75280620914171,
+    "lng": -73.97717535495758,
+    "checkins": 870
+  },
+  {
+    "id": "43a52546f964a520532c1fe3",
+    "name": "Airport",
+    "category": "Transit",
+    "lat": 40.645089355976346,
+    "lng": -73.7845230102539,
+    "checkins": 681
+  },
+  {
+    "id": "4ace6c89f964a52078d020e3",
+    "name": "Airport",
+    "category": "Transit",
+    "lat": 40.773839,
+    "lng": -73.87122,
+    "checkins": 560
+  },
+  {
+    "id": "4840fe6bf964a52030501fe3",
+    "name": "Bus Station",
+    "category": "Transit",
+    "lat": 40.75722129839835,
+    "lng": -73.99154663085938,
+    "checkins": 560
+  },
+  {
+    "id": "4a737bf8f964a52091dc1fe3",
+    "name": "Train Station",
+    "category": "Transit",
+    "lat": 40.707149,
+    "lng": -73.99057,
+    "checkins": 485
+  },
+  {
+    "id": "49b7ed6df964a52030531fe3",
+    "name": "Plaza",
+    "category": "Outdoor",
+    "lat": 40.756489872673846,
+    "lng": -73.98626804351807,
+    "checkins": 469
+  },
+  {
+    "id": "40b68100f964a5207d001fe3",
+    "name": "Park",
+    "category": "Outdoor",
+    "lat": 40.74218830848454,
+    "lng": -73.98792418909154,
+    "checkins": 439
+  },
+  {
+    "id": "4a4821f5f964a52095aa1fe3",
+    "name": "Road",
+    "category": "Other",
+    "lat": 40.76117085825042,
+    "lng": -74.01128768920898,
+    "checkins": 398
+  },
+  {
+    "id": "4a513b17f964a520d2b01fe3",
+    "name": "Train Station",
+    "category": "Transit",
+    "lat": 40.69902344282463,
+    "lng": -73.81001472473143,
+    "checkins": 352
+  },
+  {
+    "id": "3fd66200f964a520def11ee3",
+    "name": "Park",
+    "category": "Outdoor",
+    "lat": 40.73528249691621,
+    "lng": -73.99040315158283,
+    "checkins": 326
+  },
+  {
+    "id": "4459d2f1f964a520d7321fe3",
+    "name": "Airport",
+    "category": "Transit",
+    "lat": 40.68968493541091,
+    "lng": -74.17938709259033,
+    "checkins": 273
+  },
+  {
+    "id": "4a0c2e7bf964a52014751fe3",
+    "name": "Hotel",
+    "category": "Leisure",
+    "lat": 40.76224486711165,
+    "lng": -73.9792871763928,
+    "checkins": 272
+  },
+  {
+    "id": "3fd66200f964a520ddf01ee3",
+    "name": "Stadium",
+    "category": "Culture",
+    "lat": 40.82827721161922,
+    "lng": -73.92655344439045,
+    "checkins": 259
+  },
+  {
+    "id": "4c97edbdf419a09395806b88",
+    "name": "Neighborhood",
+    "category": "Other",
+    "lat": 40.65016889724004,
+    "lng": -73.94957542419434,
+    "checkins": 223
+  },
+  {
+    "id": "3fd66200f964a520d7f11ee3",
+    "name": "Park",
+    "category": "Outdoor",
+    "lat": 40.75372797263211,
+    "lng": -73.98368835767094,
+    "checkins": 219
+  },
+  {
+    "id": "3fd66200f964a52035e41ee3",
+    "name": "Music Venue",
+    "category": "Culture",
+    "lat": 40.73169799836348,
+    "lng": -73.98922693741638,
+    "checkins": 212
+  },
+  {
+    "id": "4d5bedbb5d153704613a6ce7",
+    "name": "Other Great Outdoors",
+    "category": "Outdoor",
+    "lat": 40.71430985040704,
+    "lng": -73.94939443218914,
+    "checkins": 205
+  },
+  {
+    "id": "4a32c3f9f964a5208c9a1fe3",
+    "name": "Bridge",
+    "category": "Other",
+    "lat": 40.705888200473375,
+    "lng": -73.9900016784668,
+    "checkins": 202
+  },
+  {
+    "id": "447bf8f1f964a520ec331fe3",
+    "name": "Electronics Store",
+    "category": "Retail",
+    "lat": 40.76391920774746,
+    "lng": -73.9731399591735,
+    "checkins": 202
+  },
+  {
+    "id": "4bdc9fb73904a59345084f9e",
+    "name": "Neighborhood",
+    "category": "Other",
+    "lat": 40.71343536379427,
+    "lng": -73.95807266235352,
+    "checkins": 194
+  },
+  {
+    "id": "41102700f964a520d60b1fe3",
+    "name": "Department Store",
+    "category": "Culture",
+    "lat": 40.75061379403183,
+    "lng": -73.98856401443481,
+    "checkins": 188
+  },
+  {
+    "id": "4a07ac6af964a5208f731fe3",
+    "name": "Mall",
+    "category": "Retail",
+    "lat": 40.917335441802095,
+    "lng": -74.0756607055664,
+    "checkins": 187
+  },
+  {
+    "id": "4a43bcb7f964a520bba61fe3",
+    "name": "Bridge",
+    "category": "Other",
+    "lat": 40.705953265881305,
+    "lng": -73.99656772613525,
+    "checkins": 185
+  },
+  {
+    "id": "4df53b7bd4c01ff6b2f262ec",
+    "name": "Home (private)",
+    "category": "Other",
+    "lat": 40.94175914870915,
+    "lng": -74.01238511084367,
+    "checkins": 182
+  },
+  {
+    "id": "4ad77a2bf964a520280b21e3",
+    "name": "Train Station",
+    "category": "Transit",
+    "lat": 40.71948548899754,
+    "lng": -74.0427017211914,
+    "checkins": 182
+  },
+  {
+    "id": "49de0156f964a52021601fe3",
+    "name": "Train Station",
+    "category": "Transit",
+    "lat": 40.805144639820114,
+    "lng": -73.93914699554443,
+    "checkins": 180
+  },
+  {
+    "id": "4ae6363ef964a520aba521e3",
+    "name": "Stadium",
+    "category": "Culture",
+    "lat": 40.75044987008408,
+    "lng": -73.99221103886612,
+    "checkins": 179
+  },
+  {
+    "id": "4b54d362f964a52058ce27e3",
+    "name": "Subway",
+    "category": "Transit",
+    "lat": 40.68990542829335,
+    "lng": -73.95177657844081,
+    "checkins": 178
+  },
+  {
+    "id": "412d2800f964a520df0c1fe3",
+    "name": "Park",
+    "category": "Outdoor",
+    "lat": 40.7714256153356,
+    "lng": -73.97350072860723,
+    "checkins": 173
+  },
+  {
+    "id": "508af9ccf13627e878935855",
+    "name": "Other Great Outdoors",
+    "category": "Outdoor",
+    "lat": 40.78782018739577,
+    "lng": -73.79104614257812,
+    "checkins": 171
+  },
+  {
+    "id": "42893400f964a52052231fe3",
+    "name": "Park",
+    "category": "Outdoor",
+    "lat": 40.66390776998241,
+    "lng": -73.970947265625,
+    "checkins": 171
+  },
+  {
+    "id": "4b0737c3f964a520e4f922e3",
+    "name": "Subway",
+    "category": "Transit",
+    "lat": 40.75650612666626,
+    "lng": -73.98802757263184,
+    "checkins": 171
+  },
+  {
+    "id": "4b696ecdf964a5201fa22be3",
+    "name": "Gym / Fitness Center",
+    "category": "Leisure",
+    "lat": 40.74109555804945,
+    "lng": -73.99270534515381,
+    "checkins": 166
+  },
+  {
+    "id": "4c5ef77bfff99c74eda954d3",
+    "name": "Food & Drink Shop",
+    "category": "Food",
+    "lat": 40.74186151409088,
+    "lng": -73.98943362953369,
+    "checkins": 163
+  },
+  {
+    "id": "4a888403f964a520bb0620e3",
+    "name": "Gym / Fitness Center",
+    "category": "Leisure",
+    "lat": 40.738949,
+    "lng": -73.989828,
+    "checkins": 163
+  },
+  {
+    "id": "40afe980f964a5203bf31ee3",
+    "name": "Movie Theater",
+    "category": "Culture",
+    "lat": 40.7569743825982,
+    "lng": -73.98877355904663,
+    "checkins": 157
+  },
+  {
+    "id": "4ad684abf964a520970721e3",
+    "name": "Subway",
+    "category": "Transit",
+    "lat": 40.75047562272483,
+    "lng": -73.94028425216675,
+    "checkins": 156
+  },
+  {
+    "id": "4a478d19f964a520d2a91fe3",
+    "name": "Ferry",
+    "category": "Other",
+    "lat": 40.6444055420497,
+    "lng": -74.0729570388794,
+    "checkins": 155
+  },
+  {
+    "id": "49c943d2f964a5204f581fe3",
+    "name": "Gym / Fitness Center",
+    "category": "Leisure",
+    "lat": 40.74621884426983,
+    "lng": -73.98151935953092,
+    "checkins": 155
+  },
+  {
+    "id": "4b5848d0f964a520f55028e3",
+    "name": "Light Rail",
+    "category": "Other",
+    "lat": 40.66130995253368,
+    "lng": -74.11637130665052,
+    "checkins": 153
+  },
+  {
+    "id": "43a72ba0f964a520672c1fe3",
+    "name": "Movie Theater",
+    "category": "Culture",
+    "lat": 40.73416736029532,
+    "lng": -73.99048715829849,
+    "checkins": 153
+  },
+  {
+    "id": "4a4d10fbf964a52082ad1fe3",
+    "name": "Subway",
+    "category": "Transit",
+    "lat": 40.67837610578439,
+    "lng": -73.90339851379395,
+    "checkins": 153
+  },
+  {
+    "id": "49e17f24f964a520d1611fe3",
+    "name": "Movie Theater",
+    "category": "Culture",
+    "lat": 40.77486674679395,
+    "lng": -73.98179484046595,
+    "checkins": 151
+  },
+  {
+    "id": "4bd3a9b4462cb713a110df07",
+    "name": "Chinese Restaurant",
+    "category": "Food",
+    "lat": 40.67284025644557,
+    "lng": -73.8707270170631,
+    "checkins": 150
+  },
+  {
+    "id": "42829c80f964a5205f221fe3",
+    "name": "Office",
+    "category": "Business",
+    "lat": 40.71370599034548,
+    "lng": -74.01420126337966,
+    "checkins": 148
+  },
+  {
+    "id": "4d9434251231b60c6bdb74a1",
+    "name": "Arcade",
+    "category": "Other",
+    "lat": 40.962451,
+    "lng": -74.092604,
+    "checkins": 146
+  },
+  {
+    "id": "4aa42b50f964a520a44520e3",
+    "name": "Neighborhood",
+    "category": "Other",
+    "lat": 40.741672705942285,
+    "lng": -73.98928821086884,
+    "checkins": 146
+  },
+  {
+    "id": "4b41e8f5f964a52019ca25e3",
+    "name": "Subway",
+    "category": "Transit",
+    "lat": 40.78577311803029,
+    "lng": -73.9509916305542,
+    "checkins": 146
+  },
+  {
+    "id": "49c64842f964a5202e571fe3",
+    "name": "Plaza",
+    "category": "Outdoor",
+    "lat": 40.76803326982161,
+    "lng": -73.98186922073364,
+    "checkins": 145
+  },
+  {
+    "id": "4a021207f964a52029711fe3",
+    "name": "Bar",
+    "category": "Food",
+    "lat": 40.73743415035814,
+    "lng": -73.99128147407096,
+    "checkins": 144
+  },
+  {
+    "id": "4f75b8e7e4b0b8451d425348",
+    "name": "Deli / Bodega",
+    "category": "Other",
+    "lat": 40.67289579742284,
+    "lng": -73.87072127459737,
+    "checkins": 144
+  },
+  {
+    "id": "4f106a1de4b067f66e78b229",
+    "name": "Home (private)",
+    "category": "Other",
+    "lat": 40.767237460001375,
+    "lng": -73.89482953406639,
+    "checkins": 144
+  },
+  {
+    "id": "4ad78220f964a520960b21e3",
+    "name": "Subway",
+    "category": "Transit",
+    "lat": 40.71037756449118,
+    "lng": -74.00755405426025,
+    "checkins": 141
+  },
+  {
+    "id": "43695300f964a5208c291fe3",
+    "name": "Building",
+    "category": "Business",
+    "lat": 40.74828059076867,
+    "lng": -73.98556262254715,
+    "checkins": 140
+  },
+  {
+    "id": "4b837318f964a520a30631e3",
+    "name": "Gas Station / Garage",
+    "category": "Transit",
+    "lat": 40.67287551105413,
+    "lng": -73.8706983047328,
+    "checkins": 140
+  },
+  {
+    "id": "40abf500f964a52035f31ee3",
+    "name": "Park",
+    "category": "Outdoor",
+    "lat": 40.73083612189599,
+    "lng": -73.99764060974121,
+    "checkins": 140
+  },
+  {
+    "id": "4ae8906ef964a52071b021e3",
+    "name": "Train Station",
+    "category": "Transit",
+    "lat": 40.71267092713338,
+    "lng": -74.01193141937256,
+    "checkins": 140
+  },
+  {
+    "id": "4ad854bbf964a5200b1121e3",
+    "name": "Gym / Fitness Center",
+    "category": "Leisure",
+    "lat": 40.781333,
+    "lng": -73.97965,
+    "checkins": 139
+  },
+  {
+    "id": "439c437bf964a520f02b1fe3",
+    "name": "Hotel",
+    "category": "Leisure",
+    "lat": 40.75853784442297,
+    "lng": -73.98560285568237,
+    "checkins": 139
+  },
+  {
+    "id": "4c7170dafa49a1cd60e6a8e3",
+    "name": "Office",
+    "category": "Business",
+    "lat": 40.70956429635586,
+    "lng": -73.79806280136108,
+    "checkins": 139
+  },
+  {
+    "id": "4558b83bf964a5204b3d1fe3",
+    "name": "Gym / Fitness Center",
+    "category": "Leisure",
+    "lat": 40.74272121548715,
+    "lng": -73.99276210416295,
+    "checkins": 138
+  },
+  {
+    "id": "4ae8fd76f964a520e1b321e3",
+    "name": "Subway",
+    "category": "Transit",
+    "lat": 40.7255768,
+    "lng": -74.004252,
+    "checkins": 138
+  },
+  {
+    "id": "4cc24bac4fcfbfb79547bd24",
+    "name": "Home (private)",
+    "category": "Other",
+    "lat": 40.76597116277859,
+    "lng": -74.16509908485864,
+    "checkins": 136
+  },
+  {
+    "id": "49d60947f964a520a85c1fe3",
+    "name": "Stadium",
+    "category": "Culture",
+    "lat": 40.75645736467708,
+    "lng": -73.8460636138916,
+    "checkins": 136
+  },
+  {
+    "id": "49e4a769f964a52015631fe3",
+    "name": "Beach",
+    "category": "Outdoor",
+    "lat": 40.57334843776635,
+    "lng": -73.98030281066895,
+    "checkins": 135
+  },
+  {
+    "id": "49f76cc2f964a5209d6c1fe3",
+    "name": "Train Station",
+    "category": "Transit",
+    "lat": 40.73420076077984,
+    "lng": -74.16483829470191,
+    "checkins": 134
+  },
+  {
+    "id": "4a954328f964a520cf2220e3",
+    "name": "Office",
+    "category": "Business",
+    "lat": 40.70972827284494,
+    "lng": -74.01076978215657,
+    "checkins": 133
+  },
+  {
+    "id": "43920486f964a520662b1fe3",
+    "name": "Bar",
+    "category": "Food",
+    "lat": 40.76362499327396,
+    "lng": -73.99757623672485,
+    "checkins": 132
+  },
+  {
+    "id": "4b6ee75af964a52011d02ce3",
+    "name": "College Academic Building",
+    "category": "Business",
+    "lat": 40.77079184896987,
+    "lng": -73.98592472076416,
+    "checkins": 132
+  },
+  {
+    "id": "4cf1a69a1d18a143dcf754ec",
+    "name": "Other Great Outdoors",
+    "category": "Outdoor",
+    "lat": 40.94269410852135,
+    "lng": -73.99635314941406,
+    "checkins": 132
+  },
+  {
+    "id": "4a43c0aef964a520c6a61fe3",
+    "name": "Bridge",
+    "category": "Other",
+    "lat": 40.60679958140643,
+    "lng": -74.04416981025437,
+    "checkins": 131
+  },
+  {
+    "id": "4c0babf57e3fc9286193f582",
+    "name": "Deli / Bodega",
+    "category": "Other",
+    "lat": 40.812158822891696,
+    "lng": -74.19442355632782,
+    "checkins": 131
+  },
+  {
+    "id": "4e2908af315171a3be0eddf9",
+    "name": "Home (private)",
+    "category": "Other",
+    "lat": 40.761942896511016,
+    "lng": -73.78896894871082,
+    "checkins": 131
+  },
+  {
+    "id": "4c3c82a417f2ef3bcf1381f4",
+    "name": "Pizza Place",
+    "category": "Food",
+    "lat": 40.672841077323234,
+    "lng": -73.87062939512292,
+    "checkins": 131
+  },
+  {
+    "id": "451287ebf964a520a1391fe3",
+    "name": "Office",
+    "category": "Business",
+    "lat": 40.74119771684408,
+    "lng": -74.00239165956324,
+    "checkins": 130
+  },
+  {
+    "id": "4bedb01ce24d20a128d57114",
+    "name": "Subway",
+    "category": "Transit",
+    "lat": 40.816188,
+    "lng": -73.917947,
+    "checkins": 130
+  },
+  {
+    "id": "4abbe19ef964a520548520e3",
+    "name": "Train Station",
+    "category": "Transit",
+    "lat": 40.732267009830224,
+    "lng": -74.06304359436035,
+    "checkins": 130
+  },
+  {
+    "id": "4c81773e74d7b60c6e2577d8",
+    "name": "Chinese Restaurant",
+    "category": "Food",
+    "lat": 40.67284344395805,
+    "lng": -73.87066384993089,
+    "checkins": 129
+  },
+  {
+    "id": "4c37f0c0dfb0e21e80d8ada8",
+    "name": "Home (private)",
+    "category": "Other",
+    "lat": 40.833165200622425,
+    "lng": -73.94186034276925,
+    "checkins": 129
+  },
+  {
+    "id": "4ecee40d02d5feaa1a85a14d",
+    "name": "General Travel",
+    "category": "Other",
+    "lat": 40.9460393052988,
+    "lng": -74.01625553200782,
+    "checkins": 127
+  },
+  {
+    "id": "4b02c41cf964a520c14922e3",
+    "name": "Government Building",
+    "category": "Business",
+    "lat": 40.7117844949098,
+    "lng": -74.00208234786987,
+    "checkins": 127
+  },
+  {
+    "id": "4e80a57429c2299aa3addd5d",
+    "name": "Gym / Fitness Center",
+    "category": "Leisure",
+    "lat": 40.94709963333333,
+    "lng": -74.072561,
+    "checkins": 127
+  },
+  {
+    "id": "4e5577f445dd0a4826e6ab3e",
+    "name": "Home (private)",
+    "category": "Other",
+    "lat": 40.69321217941903,
+    "lng": -73.93010370763156,
+    "checkins": 126
+  },
+  {
+    "id": "4d2f5ae2940137044fa1eeda",
+    "name": "General Travel",
+    "category": "Other",
+    "lat": 40.68900261661789,
+    "lng": -73.9290847274161,
+    "checkins": 125
+  },
+  {
+    "id": "4a43bd40f964a520bfa61fe3",
+    "name": "Bridge",
+    "category": "Other",
+    "lat": 40.75673368214285,
+    "lng": -73.95445704460144,
+    "checkins": 124
+  },
+  {
+    "id": "40f1d480f964a5206a0a1fe3",
+    "name": "Park",
+    "category": "Outdoor",
+    "lat": 40.74706188749891,
+    "lng": -74.00519371032715,
+    "checkins": 123
+  },
+  {
+    "id": "49c046f1f964a5205b551fe3",
+    "name": "Airport",
+    "category": "Transit",
+    "lat": 40.64557779020594,
+    "lng": -73.77643346786499,
+    "checkins": 122
+  },
+  {
+    "id": "4a36c1b9f964a520dd9d1fe3",
+    "name": "Medical Center",
+    "category": "Business",
+    "lat": 40.74167304814132,
+    "lng": -73.97428784381152,
+    "checkins": 122
+  },
+  {
+    "id": "49ecd458f964a52099671fe3",
+    "name": "Bridge",
+    "category": "Other",
+    "lat": 40.713565479798646,
+    "lng": -73.97236347198486,
+    "checkins": 121
+  },
+  {
+    "id": "4a33eb53f964a5206a9b1fe3",
+    "name": "Bridge",
+    "category": "Other",
+    "lat": 40.85121557428245,
+    "lng": -73.95206451416016,
+    "checkins": 121
+  },
+  {
+    "id": "49b79f54f964a5202c531fe3",
+    "name": "Plaza",
+    "category": "Outdoor",
+    "lat": 40.758728399405584,
+    "lng": -73.97855791454388,
+    "checkins": 121
+  },
+  {
+    "id": "4cd7f12a7bb06dcb988d9fb2",
+    "name": "Office",
+    "category": "Business",
+    "lat": 40.74226610630077,
+    "lng": -73.98446559906006,
+    "checkins": 120
+  },
+  {
+    "id": "4df2f04dd4c01ff6b2eaca87",
+    "name": "Other Great Outdoors",
+    "category": "Outdoor",
+    "lat": 40.66421141550086,
+    "lng": -73.91474954903893,
+    "checkins": 120
+  },
+  {
+    "id": "4a8a998af964a5202b0a20e3",
+    "name": "Coffee Shop",
+    "category": "Food",
+    "lat": 40.70964742200671,
+    "lng": -74.01051729615469,
+    "checkins": 119
+  },
+  {
+    "id": "4ad68321f964a5208e0721e3",
+    "name": "Subway",
+    "category": "Transit",
+    "lat": 40.73977358599364,
+    "lng": -74.00257587432861,
+    "checkins": 119
+  },
+  {
+    "id": "4ad8add6f964a520a61321e3",
+    "name": "Subway",
+    "category": "Transit",
+    "lat": 40.73573434642415,
+    "lng": -73.99056762456905,
+    "checkins": 119
+  },
+  {
+    "id": "4aca718ff964a520f6c120e3",
+    "name": "Gym / Fitness Center",
+    "category": "Leisure",
+    "lat": 40.76695833299644,
+    "lng": -73.95777486481806,
+    "checkins": 118
+  },
+  {
+    "id": "4d4b5ceb8e948cfa35fcef48",
+    "name": "Home (private)",
+    "category": "Other",
+    "lat": 40.69321217941903,
+    "lng": -73.93010370763156,
+    "checkins": 118
+  },
+  {
+    "id": "49b6d0b4f964a52012531fe3",
+    "name": "Office",
+    "category": "Business",
+    "lat": 40.74050711736373,
+    "lng": -73.98690838360204,
+    "checkins": 118
+  },
+  {
+    "id": "4a53d9a7f964a520c7b21fe3",
+    "name": "Office",
+    "category": "Business",
+    "lat": 40.74551752113523,
+    "lng": -73.99235129356384,
+    "checkins": 118
+  },
+  {
+    "id": "4d3e1b47557d6dcb4c484b44",
+    "name": "Road",
+    "category": "Other",
+    "lat": 40.96535005,
+    "lng": -74.06280286666667,
+    "checkins": 118
+  },
+  {
+    "id": "4e7ea6e793adeda960d078c3",
+    "name": "Home (private)",
+    "category": "Other",
+    "lat": 40.93508141690897,
+    "lng": -73.96537147003376,
+    "checkins": 117
+  },
+  {
+    "id": "4ea4acaab80355a982afff79",
+    "name": "Bar",
+    "category": "Food",
+    "lat": 40.96535583001569,
+    "lng": -74.06285508050317,
+    "checkins": 116
+  },
+  {
+    "id": "4d2b7e7ab818a35df652b08a",
+    "name": "Home (private)",
+    "category": "Other",
+    "lat": 40.69321217941903,
+    "lng": -73.93010370763156,
+    "checkins": 116
+  },
+  {
+    "id": "4db12e95a86e63d21166092b",
+    "name": "Road",
+    "category": "Other",
+    "lat": 40.72584842252312,
+    "lng": -74.00399271271695,
+    "checkins": 116
+  },
+  {
+    "id": "477a3514f964a520214d1fe3",
+    "name": "American Restaurant",
+    "category": "Food",
+    "lat": 40.731155872068506,
+    "lng": -73.98872764725327,
+    "checkins": 115
+  },
+  {
+    "id": "4bec4056fd60a5932dba3af1",
+    "name": "Office",
+    "category": "Business",
+    "lat": 40.910894,
+    "lng": -74.031547,
+    "checkins": 114
+  },
+  {
+    "id": "4cddbe60db125481b5322cce",
+    "name": "Other Great Outdoors",
+    "category": "Outdoor",
+    "lat": 40.787855984049095,
+    "lng": -73.79333210698177,
+    "checkins": 114
+  },
+  {
+    "id": "4a65a823f964a5208cc71fe3",
+    "name": "Train Station",
+    "category": "Transit",
+    "lat": 40.76147966168067,
+    "lng": -74.07551050186157,
+    "checkins": 114
+  },
+  {
+    "id": "4531059cf964a520683b1fe3",
+    "name": "Department Store",
+    "category": "Culture",
+    "lat": 40.76232480057456,
+    "lng": -73.9678144454956,
+    "checkins": 113
+  },
+  {
+    "id": "4ba8fa3df964a520ecff39e3",
+    "name": "Office",
+    "category": "Business",
+    "lat": 40.74211268500875,
+    "lng": -73.98972048733542,
+    "checkins": 113
+  },
+  {
+    "id": "49bd4e25f964a52067541fe3",
+    "name": "Gym / Fitness Center",
+    "category": "Leisure",
+    "lat": 40.72424,
+    "lng": -73.997779,
+    "checkins": 112
+  },
+  {
+    "id": "4c08065b7c9ad13ab19e2c1e",
+    "name": "Neighborhood",
+    "category": "Other",
+    "lat": 40.80785512034931,
+    "lng": -73.94546239164602,
+    "checkins": 112
+  },
+  {
+    "id": "4b3a8e5df964a520d86925e3",
+    "name": "Subway",
+    "category": "Transit",
+    "lat": 40.82650767315227,
+    "lng": -73.95039081573486,
+    "checkins": 112
+  },
+  {
+    "id": "4bd1b96a77b29c7439118d82",
+    "name": "Subway",
+    "category": "Transit",
+    "lat": 40.57745558120849,
+    "lng": -73.98124694824219,
+    "checkins": 112
+  },
+  {
+    "id": "4ca4e519a6e08cfa884d6c94",
+    "name": "Neighborhood",
+    "category": "Other",
+    "lat": 40.76203225371199,
+    "lng": -73.98515224456787,
+    "checkins": 111
+  },
+  {
+    "id": "4c45d0eb2d3ec9b61ec630ae",
+    "name": "Other Great Outdoors",
+    "category": "Outdoor",
+    "lat": 40.72768968623147,
+    "lng": -74.04474020004272,
+    "checkins": 110
+  },
+  {
+    "id": "4aafba97f964a520946420e3",
+    "name": "University",
+    "category": "Other",
+    "lat": 40.69326244953332,
+    "lng": -73.9917348465147,
+    "checkins": 110
+  },
+  {
+    "id": "4e7e0c4161af6aae1575c4a2",
+    "name": "Home (private)",
+    "category": "Other",
+    "lat": 40.80356163623484,
+    "lng": -73.94186034276925,
+    "checkins": 109
+  },
+  {
+    "id": "4f28b918e4b0188938346690",
+    "name": "Home (private)",
+    "category": "Other",
+    "lat": 40.625784494598165,
+    "lng": -74.0828838592642,
+    "checkins": 109
+  },
+  {
+    "id": "4bd7282e5631c9b6e315a730",
+    "name": "Office",
+    "category": "Business",
+    "lat": 40.96521460587434,
+    "lng": -74.06837948377257,
+    "checkins": 108
+  },
+  {
+    "id": "4d61b919865a224bef72ba85",
+    "name": "Smoke Shop",
+    "category": "Retail",
+    "lat": 40.71595073760232,
+    "lng": -73.94959533722336,
+    "checkins": 108
+  },
+  {
+    "id": "49e3a2b3f964a520a6621fe3",
+    "name": "Coffee Shop",
+    "category": "Food",
+    "lat": 40.74697,
+    "lng": -73.98138,
+    "checkins": 107
+  },
+  {
+    "id": "41390580f964a520dc1a1fe3",
+    "name": "Food & Drink Shop",
+    "category": "Food",
+    "lat": 40.742016043363805,
+    "lng": -74.00516336676101,
+    "checkins": 106
+  },
+  {
+    "id": "4afefbe2f964a5207b3222e3",
+    "name": "Ferry",
+    "category": "Other",
+    "lat": 40.75944803383743,
+    "lng": -74.00562286376953,
+    "checkins": 105
+  },
+  {
+    "id": "453cacc7f964a520153c1fe3",
+    "name": "Movie Theater",
+    "category": "Culture",
+    "lat": 40.74276195733468,
+    "lng": -73.97692322731018,
+    "checkins": 105
+  },
+  {
+    "id": "4c5cc7b485a1e21e00d35711",
+    "name": "Home (private)",
+    "category": "Other",
+    "lat": 40.716161684843215,
+    "lng": -73.88307005845945,
+    "checkins": 104
+  },
+  {
+    "id": "4cd1e59fde0f6dcbf7e67363",
+    "name": "Home (private)",
+    "category": "Other",
+    "lat": 40.87785167732287,
+    "lng": -74.11812337576457,
+    "checkins": 104
+  },
+  {
+    "id": "4e0977b87d8b2a0180676fa4",
+    "name": "Home (private)",
+    "category": "Other",
+    "lat": 40.836080595143486,
+    "lng": -73.82426211435131,
+    "checkins": 104
+  },
+  {
+    "id": "4d3260b2511760fc57f4e2bd",
+    "name": "Other Nightlife",
+    "category": "Other",
+    "lat": 40.96533795,
+    "lng": -74.0628079,
+    "checkins": 103
+  },
+  {
+    "id": "4be6d905d4f7c9b6451b2720",
+    "name": "Building",
+    "category": "Business",
+    "lat": 40.82749248,
+    "lng": -73.8566178,
+    "checkins": 102
+  },
+  {
+    "id": "4a8c017df964a520dc0c20e3",
+    "name": "Office",
+    "category": "Business",
+    "lat": 40.75269756436712,
+    "lng": -73.99003612905999,
+    "checkins": 102
+  },
+  {
+    "id": "4f93f1c8e5e828f50a2b81d1",
+    "name": "Residential Building (Apartment / Condo)",
+    "category": "Culture",
+    "lat": 40.758017730590645,
+    "lng": -73.9922547340393,
+    "checkins": 102
+  },
+  {
+    "id": "49e4ec34f964a5206e631fe3",
+    "name": "Mall",
+    "category": "Retail",
+    "lat": 40.72696606629052,
+    "lng": -74.0383243560791,
+    "checkins": 101
+  },
+  {
+    "id": "4a97fe69f964a520082a20e3",
+    "name": "Office",
+    "category": "Business",
+    "lat": 40.80615113329764,
+    "lng": -74.07784459703637,
+    "checkins": 101
+  },
+  {
+    "id": "4b8d5d69f964a5204af732e3",
+    "name": "Deli / Bodega",
+    "category": "Other",
+    "lat": 40.74379022679562,
+    "lng": -73.98389160633087,
+    "checkins": 100
+  },
+  {
+    "id": "4fc3e797e4b0524b5d3e8c4a",
+    "name": "Home (private)",
+    "category": "Other",
+    "lat": 40.72966216538398,
+    "lng": -74.04763775758458,
+    "checkins": 100
+  },
+  {
+    "id": "4b992b04f964a520726635e3",
+    "name": "Stadium",
+    "category": "Culture",
+    "lat": 40.68312,
+    "lng": -73.975979,
+    "checkins": 100
+  },
+  {
+    "id": "4c0d8f2e7189c9287e3dd7b6",
+    "name": "Gym / Fitness Center",
+    "category": "Leisure",
+    "lat": 40.927690347587664,
+    "lng": -73.99642919691247,
+    "checkins": 99
+  },
+  {
+    "id": "428d2880f964a520b5231fe3",
+    "name": "Hotel",
+    "category": "Leisure",
+    "lat": 40.75673068586622,
+    "lng": -73.97406974625711,
+    "checkins": 99
+  },
+  {
+    "id": "4c799c17bd346dcb2423f6ef",
+    "name": "Home (private)",
+    "category": "Other",
+    "lat": 40.86107855194721,
+    "lng": -73.93010370763155,
+    "checkins": 98
+  },
+  {
+    "id": "4e7f79e9754afa2da1adec7f",
+    "name": "Home (private)",
+    "category": "Other",
+    "lat": 40.87454170662472,
+    "lng": -74.09463109843134,
+    "checkins": 98
+  },
+  {
+    "id": "4f677137e4b06cb9fdedbe32",
+    "name": "Home (private)",
+    "category": "Other",
+    "lat": 40.76921864258713,
+    "lng": -74.25901478846667,
+    "checkins": 98
+  },
+  {
+    "id": "4d0304fc54d0236ac1a2e6d5",
+    "name": "Hotel",
+    "category": "Leisure",
+    "lat": 40.96550875,
+    "lng": -74.06288358333333,
+    "checkins": 98
+  },
+  {
+    "id": "4528a216f964a520173b1fe3",
+    "name": "Mall",
+    "category": "Retail",
+    "lat": 40.73405557647634,
+    "lng": -73.87084722518921,
+    "checkins": 97
+  },
+  {
+    "id": "4bdc528dfed22d7fcea057c9",
+    "name": "Subway",
+    "category": "Transit",
+    "lat": 40.60189764651378,
+    "lng": -73.99352073669434,
+    "checkins": 97
+  },
+  {
+    "id": "4b20ed51f964a5206c3524e3",
+    "name": "Coffee Shop",
+    "category": "Food",
+    "lat": 40.70813495353977,
+    "lng": -73.83076429367065,
+    "checkins": 96
+  },
+  {
+    "id": "4dfdcb64227185f38b9979e8",
+    "name": "Home (private)",
+    "category": "Other",
+    "lat": 40.76071686239771,
+    "lng": -73.91834636014222,
+    "checkins": 96
+  },
+  {
+    "id": "4b842cf3f964a5209e2531e3",
+    "name": "Library",
+    "category": "Culture",
+    "lat": 40.73699909877152,
+    "lng": -73.99245220578715,
+    "checkins": 96
+  },
+  {
+    "id": "4b547448f964a520cfbb27e3",
+    "name": "Office",
+    "category": "Business",
+    "lat": 40.74642075213303,
+    "lng": -73.98215066942257,
+    "checkins": 96
+  },
+  {
+    "id": "4d8f74cf1716a143e3ed4af7",
+    "name": "Park",
+    "category": "Outdoor",
+    "lat": 40.96541698333333,
+    "lng": -74.06291968333333,
+    "checkins": 96
+  },
+  {
+    "id": "4c7acd1cbd346dcb19adf9ef",
+    "name": "Scenic Lookout",
+    "category": "Other",
+    "lat": 40.58685478299066,
+    "lng": -73.95217264328431,
+    "checkins": 95
+  },
+  {
+    "id": "4afb4334f964a520791c22e3",
+    "name": "Community College",
+    "category": "Other",
+    "lat": 40.95105710437937,
+    "lng": -74.08986568450928,
+    "checkins": 94
+  },
+  {
+    "id": "49e36914f964a5207b621fe3",
+    "name": "Plaza",
+    "category": "Outdoor",
+    "lat": 40.74982540095488,
+    "lng": -73.98796319961548,
+    "checkins": 94
+  },
+  {
+    "id": "4ba40ca1f964a520be7b38e3",
+    "name": "Casino",
+    "category": "Other",
+    "lat": 40.918617842976126,
+    "lng": -73.86543813495955,
+    "checkins": 93
+  },
+  {
+    "id": "43bba61df964a520eb2c1fe3",
+    "name": "Food & Drink Shop",
+    "category": "Food",
+    "lat": 40.73485228613973,
+    "lng": -73.99108529090881,
+    "checkins": 93
+  },
+  {
+    "id": "4b48c4a8f964a520195626e3",
+    "name": "Food & Drink Shop",
+    "category": "Food",
+    "lat": 40.7373,
+    "lng": -74.03744,
+    "checkins": 93
+  },
+  {
+    "id": "4e570b29aeb74e5d15c50321",
+    "name": "Home (private)",
+    "category": "Other",
+    "lat": 40.75686177990922,
+    "lng": -73.75366953292578,
+    "checkins": 93
+  },
+  {
+    "id": "4ddfe92e8877e0877e661125",
+    "name": "Other Great Outdoors",
+    "category": "Outdoor",
+    "lat": 40.89621269901943,
+    "lng": -73.87670483270945,
+    "checkins": 93
+  },
+  {
+    "id": "4f22c7bde4b0b2f98daff0dc",
+    "name": "Pool",
+    "category": "Other",
+    "lat": 40.96535501903463,
+    "lng": -74.06283213352812,
+    "checkins": 93
+  },
+  {
+    "id": "4a63d085f964a520dac51fe3",
+    "name": "Train Station",
+    "category": "Transit",
+    "lat": 40.74911014966418,
+    "lng": -73.98845672607422,
+    "checkins": 93
+  },
+  {
+    "id": "4df27e5ad22d8c5470da6596",
+    "name": "Bus Station",
+    "category": "Transit",
+    "lat": 40.5770155421849,
+    "lng": -73.98116111755371,
+    "checkins": 92
+  },
+  {
+    "id": "4c225ae47e85c9283ee5bb21",
+    "name": "Food & Drink Shop",
+    "category": "Food",
+    "lat": 40.74174,
+    "lng": -73.99365,
+    "checkins": 92
+  },
+  {
+    "id": "4ba7063ef964a520387d39e3",
+    "name": "Home (private)",
+    "category": "Other",
+    "lat": 40.72966216538398,
+    "lng": -74.04763775758458,
+    "checkins": 92
+  },
+  {
+    "id": "4e48a00a18a8f9804ce6802d",
+    "name": "Home (private)",
+    "category": "Other",
+    "lat": 40.93190933538416,
+    "lng": -74.01238511084367,
+    "checkins": 92
+  },
+  {
+    "id": "4fa7629de4b028d55b6dc3b7",
+    "name": "Home (private)",
+    "category": "Other",
+    "lat": 40.85155841497341,
+    "lng": -74.14161270853154,
+    "checkins": 92
+  },
+  {
+    "id": "4b0b68cef964a5202f3123e3",
+    "name": "Subway",
+    "category": "Transit",
+    "lat": 40.67933621045698,
+    "lng": -73.93028497695923,
+    "checkins": 92
+  },
+  {
+    "id": "4a8cc1d4f964a520130f20e3",
+    "name": "Bookstore",
+    "category": "Retail",
+    "lat": 40.73316247409845,
+    "lng": -73.99104044018358,
+    "checkins": 91
+  },
+  {
+    "id": "4f612184e4b01b3ebd898091",
+    "name": "General Travel",
+    "category": "Other",
+    "lat": 40.75696158119556,
+    "lng": -73.9898237883206,
+    "checkins": 91
+  },
+  {
+    "id": "4f5684de771657f331e5ca01",
+    "name": "Home (private)",
+    "category": "Other",
+    "lat": 40.963240757086346,
+    "lng": -74.09463109843134,
+    "checkins": 91
+  },
+  {
+    "id": "4b0b2275f964a520772d23e3",
+    "name": "Subway",
+    "category": "Transit",
+    "lat": 40.75885710200309,
+    "lng": -73.98109465898243,
+    "checkins": 91
+  },
+  {
+    "id": "4b8f50d9f964a520365133e3",
+    "name": "Subway",
+    "category": "Transit",
+    "lat": 40.646098782777614,
+    "lng": -73.9026689529419,
+    "checkins": 91
+  },
+  {
+    "id": "4ef6571c722e34060e72b97f",
+    "name": "American Restaurant",
+    "category": "Food",
+    "lat": 40.96532877881822,
+    "lng": -74.06292392141155,
+    "checkins": 90
+  },
+  {
+    "id": "4283ee00f964a5209d221fe3",
+    "name": "Convention Center",
+    "category": "Business",
+    "lat": 40.75671096305903,
+    "lng": -74.00100198012031,
+    "checkins": 90
+  },
+  {
+    "id": "4a65b705f964a5208fc71fe3",
+    "name": "Ferry",
+    "category": "Other",
+    "lat": 40.77662552133105,
+    "lng": -74.01072978973389,
+    "checkins": 90
+  },
+  {
+    "id": "4c524854384c76b00080f62a",
+    "name": "Home (private)",
+    "category": "Other",
+    "lat": 40.833165200622425,
+    "lng": -73.94186034276925,
+    "checkins": 90
+  },
+  {
+    "id": "4c315e907cc0c9b688cbee9a",
+    "name": "Neighborhood",
+    "category": "Other",
+    "lat": 40.745306184001095,
+    "lng": -73.94837379455566,
+    "checkins": 90
+  },
+  {
+    "id": "4b8d2d7ef964a520afeb32e3",
+    "name": "Office",
+    "category": "Business",
+    "lat": 40.7903220753707,
+    "lng": -74.04909610748291,
+    "checkins": 90
+  },
+  {
+    "id": "4f1a558ae4b0d7904185f778",
+    "name": "Bar",
+    "category": "Food",
+    "lat": 40.96541694223362,
+    "lng": -74.06288376421803,
+    "checkins": 89
+  },
+  {
+    "id": "4a9ae1cef964a520543320e3",
+    "name": "Bridge",
+    "category": "Other",
+    "lat": 40.82809886666084,
+    "lng": -73.93391132354736,
+    "checkins": 89
+  },
+  {
+    "id": "4bfd7c4bb68d0f4785dbe857",
+    "name": "Food & Drink Shop",
+    "category": "Food",
+    "lat": 40.7645026089675,
+    "lng": -73.9740800857544,
+    "checkins": 89
+  },
+  {
+    "id": "4cf526178333224b089d1e8e",
+    "name": "Music Venue",
+    "category": "Culture",
+    "lat": 40.96532194280211,
+    "lng": -74.06280344980541,
+    "checkins": 89
+  },
+  {
+    "id": "4af18817f964a5203fe121e3",
+    "name": "Train Station",
+    "category": "Transit",
+    "lat": 40.73606359173575,
+    "lng": -74.02938723564148,
+    "checkins": 89
+  },
+  {
+    "id": "4165d880f964a5207e1d1fe3",
+    "name": "Ferry",
+    "category": "Other",
+    "lat": 40.70145732419213,
+    "lng": -74.01321428847186,
+    "checkins": 88
+  },
+  {
+    "id": "4a6dff78f964a5208dd31fe3",
+    "name": "Food & Drink Shop",
+    "category": "Food",
+    "lat": 40.74681866964715,
+    "lng": -73.94420526985277,
+    "checkins": 88
+  },
+  {
+    "id": "4eda64ced5fb8f213a5d740e",
+    "name": "Gym / Fitness Center",
+    "category": "Leisure",
+    "lat": 40.74611901545656,
+    "lng": -73.99307012557983,
+    "checkins": 88
+  },
+  {
+    "id": "4af318f0f964a5209fea21e3",
+    "name": "Office",
+    "category": "Business",
+    "lat": 40.75270452466205,
+    "lng": -73.97569973252601,
+    "checkins": 88
+  },
+  {
+    "id": "4c9a162d292a6dcbc4b6cb76",
+    "name": "Office",
+    "category": "Business",
+    "lat": 40.750091737679625,
+    "lng": -73.91028286586223,
+    "checkins": 88
+  },
+  {
+    "id": "4bd6f47d29eb9c7462db95e1",
+    "name": "Road",
+    "category": "Other",
+    "lat": 40.89002830179658,
+    "lng": -74.07025337219238,
+    "checkins": 88
+  },
+  {
+    "id": "4b3a1855f964a520026125e3",
+    "name": "Subway",
+    "category": "Transit",
+    "lat": 40.69147464622913,
+    "lng": -73.98738384246826,
+    "checkins": 88
+  },
+  {
+    "id": "4b76cf7af964a520d3602ee3",
+    "name": "Subway",
+    "category": "Transit",
+    "lat": 40.65526229575358,
+    "lng": -73.9615085721016,
+    "checkins": 88
+  },
+  {
+    "id": "4bd75116304fce72985e33ab",
+    "name": "Hotel",
+    "category": "Leisure",
+    "lat": 40.667260667168485,
+    "lng": -73.7982988357544,
+    "checkins": 87
+  },
+  {
+    "id": "4c2603d9905a0f47456c6260",
+    "name": "Road",
+    "category": "Other",
+    "lat": 40.76305616209761,
+    "lng": -73.74328136444092,
+    "checkins": 87
+  },
+  {
+    "id": "4adcf849f964a5200c6321e3",
+    "name": "Subway",
+    "category": "Transit",
+    "lat": 40.67026755172896,
+    "lng": -73.98977637290949,
+    "checkins": 87
+  },
+  {
+    "id": "4d44de972e326ea872f8e8a6",
+    "name": "Deli / Bodega",
+    "category": "Other",
+    "lat": 40.704112154316725,
+    "lng": -73.94863673132467,
+    "checkins": 86
+  },
+  {
+    "id": "4ef0e7cf7beb5932d5bdeb4e",
+    "name": "Office",
+    "category": "Business",
+    "lat": 40.724169079279605,
+    "lng": -73.99721145629883,
+    "checkins": 86
+  },
+  {
+    "id": "4ea37694b6347b99683dcb09",
+    "name": "Campground",
+    "category": "Other",
+    "lat": 40.67172008474036,
+    "lng": -73.8066029548645,
+    "checkins": 85
+  },
+  {
+    "id": "4bf41b92cad2c9289e859b99",
+    "name": "Office",
+    "category": "Business",
+    "lat": 40.77296038604625,
+    "lng": -73.98154805548008,
+    "checkins": 85
+  },
+  {
+    "id": "4c0c2b61bbc676b0a8b44cd5",
+    "name": "River",
+    "category": "Other",
+    "lat": 40.735604988736725,
+    "lng": -73.9719633703152,
+    "checkins": 85
+  },
+  {
+    "id": "4cbfbedea0c4f04d1e085731",
+    "name": "Subway",
+    "category": "Transit",
+    "lat": 40.73977053760343,
+    "lng": -74.00258123874664,
+    "checkins": 85
+  },
+  {
+    "id": "4eaa3e3d49015844896ef36e",
+    "name": "Home (private)",
+    "category": "Other",
+    "lat": 40.628964535118925,
+    "lng": -73.96537147003376,
+    "checkins": 84
+  },
+  {
+    "id": "4b06ab0bf964a5206dee22e3",
+    "name": "Medical Center",
+    "category": "Business",
+    "lat": 40.88366806062851,
+    "lng": -74.05626344761434,
+    "checkins": 84
+  },
+  {
+    "id": "4a991c59f964a520662d20e3",
+    "name": "Mall",
+    "category": "Retail",
+    "lat": 40.95634251626308,
+    "lng": -74.06902771574032,
+    "checkins": 83
+  },
+  {
+    "id": "4a4138ebf964a520f9a41fe3",
+    "name": "Movie Theater",
+    "category": "Culture",
+    "lat": 40.74490101607357,
+    "lng": -73.99805899339255,
+    "checkins": 83
+  },
+  {
+    "id": "4c26b50fa852c9287f33e76c",
+    "name": "Other Great Outdoors",
+    "category": "Outdoor",
+    "lat": 40.64350090452625,
+    "lng": -73.90490893133068,
+    "checkins": 83
+  },
+  {
+    "id": "4aa57787f964a5207c4820e3",
+    "name": "Park",
+    "category": "Outdoor",
+    "lat": 40.72678506374359,
+    "lng": -74.00346747445712,
+    "checkins": 83
+  },
+  {
+    "id": "4af1d4c8f964a52099e321e3",
+    "name": "Subway",
+    "category": "Transit",
+    "lat": 40.8864595193891,
+    "lng": -73.87842178344727,
+    "checkins": 83
+  },
+  {
+    "id": "4d15545cbb488cfaf6c29ed4",
+    "name": "Neighborhood",
+    "category": "Other",
+    "lat": 40.88595663003309,
+    "lng": -74.0434956550598,
+    "checkins": 82
+  },
+  {
+    "id": "49c224c6f964a520e2551fe3",
+    "name": "Office",
+    "category": "Business",
+    "lat": 40.895019294718885,
+    "lng": -73.94258075790712,
+    "checkins": 82
+  },
+  {
+    "id": "4a98966ff964a520d42c20e3",
+    "name": "Subway",
+    "category": "Transit",
+    "lat": 40.76669659750053,
+    "lng": -73.92148733139038,
+    "checkins": 82
+  },
+  {
+    "id": "4c896e121dcd199c41a04c1b",
+    "name": "Home (private)",
+    "category": "Other",
+    "lat": 40.79012656060537,
+    "lng": -73.84778739924586,
+    "checkins": 81
+  },
+  {
+    "id": "4c62bfd0e1621b8dfe232453",
+    "name": "Neighborhood",
+    "category": "Other",
+    "lat": 40.75951304689015,
+    "lng": -73.83147239685059,
+    "checkins": 81
+  },
+  {
+    "id": "4baa673bf964a520d8663ae3",
+    "name": "Office",
+    "category": "Business",
+    "lat": 40.77350198619314,
+    "lng": -73.98102578853477,
+    "checkins": 81
+  },
+  {
+    "id": "4f6320a7e4b0b3b496002a34",
+    "name": "Food & Drink Shop",
+    "category": "Food",
+    "lat": 40.884835891587976,
+    "lng": -74.21012257381425,
+    "checkins": 80
+  },
+  {
+    "id": "4c05304339d476b0227b32a7",
+    "name": "General Entertainment",
+    "category": "Other",
+    "lat": 40.84336374022088,
+    "lng": -73.93525593409399,
+    "checkins": 80
+  },
+  {
+    "id": "45b893e3f964a520cf411fe3",
+    "name": "Movie Theater",
+    "category": "Culture",
+    "lat": 40.75239971617386,
+    "lng": -73.99415090184415,
+    "checkins": 80
+  },
+  {
+    "id": "4cdacd78958f236a8e1fa903",
+    "name": "Office",
+    "category": "Business",
+    "lat": 40.73952471056237,
+    "lng": -73.98845217626241,
+    "checkins": 80
+  },
+  {
+    "id": "4c1836421436a593271a8d75",
+    "name": "Residential Building (Apartment / Condo)",
+    "category": "Culture",
+    "lat": 40.75756480347108,
+    "lng": -73.96864592496735,
+    "checkins": 80
+  },
+  {
+    "id": "4b58c03df964a5201d6928e3",
+    "name": "Building",
+    "category": "Business",
+    "lat": 40.75897276385511,
+    "lng": -73.97923514823479,
+    "checkins": 79
+  }
+]
