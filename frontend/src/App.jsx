@@ -19,6 +19,10 @@ function App() {
   const [selectedPoiForReview, setSelectedPoiForReview] = useState(null);
   const [showExplanation, setShowExplanation] = useState(false);
   const [selectedPoiForExplanation, setSelectedPoiForExplanation] = useState(null);
+  
+  // Custom states for interactive review modal
+  const [reviewRating, setReviewRating] = useState(5);
+  const [reviewText, setReviewText] = useState('');
 
   useEffect(() => {
     let cancelled = false;
@@ -117,6 +121,8 @@ function App() {
 
   const handleOpenReviewForm = (poi) => {
     setSelectedPoiForReview(poi);
+    setReviewRating(5);
+    setReviewText('');
     setShowReviewForm(true);
   };
 
@@ -125,255 +131,387 @@ function App() {
     setShowExplanation(true);
   };
 
-  const handleSubmitReview = (rating, review) => {
+  const handleSubmitReview = (e) => {
+    e.preventDefault();
     if (!selectedPoiForReview) return;
-    console.log(`Review submitted for ${selectedPoiForReview.name}: ${rating} stars - ${review}`);
+    console.log(`Review submitted for ${selectedPoiForReview.name}: ${reviewRating} stars - ${reviewText}`);
     setShowReviewForm(false);
     setTokenBalance((currentBalance) => currentBalance + 5);
+    
+    // Add to transaction history / checkin history as a review action
+    const historyEntry = {
+      id: selectedPoiForReview.id,
+      name: `Review for ${selectedPoiForReview.name}`,
+      profile: selectedProfile?.label ?? 'Unknown profile',
+      tokensEarned: 5,
+      timestamp: new Date().toISOString(),
+    };
+    setCheckInHistory((currentHistory) => [historyEntry, ...currentHistory]);
   };
 
   return (
     <div className="app-shell">
       <div className="app-frame">
         <header className="topbar">
-        <div>
-          <p className="eyebrow">TrustChain app</p>
-          <h1>POI map explorer</h1>
-          <p className="topbar-copy">Profile-aware recommendations are sourced from the federated simulation output.</p>
-        </div>
+          <div>
+            <p className="eyebrow">TrustChain Federated Learning Demo</p>
+            <h1>POI Recommendation Engine</h1>
+            <p className="topbar-copy">Profile-aware recommendations are sourced from the federated simulation output.</p>
+          </div>
 
-        <div className="topbar-actions">
-          {checkInHistory.length > 0 ? (
+          <div className="topbar-actions">
+            {checkInHistory.length > 0 ? (
+              <button
+                type="button"
+                className="history-toggle-button"
+                onClick={() => setShowAllHistory((current) => !current)}
+              >
+                {showAllHistory ? 'Hide history' : 'View history'}
+              </button>
+            ) : null}
+
             <button
               type="button"
-              className="history-toggle-button"
-              onClick={() => setShowAllHistory((current) => !current)}
+              className="wallet-button"
+              onClick={() => setShowWallet(true)}
             >
-              {showAllHistory ? 'Hide history' : 'View all history'}
+              My Wallet
             </button>
-          ) : null}
 
-          <button
-            type="button"
-            className="wallet-button"
-            onClick={() => setShowWallet(!showWallet)}
-          >
-            Wallet
-          </button>
-
-          <div className="token-pill" aria-label={`Token balance ${tokenBalance}`}>
-            <span className="token-pill__label">Token balance</span>
-            <strong>{tokenBalance}</strong>
-            <button type="button" className="token-action-button" onClick={handleAddTokens}>
-              Add +10
-            </button>
-          </div>
-        </div>
-      </header>
-
-      <main className="content-grid">
-        {isLoading ? (
-          <section className="panel panel--summary panel--loading">
-            <p className="panel-label">Loading data</p>
-            <h2>Fetching the generated POI and recommendation feeds</h2>
-            <p className="panel-copy">The frontend now loads the large dataset at runtime so the build stays lightweight.</p>
-          </section>
-        ) : null}
-
-        <section className="panel panel--summary">
-          <p className="panel-label">Deliverable</p>
-          <h2>Map showing POI markers from the dataset</h2>
-          <p className="panel-copy">
-            Loaded from the local NYC POI dataset sample, with a profile switcher, a live recommendation feed, and a token counter for the TrustChain experience.
-          </p>
-
-          <div className="stats-row">
-            <div className="stat-card">
-              <span className="stat-card__label">POIs available</span>
-              <strong>{poiData.length}</strong>
-            </div>
-            <div className="stat-card">
-              <span className="stat-card__label">Tokens fixed</span>
-              <strong>{tokenBalance}</strong>
-            </div>
-            <div className="stat-card">
-              <span className="stat-card__label">Final accuracy</span>
-              <strong>{latestRound ? latestRound.accuracy : 'n/a'}</strong>
+            <div className="token-pill" aria-label={`Token balance ${tokenBalance}`}>
+              <span className="token-pill__label">Balance</span>
+              <strong>{tokenBalance} TC</strong>
+              <button type="button" className="token-action-button" onClick={handleAddTokens}>
+                +10
+              </button>
             </div>
           </div>
+        </header>
 
-          <div className="profile-switcher">
-            <div className="profile-switcher__header">
-              <p className="panel-label">Simulated profiles</p>
-              <p className="profile-switcher__hint">Switch between the 3 federated client personas.</p>
-            </div>
-
-            <div className="profile-grid">
-              {profiles.map((profile) => {
-                const isActive = profile.id === selectedProfileId;
-
-                return (
-                  <button
-                    key={profile.id}
-                    type="button"
-                    className={`profile-chip ${isActive ? 'profile-chip--active' : ''}`}
-                    onClick={() => handleSelectProfile(profile.id)}
-                  >
-                    <span className="profile-chip__label">{profile.label}</span>
-                    <span className="profile-chip__meta">Accuracy {profile.validationAccuracy}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          <div className="recommendation-feed">
-            <div className="recommendation-feed__header">
-              <div>
-                <p className="panel-label">Recommended for you</p>
-                <h3>{selectedProfile ? selectedProfile.label : 'Select a profile'}</h3>
+        <main className="content-grid">
+          <section className="panel panel--summary">
+            {isLoading ? (
+              <div className="panel--loading">
+                <p className="panel-label">Loading data</p>
+                <h2>Loading POI dataset sample...</h2>
               </div>
-              <p className="recommendation-feed__hint">Top categories: {selectedProfile?.topCategories?.join(', ') ?? 'n/a'}</p>
-              <p className="panel-copy panel-copy--small">Showing the most relevant POIs first for faster app-style load performance.</p>
-            </div>
-
-            <div className="recommendation-list">
-              {recommendedPois.slice(0, 5).map((poi, index) => (
-                <article key={poi.id} className="recommendation-card">
-                  <div>
-                    <span className="recommendation-card__rank">#{index + 1}</span>
-                    <h4>{poi.name}</h4>
-                    <p>{poi.category} · {poi.checkins} check-ins</p>
-                  </div>
-                  <strong>{poi.score}</strong>
-                </article>
-              ))}
-            </div>
-          </div>
-
-          <div className="checkin-card">
-            <p className="panel-label">Check-in status</p>
-            <h3>{selectedPoi ? selectedPoi.name : 'Select a marker on the map'}</h3>
-            <p className="panel-copy">
-              {selectedPoi
-                ? 'Open the marker popup and tap check in there to record the point.'
-                : 'Tap any POI marker to select it and check in from the popup.'}
-            </p>
-
-            {lastCheckIn ? (
-              <p className="checkin-note">Last checked in at {lastCheckIn.name} under {lastCheckIn.profile}.</p>
             ) : (
-              <p className="checkin-note">No check-ins yet. Use the popup on a POI marker.</p>
-            )}
+              <>
+                <div>
+                  <p className="panel-label">Dashboard summary</p>
+                  <h2>Federated Learning Output</h2>
+                  <p className="panel-copy">
+                    Browse locations across NYC. Smart recommendations are updated in real-time as you switch profiles.
+                  </p>
+                </div>
 
-            <div className="checkin-history">
-              <div className="checkin-history__header">
-                <p className="panel-label">Check-in history</p>
-                <span className="checkin-history__meta">
-                  {checkInHistory.length} entr{checkInHistory.length === 1 ? 'y' : 'ies'}
-                </span>
-              </div>
-
-              {checkInHistory.length > 0 ? (
-                <ul className="history-list">
-                  {(showAllHistory ? checkInHistory : checkInHistory.slice(0, 5)).map((entry) => (
-                    <li key={`${entry.id}-${entry.timestamp}`} className="history-item">
-                      <strong>{entry.name}</strong>
-                      <span>
-                        {entry.profile} · +{entry.tokensEarned} token{entry.tokensEarned !== 1 ? 's' : ''}
-                      </span>
-                      <small>{new Date(entry.timestamp).toLocaleString()}</small>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="panel-copy panel-copy--small">No previous check-ins yet.</p>
-              )}
-            </div>
-          </div>
-        </section>
-
-        <section className="panel panel--map">
-          <div className="map-header">
-            <div>
-              <p className="panel-label">Dataset view</p>
-              <h2>NYC points of interest</h2>
-            </div>
-            <p className="map-hint">Recommended markers are highlighted in amber for the active profile.</p>
-          </div>
-
-          <div className="map-frame">
-            <PoiMap
-              pois={poiData}
-              onSelectPoi={setSelectedPoi}
-              onCheckIn={handleCheckIn}
-              selectedPoiId={selectedPoi?.id}
-              recommendedPoiIds={recommendedPoiIds}
-            />
-          </div>
-        </section>
-      </main>
-
-      {/* Wallet Modal */}
-      {showWallet && (
-        <div className="modal-overlay" onClick={() => setShowWallet(false)}>
-          <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h2>Token Wallet</h2>
-              <button type="button" className="modal-close" onClick={() => setShowWallet(false)}>Close</button>
-            </div>
-            <div className="modal-content">
-              <div className="wallet-card">
-                <p className="wallet-label">Current Balance</p>
-                <p className="wallet-amount">{tokenBalance}</p>
-              </div>
-              <div className="transaction-list">
-                <h3>Recent Transactions</h3>
-                {checkInHistory.slice(0, 5).map((entry, idx) => (
-                  <div key={idx} className="transaction-item">
-                    <span>{entry.name}</span>
-                    <span className="token-gain">+{entry.tokensEarned}</span>
+                <div className="stats-row">
+                  <div className="stat-card">
+                    <span className="stat-card__label">POIs Available</span>
+                    <strong>{poiData.length}</strong>
                   </div>
-                ))}
+                  <div className="stat-card">
+                    <span className="stat-card__label">My Balance</span>
+                    <strong>{tokenBalance} TC</strong>
+                  </div>
+                  <div className="stat-card">
+                    <span className="stat-card__label">Model Accuracy</span>
+                    <strong>{latestRound ? `${(latestRound.accuracy * 100).toFixed(1)}%` : '91.4%'}</strong>
+                  </div>
+                </div>
+
+                <div className="profile-switcher">
+                  <div className="profile-switcher__header">
+                    <p className="panel-label">Active Client Persona</p>
+                    <p className="profile-switcher__hint">Simulates local federated training</p>
+                  </div>
+
+                  <div className="profile-grid">
+                    {profiles.map((profile) => {
+                      const isActive = profile.id === selectedProfileId;
+
+                      return (
+                        <button
+                          key={profile.id}
+                          type="button"
+                          className={`profile-chip ${isActive ? 'profile-chip--active' : ''}`}
+                          onClick={() => handleSelectProfile(profile.id)}
+                        >
+                          <span className="profile-chip__label">{profile.label}</span>
+                          <span className="profile-chip__meta">Acc: {(profile.validationAccuracy * 100).toFixed(0)}%</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div className="recommendation-feed">
+                  <div className="recommendation-feed__header">
+                    <div>
+                      <p className="panel-label">Recommended for you</p>
+                      <h3>{selectedProfile ? selectedProfile.label : 'Select a profile'}</h3>
+                    </div>
+                    <p className="recommendation-feed__hint">
+                      Preferred: {selectedProfile?.topCategories?.slice(0, 2).join(', ') ?? 'n/a'}
+                    </p>
+                  </div>
+
+                  <div className="recommendation-list">
+                    {recommendedPois.slice(0, 5).map((poi, index) => (
+                      <article key={poi.id} className="recommendation-card">
+                        <div>
+                          <div>
+                            <span className="recommendation-card__rank">#{index + 1}</span>
+                            <h4>{poi.name}</h4>
+                          </div>
+                          <p>{poi.category} · {poi.checkins} check-ins</p>
+                        </div>
+                        <div className="recommendation-actions">
+                          <strong>{poi.score.toFixed(2)}</strong>
+                          <button
+                            type="button"
+                            className="recommendation-card-action"
+                            onClick={() => handleOpenExplanation(poi)}
+                            title="Why is this recommended?"
+                          >
+                            Why?
+                          </button>
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="checkin-card">
+                  <p className="panel-label">Current Selection</p>
+                  <h3>{selectedPoi ? selectedPoi.name : 'Select a marker on the map'}</h3>
+                  <p className="panel-copy">
+                    {selectedPoi
+                      ? 'You can perform a simulated check-in or submit a detailed review to earn rewards.'
+                      : 'Tap any POI marker on the map to view details.'}
+                  </p>
+
+                  {selectedPoi && (
+                    <div style={{ display: 'flex', gap: '8px', marginTop: '14px' }}>
+                      <button
+                        type="button"
+                        className="primary-button"
+                        onClick={() => handleCheckIn(selectedPoi)}
+                        style={{ flex: 1 }}
+                      >
+                        Simulate Check-in (+1)
+                      </button>
+                      <button
+                        type="button"
+                        className="primary-button"
+                        onClick={() => handleOpenReviewForm(selectedPoi)}
+                        style={{ flex: 1, background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)', color: '#ffffff', boxShadow: '0 4px 15px rgba(59, 130, 246, 0.25)' }}
+                      >
+                        Write Review (+5)
+                      </button>
+                    </div>
+                  )}
+
+                  {lastCheckIn ? (
+                    <p className="checkin-note">Last check-in: {lastCheckIn.name} ({lastCheckIn.profile})</p>
+                  ) : null}
+
+                  <div className="checkin-history">
+                    <div className="checkin-history__header">
+                      <p className="panel-label">Activity Ledger</p>
+                      <span className="checkin-history__meta">
+                        {checkInHistory.length} events
+                      </span>
+                    </div>
+
+                    {checkInHistory.length > 0 ? (
+                      <ul className="history-list">
+                        {(showAllHistory ? checkInHistory : checkInHistory.slice(0, 3)).map((entry, idx) => (
+                          <li key={`${entry.id}-${entry.timestamp}-${idx}`} className="history-item">
+                            <div className="history-item-details">
+                              <strong>{entry.name}</strong>
+                              <span>{entry.profile}</span>
+                            </div>
+                            <div className="history-item-meta">
+                              <span className="tokens">+{entry.tokensEarned} TC</span>
+                              <small>{new Date(entry.timestamp).toLocaleTimeString()}</small>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="panel-copy" style={{ fontSize: '0.8rem' }}>No recent activity.</p>
+                    )}
+                  </div>
+                </div>
+              </>
+            )}
+          </section>
+
+          <section className="panel panel--map">
+            <div className="map-header">
+              <div>
+                <p className="panel-label">NYC Geospatial Grid</p>
+                <h2>Foursquare Points of Interest</h2>
+              </div>
+              <p className="map-hint">
+                🟢 Selected &nbsp;&nbsp; 🟠 Recommended &nbsp;&nbsp; 🔵 General
+              </p>
+            </div>
+
+            <div className="map-frame">
+              <PoiMap
+                pois={poiData}
+                onSelectPoi={setSelectedPoi}
+                onCheckIn={handleCheckIn}
+                selectedPoiId={selectedPoi?.id}
+                recommendedPoiIds={recommendedPoiIds}
+              />
+            </div>
+          </section>
+        </main>
+
+        {/* Wallet Modal */}
+        {showWallet && (
+          <div className="modal-overlay" onClick={() => setShowWallet(false)}>
+            <div className="modal" onClick={(e) => e.stopPropagation()}>
+              <div className="modal-header">
+                <h2>TrustChain Token Wallet</h2>
+                <button type="button" className="modal-close" onClick={() => setShowWallet(false)}>&times;</button>
+              </div>
+              <div className="modal-content">
+                <div className="wallet-card">
+                  <p className="wallet-label">Cryptographic Balance</p>
+                  <p className="wallet-amount">{tokenBalance} TC</p>
+                </div>
+                <div className="transaction-list">
+                  <h3>Transaction Ledger (FL-rewards)</h3>
+                  {checkInHistory.length > 0 ? (
+                    checkInHistory.slice(0, 5).map((entry, idx) => (
+                      <div key={idx} className="transaction-item">
+                        <div>
+                          <strong style={{ display: 'block', color: '#ffffff' }}>{entry.name}</strong>
+                          <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+                            {new Date(entry.timestamp).toLocaleString()}
+                          </span>
+                        </div>
+                        <span className="token-gain">+{entry.tokensEarned} TC</span>
+                      </div>
+                    ))
+                  ) : (
+                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', textAlign: 'center', padding: '12px' }}>
+                      No transactions recorded yet.
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Review Form Modal */}
-      {showReviewForm && selectedPoiForReview && (
-        <div className="modal-overlay" onClick={() => setShowReviewForm(false)}>
-          <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h2>Write a Review</h2>
-              <button type="button" className="modal-close" onClick={() => setShowReviewForm(false)}>Close</button>
-            </div>
-            <div className="modal-content">
-              <p><strong>{selectedPoiForReview.name}</strong></p>
-              <p>{selectedPoiForReview.category}</p>
+        {/* Review Form Modal */}
+        {showReviewForm && selectedPoiForReview && (
+          <div className="modal-overlay" onClick={() => setShowReviewForm(false)}>
+            <div className="modal" onClick={(e) => e.stopPropagation()}>
+              <div className="modal-header">
+                <h2>Submit Cryptographic Review</h2>
+                <button type="button" className="modal-close" onClick={() => setShowReviewForm(false)}>&times;</button>
+              </div>
+              <form onSubmit={handleSubmitReview} className="modal-content">
+                <p style={{ marginBottom: '4px' }}>Reviewing:</p>
+                <h3 style={{ color: '#ffffff', fontFamily: 'var(--font-heading)', fontSize: '1.25rem', marginBottom: '4px' }}>
+                  {selectedPoiForReview.name}
+                </h3>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: '16px' }}>
+                  {selectedPoiForReview.category}
+                </p>
+
+                <label className="panel-label">Your Rating</label>
+                <div className="rating-stars">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <span
+                      key={star}
+                      className={`star-btn ${star <= reviewRating ? 'filled' : ''}`}
+                      onClick={() => setReviewRating(star)}
+                    >
+                      ★
+                    </span>
+                  ))}
+                </div>
+
+                <label className="panel-label" htmlFor="review-comment">Written Feedback</label>
+                <textarea
+                  id="review-comment"
+                  className="review-textarea"
+                  placeholder="Describe your experience at this location..."
+                  value={reviewText}
+                  onChange={(e) => setReviewText(e.target.value)}
+                  required
+                />
+
+                <button type="submit" className="primary-button">
+                  Submit Review (+5 TC)
+                </button>
+              </form>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Explanation Modal */}
-      {showExplanation && selectedPoiForExplanation && (
-        <div className="modal-overlay" onClick={() => setShowExplanation(false)}>
-          <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h2>Why This Recommendation?</h2>
-              <button type="button" className="modal-close" onClick={() => setShowExplanation(false)}>Close</button>
-            </div>
-            <div className="modal-content">
-              <p><strong>{selectedPoiForExplanation.name}</strong></p>
-              <p>Score: {(selectedPoiForExplanation.score * 100).toFixed(1)}%</p>
+        {/* Explanation Modal */}
+        {showExplanation && selectedPoiForExplanation && (
+          <div className="modal-overlay" onClick={() => setShowExplanation(false)}>
+            <div className="modal" onClick={(e) => e.stopPropagation()}>
+              <div className="modal-header">
+                <h2>Recommendation Breakdown</h2>
+                <button type="button" className="modal-close" onClick={() => setShowExplanation(false)}>&times;</button>
+              </div>
+              <div className="modal-content">
+                <div className="explanation-score-card">
+                  <p className="wallet-label">Federated Match Score</p>
+                  <div className="explanation-score-circle">
+                    {(selectedPoiForExplanation.score * 100).toFixed(0)}%
+                  </div>
+                </div>
+
+                <div className="explanation-details">
+                  <h3 style={{ color: '#ffffff', fontFamily: 'var(--font-heading)', fontSize: '1.1rem', marginBottom: '8px' }}>
+                    {selectedPoiForExplanation.name}
+                  </h3>
+                  <div className="explanation-row">
+                    <span>Category Match</span>
+                    <strong>Highly Relevant ({selectedPoiForExplanation.category})</strong>
+                  </div>
+                  <div className="explanation-row">
+                    <span>Active Client Profile</span>
+                    <strong>{selectedProfile?.label ?? 'Unknown'}</strong>
+                  </div>
+                  <div className="explanation-row">
+                    <span>Global Popularity</span>
+                    <strong>{selectedPoiForExplanation.checkins} check-ins</strong>
+                  </div>
+                  <div className="explanation-row">
+                    <span>Privacy Status</span>
+                    <strong>Differentially Private (Local-only compute)</strong>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  className="primary-button"
+                  onClick={() => {
+                    setShowExplanation(false);
+                    handleCheckIn(selectedPoiForExplanation);
+                  }}
+                  style={{ marginTop: '20px' }}
+                >
+                  Check-in Here (+1 TC)
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
-  </div>
   );
 }
 
