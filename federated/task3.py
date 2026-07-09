@@ -304,7 +304,7 @@ def score_pois(pois: list[dict[str, object]], bias: dict[str, float], round_boos
     return sorted(weighted, key=lambda item: item["score"], reverse=True)
 
 
-def build_recommendation_payload(df: pd.DataFrame, pois: list[dict[str, object]], source_kind: str) -> dict[str, object]:
+def build_recommendation_payload(df: pd.DataFrame, pois: list[dict[str, object]], source_kind: str, defense_stats: dict[str, object] = None) -> dict[str, object]:
     profiles = build_user_profiles(df) if source_kind == "checkins" and "user_id" in df.columns else build_synthetic_profiles(pois)
     family_popularity = {}
     for poi in pois:
@@ -348,6 +348,7 @@ def build_recommendation_payload(df: pd.DataFrame, pois: list[dict[str, object]]
             }
         )
 
+    defense_stats = defense_stats or {}
     return {
         "generatedAt": datetime.now(timezone.utc).isoformat(),
         "meta": {
@@ -355,6 +356,13 @@ def build_recommendation_payload(df: pd.DataFrame, pois: list[dict[str, object]]
             "rounds": ROUNDS,
             "clients": CLIENTS,
             "finalAccuracy": history[-1]["accuracy"],
+            "defenseShield": {
+                "active": bool(defense_stats),
+                "flaggedBots": defense_stats.get("flagged_bots", 0),
+                "retentionRate": defense_stats.get("retention_rate", 100),
+                "dpApplied": True,
+                "epsilon": 1.0
+            }
         },
         "rounds": history,
         "profiles": profile_payloads,
@@ -366,6 +374,19 @@ def main() -> None:
     random.seed(RANDOM_SEED)
     df, source_kind = load_dataset()
 
+    defense_stats = {}
+    if source_kind == "checkins":
+        import sys
+        if str(ROOT) not in sys.path:
+            sys.path.append(str(ROOT))
+        from S4_DEFENSE_INTEGRATION import S4DefenseShield
+        shield = S4DefenseShield(verbose=True)
+        # Workaround for Amber's column detection bug (timezone_offset is picked instead of utc_time)
+        df_for_shield = df.drop(columns=["timezone_offset"], errors="ignore")
+        clean_df = shield.apply_defense_filter(df_for_shield, max_checkins_per_hour=7, max_venue_diversity=5)
+        df = df[df["user_id"].isin(clean_df["user_id"])]
+        defense_stats = shield.last_defense_stats
+
     pois = build_pois(df, source_kind)
     POI_OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     PUBLIC_DIR.mkdir(parents=True, exist_ok=True)
@@ -376,7 +397,7 @@ def main() -> None:
     USER_PROFILES_OUTPUT_PATH.write_text(json.dumps(user_profiles, indent=2), encoding="utf-8")
     PUBLIC_USER_PROFILES_OUTPUT_PATH.write_text(json.dumps(user_profiles, indent=2), encoding="utf-8")
 
-    recommendation_payload = build_recommendation_payload(df, pois, source_kind)
+    recommendation_payload = build_recommendation_payload(df, pois, source_kind, defense_stats=defense_stats)
     RECOMMENDATION_OUTPUT_PATH.write_text(json.dumps(recommendation_payload, indent=2), encoding="utf-8")
     PUBLIC_RECOMMENDATION_OUTPUT_PATH.write_text(json.dumps(recommendation_payload, indent=2), encoding="utf-8")
 

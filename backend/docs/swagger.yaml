@@ -1,0 +1,484 @@
+openapi: "3.0.3"
+
+info:
+  title: TrustChain API
+  description: >
+    Blockchain-based trust framework for location recommendations.
+    All responses follow a standard envelope: { success, message, data } or { success, message, error }.
+  version: "1.0.0"
+  contact:
+    name: TrustChain Backend
+    email: backend@trustchain.dev
+
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Local development
+
+tags:
+  - name: health
+    description: Service health and readiness
+  - name: checkins
+    description: User check-in operations
+  - name: reviews
+    description: POI reviews and ratings
+  - name: recommendations
+    description: Personalised POI recommendations
+  - name: blockchain
+    description: Token balance and transaction operations
+  - name: pois
+    description: Points of interest discovery
+
+paths:
+
+  /health:
+    get:
+      tags: [health]
+      summary: Service health check
+      operationId: getHealth
+      responses:
+        "200":
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthResponse"
+        "503":
+          description: Service is degraded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /checkin:
+    post:
+      tags: [checkins]
+      summary: Submit a check-in
+      operationId: postCheckin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CheckinRequest"
+      responses:
+        "201":
+          description: Check-in recorded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CheckinResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+  /review:
+    post:
+      tags: [reviews]
+      summary: Submit a review
+      operationId: postReview
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReviewRequest"
+      responses:
+        "201":
+          description: Review submitted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReviewResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+  /recommend:
+    get:
+      tags: [recommendations]
+      summary: Get POI recommendations
+      operationId: getRecommendations
+      parameters:
+        - name: userId
+          in: query
+          required: false
+          schema:
+            type: string
+            example: "64f1a2b3c4d5e6f7a8b9c0d1"
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 10
+        - name: category
+          in: query
+          required: false
+          schema:
+            type: string
+            example: "cafe"
+      responses:
+        "200":
+          description: Recommendations retrieved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RecommendResponse"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+
+  /token-balance:
+    get:
+      tags: [blockchain]
+      summary: Get token balance
+      operationId: getTokenBalance
+      parameters:
+        - name: userId
+          in: query
+          required: true
+          schema:
+            type: string
+            example: "64f1a2b3c4d5e6f7a8b9c0d1"
+      responses:
+        "200":
+          description: Balance retrieved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TokenBalanceResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+
+  /pois:
+    get:
+      tags: [pois]
+      summary: List points of interest
+      operationId: getPOIs
+      parameters:
+        - name: lat
+          in: query
+          required: false
+          schema:
+            type: number
+            format: double
+            minimum: -90
+            maximum: 90
+        - name: lon
+          in: query
+          required: false
+          schema:
+            type: number
+            format: double
+            minimum: -180
+            maximum: 180
+        - name: radius
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50000
+            default: 1000
+        - name: category
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        "200":
+          description: POIs retrieved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/POIListResponse"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+components:
+
+  schemas:
+
+    CheckinRequest:
+      type: object
+      required: [userId, poiId, latitude, longitude]
+      properties:
+        userId:
+          type: string
+          description: MongoDB ObjectID of the user
+          example: "64f1a2b3c4d5e6f7a8b9c0d1"
+        poiId:
+          type: string
+          description: MongoDB ObjectID of the POI
+          example: "64f1a2b3c4d5e6f7a8b9c0d2"
+        latitude:
+          type: number
+          format: double
+          minimum: -90
+          maximum: 90
+          example: 40.7128
+        longitude:
+          type: number
+          format: double
+          minimum: -180
+          maximum: 180
+          example: -74.0060
+
+    ReviewRequest:
+      type: object
+      required: [userId, poiId, rating, review]
+      properties:
+        userId:
+          type: string
+          example: "64f1a2b3c4d5e6f7a8b9c0d1"
+        poiId:
+          type: string
+          example: "64f1a2b3c4d5e6f7a8b9c0d2"
+        rating:
+          type: integer
+          minimum: 1
+          maximum: 5
+          example: 5
+        review:
+          type: string
+          minLength: 1
+          maxLength: 2000
+          example: "Excellent coffee, friendly staff."
+
+    CheckinResponse:
+      allOf:
+        - $ref: "#/components/schemas/SuccessEnvelope"
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                checkinId: { type: string }
+                userId: { type: string }
+                poiId: { type: string }
+                location:
+                  $ref: "#/components/schemas/LatLon"
+                verification:
+                  type: object
+                  properties:
+                    method: { type: string, example: "none" }
+                    status: { type: string, example: "pending" }
+                blockchain:
+                  type: object
+                  properties:
+                    txHash: { type: string, example: "0xabc123" }
+                    txStatus: { type: string, example: "pending" }
+                createdAt: { type: string, format: date-time }
+
+    ReviewResponse:
+      allOf:
+        - $ref: "#/components/schemas/SuccessEnvelope"
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                reviewId: { type: string }
+                userId: { type: string }
+                poiId: { type: string }
+                rating: { type: integer }
+                review: { type: string }
+                moderation:
+                  type: object
+                  properties:
+                    status: { type: string, example: "approved" }
+                createdAt: { type: string, format: date-time }
+
+    RecommendResponse:
+      allOf:
+        - $ref: "#/components/schemas/SuccessEnvelope"
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                provider: { type: string, example: "mock" }
+                userId: { type: string }
+                recommendations:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      poiId: { type: string }
+                      name: { type: string }
+                      category: { type: string }
+                      score: { type: number, format: double }
+                      location:
+                        $ref: "#/components/schemas/LatLon"
+
+    TokenBalanceResponse:
+      allOf:
+        - $ref: "#/components/schemas/SuccessEnvelope"
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                provider: { type: string, example: "mock" }
+                userId: { type: string }
+                wallet: { type: string, example: "0x71C7656EC7ab88b098defB751B7401B5f6d8976F" }
+                balance: { type: integer, example: 100 }
+                symbol: { type: string, example: "TCT" }
+                decimals: { type: integer, example: 18 }
+
+    POIListResponse:
+      allOf:
+        - $ref: "#/components/schemas/SuccessEnvelope"
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                count: { type: integer }
+                pois:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/POI"
+
+    HealthResponse:
+      allOf:
+        - $ref: "#/components/schemas/SuccessEnvelope"
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                status: { type: string, example: "healthy" }
+                version: { type: string, example: "1.0.0" }
+                uptime: { type: string, example: "3h24m11s" }
+                checks:
+                  type: object
+                  properties:
+                    database:
+                      type: object
+                      properties:
+                        status: { type: string }
+                        latencyMs: { type: integer }
+                    blockchainProvider:
+                      type: object
+                      properties:
+                        status: { type: string }
+                        provider: { type: string }
+                    recommendationProvider:
+                      type: object
+                      properties:
+                        status: { type: string }
+                        provider: { type: string }
+
+    POI:
+      type: object
+      properties:
+        id: { type: string }
+        name: { type: string }
+        description: { type: string }
+        category: { type: string }
+        tags:
+          type: array
+          items: { type: string }
+        location:
+          $ref: "#/components/schemas/LatLon"
+        address:
+          type: object
+          properties:
+            street: { type: string }
+            city: { type: string }
+            country: { type: string }
+            postalCode: { type: string }
+        metadata:
+          type: object
+          properties:
+            averageRating: { type: number }
+            totalReviews: { type: integer }
+            totalCheckins: { type: integer }
+            verified: { type: boolean }
+        createdAt: { type: string, format: date-time }
+
+    LatLon:
+      type: object
+      properties:
+        latitude: { type: number, format: double }
+        longitude: { type: number, format: double }
+
+    SuccessEnvelope:
+      type: object
+      required: [success, message]
+      properties:
+        success: { type: boolean, example: true }
+        message: { type: string }
+
+    ErrorResponse:
+      type: object
+      required: [success, message, error]
+      properties:
+        success: { type: boolean, example: false }
+        message: { type: string }
+        error: { type: string }
+
+  responses:
+
+    BadRequest:
+      description: Malformed request body
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+
+    UnprocessableEntity:
+      description: Semantic validation failure
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+
+    InternalServerError:
+      description: Unexpected server error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+
+    ServiceUnavailable:
+      description: External provider unavailable
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"

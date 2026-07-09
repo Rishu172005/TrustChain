@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import PoiMap from './PoiMap';
 import './App.css';
 
@@ -84,8 +84,16 @@ function App() {
   }, [poiData, selectedProfile]);
 
   const recommendedPois = selectedProfile?.recommendations ?? [];
-  const recommendedPoiIds = new Set(recommendedPois.map((poi) => poi.id));
+  const recommendedPoiIds = useMemo(() => new Set(recommendedPois.map((poi) => poi.id)), [recommendedPois]);
   const latestRound = recommendationData.rounds?.[recommendationData.rounds.length - 1] ?? null;
+  const defenseShield = recommendationData.meta?.defenseShield ?? null;
+
+  const allPoisToRender = useMemo(() => {
+    const map = new Map();
+    poiData.forEach(poi => map.set(poi.id, poi));
+    recommendedPois.forEach(poi => map.set(poi.id, poi));
+    return Array.from(map.values());
+  }, [poiData, recommendedPois]);
 
   const handleSelectProfile = (profileId) => {
     const profile = profiles.find((item) => item.id === profileId);
@@ -189,6 +197,17 @@ function App() {
         </header>
 
         <main className="content-grid">
+          {defenseShield?.flaggedBots > 0 && (
+            <div className="bot-warning-banner" style={{ background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)', color: 'white', padding: '16px', borderRadius: '12px', marginBottom: '24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', boxShadow: '0 4px 15px rgba(239, 68, 68, 0.25)', gridColumn: '1 / -1' }}>
+              <div>
+                <h3 style={{ margin: '0 0 4px 0', fontSize: '1.1rem', color: '#ffffff' }}>🚨 Defense Shield Active</h3>
+                <p style={{ margin: 0, fontSize: '0.9rem', color: '#fecaca' }}>Blocked {defenseShield.flaggedBots} malicious bot accounts from influencing the model.</p>
+              </div>
+              <div style={{ background: 'rgba(255, 255, 255, 0.2)', padding: '6px 12px', borderRadius: '8px', fontSize: '0.85rem', fontWeight: 600 }}>
+                {defenseShield.retentionRate.toFixed(1)}% Data Retained
+              </div>
+            </div>
+          )}
           <section className="panel panel--summary">
             {isLoading ? (
               <div className="panel--loading">
@@ -361,7 +380,7 @@ function App() {
 
             <div className="map-frame">
               <PoiMap
-                pois={poiData}
+                pois={allPoisToRender}
                 onSelectPoi={setSelectedPoi}
                 onCheckIn={handleCheckIn}
                 selectedPoiId={selectedPoi?.id}
@@ -491,7 +510,7 @@ function App() {
                   </div>
                   <div className="explanation-row">
                     <span>Privacy Status</span>
-                    <strong>Differentially Private (Local-only compute)</strong>
+                    <strong>{defenseShield?.dpApplied ? `Differentially Private (ε = ${defenseShield.epsilon.toFixed(1)})` : 'Local-only compute'}</strong>
                   </div>
                 </div>
 

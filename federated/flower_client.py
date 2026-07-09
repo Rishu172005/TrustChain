@@ -89,7 +89,14 @@ class POICollaborativeFilteringClient(fl.client.NumPyClient):
 
         print(f"Client {self.client_id}: Local model updated - weights: {self.local_model}")
 
-        return [self.local_model], len(self.pois), {"client_id": self.client_id}
+        import sys
+        if str(ROOT) not in sys.path:
+            sys.path.append(str(ROOT))
+        from S4_DEFENSE_INTEGRATION import S4DefenseShield
+        shield = S4DefenseShield(verbose=False)
+        private_model = shield.apply_privacy_to_gradients(self.local_model, epsilon=1.0, sensitivity=0.5)
+
+        return [private_model], len(self.pois), {"client_id": self.client_id}
 
     def evaluate(self, parameters: list[np.ndarray], config: dict[str, Any]) -> tuple[float, int, dict[str, Any]]:
         """Evaluate model on local validation data."""

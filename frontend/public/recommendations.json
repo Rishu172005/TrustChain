@@ -1,10 +1,17 @@
 {
-  "generatedAt": "2026-06-27T06:37:33.402510+00:00",
+  "generatedAt": "2026-07-08T16:07:37.941945+00:00",
   "meta": {
     "model": "Federated collaborative filtering",
     "rounds": 5,
     "clients": 3,
-    "finalAccuracy": 0.93
+    "finalAccuracy": 0.93,
+    "defenseShield": {
+      "active": true,
+      "flaggedBots": 80,
+      "retentionRate": 84.88983602780571,
+      "dpApplied": true,
+      "epsilon": 1.0
+    }
   },
   "rounds": [
     {
@@ -38,8 +45,8 @@
       "id": "commuter",
       "label": "Transit Commuter",
       "description": "Prefers practical stops, transport hubs, and quick food.",
-      "seedUserId": "293",
-      "dominantCategory": "Retail",
+      "seedUserId": "185",
+      "dominantCategory": "Food",
       "validationAccuracy": 0.99,
       "topCategories": [
         "Transit",
@@ -53,8 +60,8 @@
           "category": "Transit",
           "lat": 40.750794799423865,
           "lng": -73.99357639021292,
-          "checkins": 1134,
-          "score": 0.4489
+          "checkins": 1081,
+          "score": 0.447
         },
         {
           "id": "42829c80f964a5206a221fe3",
@@ -62,8 +69,8 @@
           "category": "Transit",
           "lat": 40.75280620914171,
           "lng": -73.97717535495758,
-          "checkins": 870,
-          "score": 0.4387
+          "checkins": 780,
+          "score": 0.4344
         },
         {
           "id": "43a52546f964a520532c1fe3",
@@ -71,8 +78,8 @@
           "category": "Transit",
           "lat": 40.645089355976346,
           "lng": -73.7845230102539,
-          "checkins": 681,
-          "score": 0.4293
+          "checkins": 662,
+          "score": 0.4281
         },
         {
           "id": "4ace6c89f964a52078d020e3",
@@ -80,8 +87,8 @@
           "category": "Transit",
           "lat": 40.773839,
           "lng": -73.87122,
-          "checkins": 560,
-          "score": 0.4218
+          "checkins": 545,
+          "score": 0.4206
         },
         {
           "id": "4840fe6bf964a52030501fe3",
@@ -89,8 +96,8 @@
           "category": "Transit",
           "lat": 40.75722129839835,
           "lng": -73.99154663085938,
-          "checkins": 560,
-          "score": 0.4218
+          "checkins": 515,
+          "score": 0.4184
         },
         {
           "id": "4a737bf8f964a52091dc1fe3",
@@ -98,17 +105,17 @@
           "category": "Transit",
           "lat": 40.707149,
           "lng": -73.99057,
-          "checkins": 485,
-          "score": 0.4163
+          "checkins": 435,
+          "score": 0.4119
         },
         {
           "id": "4a513b17f964a520d2b01fe3",
           "name": "Train Station",
           "category": "Transit",
-          "lat": 40.69902344282463,
+          "lat": 40.699023442824625,
           "lng": -73.81001472473143,
-          "checkins": 352,
-          "score": 0.404
+          "checkins": 269,
+          "score": 0.3934
         },
         {
           "id": "4459d2f1f964a520d7321fe3",
@@ -116,8 +123,8 @@
           "category": "Transit",
           "lat": 40.68968493541091,
           "lng": -74.17938709259033,
-          "checkins": 273,
-          "score": 0.3943
+          "checkins": 256,
+          "score": 0.3915
         }
       ]
     },
@@ -125,8 +132,8 @@
       "id": "explorer",
       "label": "City Explorer",
       "description": "Looks for parks, landmarks, and cultural venues.",
-      "seedUserId": "185",
-      "dominantCategory": "Food",
+      "seedUserId": "445",
+      "dominantCategory": "Other",
       "validationAccuracy": 0.99,
       "topCategories": [
         "Culture",
@@ -135,31 +142,22 @@
       ],
       "recommendations": [
         {
-          "id": "49b7ed6df964a52030531fe3",
-          "name": "Plaza",
-          "category": "Outdoor",
-          "lat": 40.756489872673846,
-          "lng": -73.98626804351807,
-          "checkins": 469,
-          "score": 0.3682
-        },
-        {
           "id": "40b68100f964a5207d001fe3",
           "name": "Park",
           "category": "Outdoor",
           "lat": 40.74218830848454,
           "lng": -73.98792418909154,
-          "checkins": 439,
-          "score": 0.3656
+          "checkins": 433,
+          "score": 0.3658
         },
         {
-          "id": "3fd66200f964a520def11ee3",
-          "name": "Park",
+          "id": "49b7ed6df964a52030531fe3",
+          "name": "Plaza",
           "category": "Outdoor",
-          "lat": 40.73528249691621,
-          "lng": -73.99040315158283,
-          "checkins": 326,
-          "score": 0.3542
+          "lat": 40.756489872673846,
+          "lng": -73.98626804351807,
+          "checkins": 428,
+          "score": 0.3654
         },
         {
           "id": "3fd66200f964a520ddf01ee3",
@@ -167,8 +165,17 @@
           "category": "Culture",
           "lat": 40.82827721161922,
           "lng": -73.92655344439045,
-          "checkins": 259,
-          "score": 0.3541
+          "checkins": 237,
+          "score": 0.3525
+        },
+        {
+          "id": "3fd66200f964a520def11ee3",
+          "name": "Park",
+          "category": "Outdoor",
+          "lat": 40.73528249691621,
+          "lng": -73.99040315158283,
+          "checkins": 304,
+          "score": 0.3522
         },
         {
           "id": "42911d00f964a520f5231fe3",
@@ -176,8 +183,8 @@
           "category": "Transit",
           "lat": 40.750794799423865,
           "lng": -73.99357639021292,
-          "checkins": 1134,
-          "score": 0.3534
+          "checkins": 1081,
+          "score": 0.3515
         },
         {
           "id": "3fd66200f964a52035e41ee3",
@@ -185,17 +192,8 @@
           "category": "Culture",
           "lat": 40.73169799836348,
           "lng": -73.98922693741638,
-          "checkins": 212,
-          "score": 0.3465
-        },
-        {
-          "id": "42829c80f964a5206a221fe3",
-          "name": "Train Station",
-          "category": "Transit",
-          "lat": 40.75280620914171,
-          "lng": -73.97717535495758,
-          "checkins": 870,
-          "score": 0.3432
+          "checkins": 210,
+          "score": 0.3479
         },
         {
           "id": "41102700f964a520d60b1fe3",
@@ -203,8 +201,17 @@
           "category": "Culture",
           "lat": 40.75061379403183,
           "lng": -73.98856401443481,
-          "checkins": 188,
-          "score": 0.3419
+          "checkins": 184,
+          "score": 0.3428
+        },
+        {
+          "id": "42829c80f964a5206a221fe3",
+          "name": "Train Station",
+          "category": "Transit",
+          "lat": 40.75280620914171,
+          "lng": -73.97717535495758,
+          "checkins": 780,
+          "score": 0.3389
         }
       ]
     },
@@ -212,8 +219,8 @@
       "id": "social",
       "label": "Social Weekender",
       "description": "Prioritizes food, leisure, and hangout-friendly places.",
-      "seedUserId": "354",
-      "dominantCategory": "Transit",
+      "seedUserId": "730",
+      "dominantCategory": "Business",
       "validationAccuracy": 0.99,
       "topCategories": [
         "Food",
@@ -222,22 +229,13 @@
       ],
       "recommendations": [
         {
-          "id": "42911d00f964a520f5231fe3",
-          "name": "Train Station",
-          "category": "Transit",
-          "lat": 40.750794799423865,
-          "lng": -73.99357639021292,
-          "checkins": 1134,
-          "score": 0.3594
-        },
-        {
           "id": "4c5ef77bfff99c74eda954d3",
           "name": "Food & Drink Shop",
           "category": "Food",
           "lat": 40.74186151409088,
           "lng": -73.98943362953369,
-          "checkins": 163,
-          "score": 0.3585
+          "checkins": 160,
+          "score": 0.3614
         },
         {
           "id": "4a0c2e7bf964a52014751fe3",
@@ -246,16 +244,16 @@
           "lat": 40.76224486711165,
           "lng": -73.9792871763928,
           "checkins": 272,
-          "score": 0.357
+          "score": 0.3594
         },
         {
-          "id": "4bd3a9b4462cb713a110df07",
-          "name": "Chinese Restaurant",
-          "category": "Food",
-          "lat": 40.67284025644557,
-          "lng": -73.8707270170631,
-          "checkins": 150,
-          "score": 0.3553
+          "id": "42911d00f964a520f5231fe3",
+          "name": "Train Station",
+          "category": "Transit",
+          "lat": 40.750794799423865,
+          "lng": -73.99357639021292,
+          "checkins": 1081,
+          "score": 0.3575
         },
         {
           "id": "4a021207f964a52029711fe3",
@@ -263,8 +261,8 @@
           "category": "Food",
           "lat": 40.73743415035814,
           "lng": -73.99128147407096,
-          "checkins": 144,
-          "score": 0.3538
+          "checkins": 143,
+          "score": 0.3571
         },
         {
           "id": "43920486f964a520662b1fe3",
@@ -272,26 +270,35 @@
           "category": "Food",
           "lat": 40.76362499327396,
           "lng": -73.99757623672485,
-          "checkins": 132,
-          "score": 0.3504
+          "checkins": 130,
+          "score": 0.3534
         },
         {
-          "id": "4c3c82a417f2ef3bcf1381f4",
-          "name": "Pizza Place",
+          "id": "4a8a998af964a5202b0a20e3",
+          "name": "Coffee Shop",
           "category": "Food",
-          "lat": 40.672841077323234,
-          "lng": -73.87062939512292,
-          "checkins": 131,
-          "score": 0.3502
+          "lat": 40.70964742200671,
+          "lng": -74.01051729615469,
+          "checkins": 119,
+          "score": 0.35
         },
         {
-          "id": "4c81773e74d7b60c6e2577d8",
-          "name": "Chinese Restaurant",
+          "id": "4ea4acaab80355a982afff79",
+          "name": "Bar",
           "category": "Food",
-          "lat": 40.67284344395805,
-          "lng": -73.87066384993089,
-          "checkins": 129,
-          "score": 0.3496
+          "lat": 40.96535583001569,
+          "lng": -74.06285508050317,
+          "checkins": 116,
+          "score": 0.349
+        },
+        {
+          "id": "477a3514f964a520214d1fe3",
+          "name": "American Restaurant",
+          "category": "Food",
+          "lat": 40.731155872068506,
+          "lng": -73.98872764725327,
+          "checkins": 114,
+          "score": 0.3484
         }
       ]
     }
