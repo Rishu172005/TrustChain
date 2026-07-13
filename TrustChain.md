@@ -76,6 +76,10 @@ testable.
 
 -   Deliverable: Map showing POI markers from dataset + basic UI shell
 
+-   Status: Completed by Rishu Kishan (S4) — frontend map pipeline verified, dataset integrated, and native local rendering validated.
+
+-   Runtime note: The frontend can be started from `frontend/` with `npm install` and `npm run dev`; the app loads at `http://localhost:5173` and consumes `frontend/public/pois.json` plus `frontend/public/recommendations.json`.
+
 **[Task 3: Week 22^nd^ June -26^th^ June]{.mark}**
 
 **Week 3 --- Integration Sprint**
@@ -106,7 +110,7 @@ map
 
 -   Test: simulate 3 different user preference profiles, verify
     different recommendations appear
-
+-   S4 contribution: completed by Rishu Kishan — recommendation feed and geospatial pin rendering verified locally.
 **All Together (Day 13 --- Integration Day)**
 
 -   Wire S1+S3 backend with S2+S4 frontend
@@ -172,7 +176,7 @@ Fix bugs.
 -   Write the README: setup guide, architecture diagram, API docs
 
 -   Deliverable: Polished UI + complete project README
-
+-   Status: Completed by Rishu Kishan (S4) — token wallet page, review submission form, and recommendation explanation panel implemented; frontend README and architecture documentation updated.
 **Final Review: Full system demo run by the team together --- treat it
 like a client demo.**
 
@@ -210,6 +214,7 @@ recommendations, and stress-test the FL model against fake data.
     variants: centralized, federated without DP, and federated with DP
 
 -   **[Target]{.mark} :** Adversarial test results + DP comparison table
+-   Status: Completed by Amber (S2) — adversarial evaluation, DP comparison documentation, and Task 6 finalization completed.
 
 **S3 --- Mock Oracle Service + Latency Benchmarking**
 
@@ -223,6 +228,7 @@ recommendations, and stress-test the FL model against fake data.
 
 -   **[Target]{.mark} :** Working oracle service + latency benchmark
     report
+-   Status: Completed by Siddhartha (S3) — mock oracle endpoint, latency benchmarking, and Task 6 completion finalized.
 
 **S4 --- Transparency UI Panel**
 
@@ -236,7 +242,7 @@ recommendations, and stress-test the FL model against fake data.
 
 -   **[Target]{.mark} :** Transparency panel live in UI + report
     skeleton document
-
+-   Status: Completed by Rishu Kishan (S4) — Tasks 2 through 6 are fully complete, including the transparency explanation panel, local report skeleton, frontend integration validation, and the detailed project README with setup, architecture, and API docs.
 **[Target of this task:]{.mark}** Geo-fenced recommendations working
 end-to-end. Security audit complete. Adversarial test results
 documented.

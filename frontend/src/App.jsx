@@ -20,6 +20,27 @@ function App() {
   const [showExplanation, setShowExplanation] = useState(false);
   const [selectedPoiForExplanation, setSelectedPoiForExplanation] = useState(null);
   
+  const userLocation = { lat: 40.7549, lng: -73.9840 };
+
+  const selectedPoiExplanationMetrics = useMemo(() => {
+    if (!selectedPoiForExplanation || poiData.length === 0) {
+      return null;
+    }
+
+    const maxCheckins = Math.max(...poiData.map((poi) => poi.checkins || 0), 1);
+    const distance = Math.sqrt(
+      (selectedPoiForExplanation.lat - userLocation.lat) ** 2 +
+      (selectedPoiForExplanation.lng - userLocation.lng) ** 2,
+    );
+    const proximityScore = Math.max(0, Math.round(Math.min(100, 110 - distance * 55)));
+    const communityRating = Math.round(
+      Math.min(100, ((selectedPoiForExplanation.checkins || 0) / maxCheckins) * 100),
+    );
+    const modelScore = Math.round(Math.min(100, (selectedPoiForExplanation.score ?? 0) * 100));
+
+    return { proximityScore, communityRating, modelScore };
+  }, [selectedPoiForExplanation, poiData]);
+
   // Custom states for interactive review modal
   const [reviewRating, setReviewRating] = useState(5);
   const [reviewText, setReviewText] = useState('');
@@ -497,20 +518,20 @@ function App() {
                     {selectedPoiForExplanation.name}
                   </h3>
                   <div className="explanation-row">
-                    <span>Category Match</span>
-                    <strong>Highly Relevant ({selectedPoiForExplanation.category})</strong>
+                    <span>Proximity score</span>
+                    <strong>{selectedPoiExplanationMetrics ? `${selectedPoiExplanationMetrics.proximityScore}%` : 'N/A'}</strong>
                   </div>
                   <div className="explanation-row">
-                    <span>Active Client Profile</span>
+                    <span>Community rating</span>
+                    <strong>{selectedPoiExplanationMetrics ? `${selectedPoiExplanationMetrics.communityRating}%` : 'N/A'}</strong>
+                  </div>
+                  <div className="explanation-row">
+                    <span>Model score</span>
+                    <strong>{selectedPoiExplanationMetrics ? `${selectedPoiExplanationMetrics.modelScore}%` : 'N/A'}</strong>
+                  </div>
+                  <div className="explanation-row" style={{ marginTop: '12px', opacity: 0.85 }}>
+                    <span>Profile context</span>
                     <strong>{selectedProfile?.label ?? 'Unknown'}</strong>
-                  </div>
-                  <div className="explanation-row">
-                    <span>Global Popularity</span>
-                    <strong>{selectedPoiForExplanation.checkins} check-ins</strong>
-                  </div>
-                  <div className="explanation-row">
-                    <span>Privacy Status</span>
-                    <strong>{defenseShield?.dpApplied ? `Differentially Private (ε = ${defenseShield.epsilon.toFixed(1)})` : 'Local-only compute'}</strong>
                   </div>
                 </div>
 

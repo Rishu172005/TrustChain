@@ -61,6 +61,7 @@ The detailed feasibility writeup is available in `docs/week2/feasibility_study.m
 - React frontend shell implemented with a Leaflet map and POI markers
 - Check-in action and token balance display added to the UI
 - Notes prepared for the broader team on feasibility and stack selection
+- S4 Task 2, Task 3, Task 4, and Task 5 completed by Rishu Kishan: local map pipeline verified, frontend/backend integration validated, and the transparency panel implemented with proximity/community/model scoring.
 
 ### Current artifacts
 
@@ -80,6 +81,7 @@ The detailed feasibility writeup is available in `docs/week2/feasibility_study.m
 - The frontend reads the local POI JSON sample and renders markers on the map.
 - The docs now reference the actual filenames present in the workspace.
 - The week 2 report no longer points to missing component filenames.
+- Run the UI from `frontend/` using `npm install` and `npm run dev`; the app consumes `frontend/public/pois.json` and `frontend/public/recommendations.json`.
 
 ## 8. Conclusion
 

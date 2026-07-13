@@ -50,6 +50,8 @@ The project architecture is feasible, the core technologies are compatible, and 
 | Siddhartha (S3) | Backend Lead | APIs, data pipeline, integration |
 | Rishu Kishan (S4) | Frontend/Research Lead | Dataset exploration, map UI, feasibility/research documentation |
 
+*Status update: Rishu Kishan (S4) completed the core S4 scope through Task 2, Task 3, and Task 4, including a verified local map visualization pipeline and backend integration.*
+
 ### Repository and Platform Setup
 
 - Repository structure is organized into `contracts`, `federated`, `backend`, `frontend`, `data`, `docs`, and `notebooks`.

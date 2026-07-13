@@ -124,6 +124,13 @@ const [showExplanation, setShowExplanation] = useState(false)  // Explanation mo
    - FL model boost (15% weight)
 3. Close to return
 
+### Task 5: Transparency Panel (Completed)
+- The explanation modal now shows:
+  - Proximity score
+  - Community rating
+  - Model score
+- The UI includes a completed transparency panel for recommended POIs.
+
 ## Running the Application
 
 ### Quick Start
@@ -134,6 +141,8 @@ npm run dev
 ```
 
 Open: `http://localhost:5173`
+
+> Runtime note: Start the app from the `frontend/` folder with `npm install` and `npm run dev`. The React UI reads `frontend/public/pois.json` and `frontend/public/recommendations.json` on mount.
 
 ### Building for Production
 ```bash

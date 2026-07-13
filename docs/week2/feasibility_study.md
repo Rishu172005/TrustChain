@@ -19,6 +19,8 @@ This feasibility study covers the S4 research and frontend scope for TrustChain:
 | Siddhartha (S3) | Backend Lead | APIs, data pipeline, integration |
 | Rishu Kishan (S4) | Frontend/Research Lead | Dataset exploration, map UI, feasibility/research documentation |
 
+*Status update: Rishu Kishan (S4) completed S4 Task 2, Task 3, Task 4, and Task 5, providing a verified local map pipeline, backend integration, and a completed transparency explanation panel ready for the next phase.*
+
 ## 3. System Architecture
 
 TrustChain is split into four isolated but compatible modules:

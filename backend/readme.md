@@ -9,10 +9,9 @@ recommendation systems.
 
 ## Quick Start
 
-The entire stack runs with a single command. No manual configuration required.
+The backend service can be run locally from the repository.
 
 ```bash
-git clone https://github.com/trustchain/backend.git
 cd backend
 cp .env.example .env
 docker compose up --build
