@@ -78,7 +78,7 @@ testable.
 
 -   Status: Completed by Rishu Kishan (S4) — frontend map pipeline verified, dataset integrated, and native local rendering validated.
 
--   Runtime note: The frontend can be started from `frontend/` with `npm install` and `npm run dev`; the app loads at `http://localhost:5173` and consumes `frontend/public/pois.json` plus `frontend/public/recommendations.json`.
+-   Runtime note: The frontend can be started from `frontend/` with `npm install` and `npm run dev`; the app loads at `http://localhost:5173` (or the next available port if `5173` is occupied) and consumes `frontend/public/pois.json` plus `frontend/public/recommendations.json`. The frontend also builds cleanly with `npm run build`.
 
 **[Task 3: Week 22^nd^ June -26^th^ June]{.mark}**
 

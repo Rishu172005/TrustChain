@@ -47,9 +47,9 @@ npm install
 npm run dev
 ```
 
-Open the browser at `http://localhost:5173` to see the frontend.
+Open the browser at `http://localhost:5173` to see the frontend. If port `5173` is already in use, Vite will automatically fall back to the next available port (for example, `http://localhost:5174`).
 
-> Runtime note: The frontend is configured to run locally from the `frontend/` folder with `npm install` and `npm run dev`. It loads POI and recommendation assets from `frontend/public/pois.json` and `frontend/public/recommendations.json`.
+> Runtime note: Verified locally from the `frontend/` folder by running `npm install` and `npm run dev`. The app successfully served `poi` and recommendation assets from `frontend/public/pois.json` and `frontend/public/recommendations.json`, and the project also builds successfully with `npm run build`.
 
 ### 2. Backend Setup
 The backend runs server APIs used by the frontend.
