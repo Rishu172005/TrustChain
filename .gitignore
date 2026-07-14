@@ -25,6 +25,7 @@ data/processed/
 
 # OS files
 .DS_Store
+**/.DS_Store
 backend/.DS_Store
 frontend/node_modules/
 data/
