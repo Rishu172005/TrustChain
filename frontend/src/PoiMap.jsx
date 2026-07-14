@@ -73,9 +73,9 @@ export default function PoiMap({
           //   General     → radius 3,  tiny, low-opacity background dots
           //   Recommended → radius 16, very prominent with double halo
           //   Selected    → radius 14, solid filled with halo
-          const mainRadius  = isSelected ? 14 : isRecommended ? 16 : 3;
-          const haloRadius1 = isSelected ? 24 : 26; // inner solid ring
-          const haloRadius2 = isSelected ? 34 : 36; // outer dashed ring
+          const mainRadius  = isSelected ? 14 : isRecommended ? 11 : 3;
+          const haloRadius1 = isSelected ? 24 : 19; // inner solid ring
+          const haloRadius2 = isSelected ? 34 : 27; // outer dashed ring
 
           return (
             <div key={poi.id}>

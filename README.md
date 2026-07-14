@@ -1,253 +1,489 @@
-# TrustChain
+# ⛓️ TrustChain
 
-TrustChain is a project that combines several technologies into one working system:
-- blockchain smart contracts for trust and token tracking
-- federated learning for personalized recommendations
-- backend APIs for user actions and data flow
-- a map-based React frontend for interaction
-- dataset processing and research notes to support the design
+**Blockchain-Anchored Federated Learning for Privacy-Preserving Location Recommendations**
 
-This repository is organized so that each part can be understood and run separately, while still working together as a complete recommendation system.
+TrustChain combines three pillars into one verifiable recommendation system:
+
+| Pillar | Technology | Role |
+|---|---|---|
+| 🤖 **Federated Learning** | Flower + PyTorch | Train personalised POI recommendations without sharing raw data |
+| ⛓️ **Blockchain** | Ethereum / Hardhat + Solidity | Immutably anchor model weights, check-ins, and token rewards |
+| 🔒 **Differential Privacy** | DP noise (ε = 1.0) | Protect individual data during model training and aggregation |
+
+The system's unique user-facing feature is the **Transparency Panel** — a live UI that shows _exactly_ why each POI was recommended, backed by on-chain cryptographic proof.
+
+---
+
+## Table of Contents
+
+1. [What This Project Does](#what-this-project-does)
+2. [Quick Start](#quick-start)
+3. [Architecture](#architecture)
+4. [Component Breakdown](#component-breakdown)
+5. [API Documentation](#api-documentation)
+6. [UI Feature Guide](#ui-feature-guide)
+7. [Dataset](#dataset)
+8. [Team](#team)
+
+---
 
 ## What This Project Does
 
-TrustChain simulates a location-based recommendation system where users can:
-- explore points of interest (POIs) on a map
-- check in at a location and earn tokens
-- submit reviews for extra rewards
-- receive personalized suggestions from a federated learning model
-- inspect why a POI was recommended using a transparency panel
+TrustChain is a location-based recommendation system where users can:
 
-The system also includes defense logic for detecting fake activity and applying privacy protections.
+- 🗺️ **Explore** 34,000+ NYC points of interest on an interactive map
+- ✅ **Check in** at locations and earn **TrustChain (TC) tokens** on-chain
+- ✍️ **Submit reviews** (hashed and stored on-chain) for extra TC rewards
+- 🎯 **Receive personalised recommendations** from a federated learning model
+- 🔍 **Inspect why** any POI was recommended via a transparency panel showing three scored components
+- 🛡️ **Trust the data** — bot activity is detected and filtered; the defence shield result is displayed live in the UI
 
-## Who Should Read This
+---
 
-This README is written for someone who knows basic programming, but may not be an expert in blockchain, machine learning, or React. It explains:
-- the main components of the project
-- how they fit together
-- how to run the system locally
-- what each API does
-
-## Setup Guide
+## Quick Start
 
 ### Prerequisites
-Install the following before running TrustChain:
-- Node.js 18+ and npm
-- Python 3.11+
-- MongoDB (local or cloud)
-- Go
-- Git
 
-### 1. Frontend Setup
-The frontend shows the map and recommendation UI.
+| Tool | Version | Purpose |
+|---|---|---|
+| Node.js + npm | 18+ | Frontend (React + Vite) |
+| Python | 3.11+ | Federated learning + defence logic |
+| Go | 1.21+ | Backend API server |
+| MongoDB | 6+ | Off-chain metadata storage |
+| Git | any | Version control |
+
+---
+
+### 1 · Frontend
 
 ```bash
-cd /Users/rishukishan/Documents/9th/internship/TrustChain/frontend
+cd frontend
 npm install
 npm run dev
 ```
 
-Open the browser at `http://localhost:5173` to see the frontend. If port `5173` is already in use, Vite will automatically fall back to the next available port (for example, `http://localhost:5174`).
+Open **http://localhost:5173** — the dashboard loads instantly from static JSON data; no backend required for the map and recommendations.
 
-> Runtime note: Verified locally from the `frontend/` folder by running `npm install` and `npm run dev`. The app successfully served `poi` and recommendation assets from `frontend/public/pois.json` and `frontend/public/recommendations.json`, and the project also builds successfully with `npm run build`.
+> ✅ **Verified:** `npm run build` succeeds. All POI and recommendation data is served from `frontend/public/`.
 
-### 2. Backend Setup
-The backend runs server APIs used by the frontend.
+---
+
+### 2 · Backend
 
 ```bash
-cd /Users/rishukishan/Documents/9th/internship/TrustChain/backend
+cd backend
 go mod tidy
 go run ./cmd/server
 ```
 
-This starts the backend service. It handles actions like check-ins, reviews, and token balance.
+The API server starts on **http://localhost:8080**. It handles check-ins, reviews, token balance queries, and blockchain transactions via ethers.js.
 
-### 3. Federated Learning Setup
-The `federated/` folder runs the recommendation model and defense logic.
+---
+
+### 3 · Federated Learning Server
 
 ```bash
-cd /Users/rishukishan/Documents/9th/internship/TrustChain/federated
+cd federated
 python3 -m venv .venv
-source .venv/bin/activate
+source .venv/bin/activate          # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 python flower_server.py
 ```
 
-This will start the federated learning server that generates recommendations and defense metadata.
+This starts the Flower FL server. It runs FedAvg aggregation across 3 simulated client nodes and stores model weight hashes on-chain after each round.
 
-### 4. Data Setup
-The data folder contains the raw dataset and the cleaned version used by the project.
+---
 
-Files to know:
-- `data/raw/dataset_TSMC2014_NYC.txt`
-- `data/processed/foursquare_nyc_clean.csv`
-- `data/preprocess.py`
+### 4 · Smart Contracts (Hardhat)
 
-Run the preprocessing script to clean and prepare the dataset before training or generating recommendations.
+```bash
+cd contracts
+npm install
+npx hardhat compile
+npx hardhat test
+npx hardhat node          # local testnet
+npx hardhat run scripts/deploy.js --network localhost
+```
 
-### 5. Defense Integration
-The file `S4_DEFENSE_INTEGRATION.py` contains helper code for bot detection and differential privacy. It is used to make the recommendation pipeline safer and more robust.
+---
 
-## High-Level Architecture
+### 5 · Data Preprocessing
 
-The project is split into five main parts. Each part has a clear role:
+```bash
+cd data
+python preprocess.py
+```
 
-1. **Frontend** (`frontend/`)
-   - React application with a Leaflet map
-   - displays POI markers and recommended items
-   - supports check-ins, wallet view, reviews, and explanation panels
+Cleans `raw/dataset_TSMC2014_NYC.txt` → `processed/foursquare_nyc_clean.csv`, which feeds both the FL model and the frontend dataset.
 
-2. **Backend** (`backend/`)
-   - serves REST APIs for frontend actions
-   - connects to data and optionally to the smart contract layer
-   - handles requests like `/checkin`, `/review`, `/recommend`, and `/token-balance`
+---
 
-3. **Contracts** (`contracts/`)
-   - smart contract code for token tracking and recommendation proof
-   - intended for blockchain trust and geofencing logic
+### 6 · Defence Integration (Optional)
 
-4. **Federated** (`federated/`)
-   - runs a federated learning simulation
-   - generates recommendation scores for different user profiles
-   - includes defense logic for fake activity and privacy
+```bash
+python S4_DEFENSE_INTEGRATION.py
+```
 
-5. **Data** (`data/`)
-   - raw dataset files and cleaned POI/check-in records
-   - used by model training and the frontend dataset
+Runs bot detection and differential privacy analysis. Output feeds into `frontend/public/recommendations.json` as the `meta.defenseShield` block.
 
-### How the system works together
+---
 
-- The frontend asks the backend for recommendations and user status.
-- The backend may query the federated learning service or read pre-generated recommendation data.
-- The frontend presents results on a map and allows the user to perform actions.
-- Check-ins and reviews are recorded, and token balance is updated.
-- The explanation panel shows why the model recommended a specific POI.
+## Architecture
 
-## Walkthrough: What a user sees
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                         TrustChain System                           │
+│                                                                     │
+│  ┌──────────────────┐    REST/JSON    ┌───────────────────────────┐ │
+│  │   React 19 UI    │◄──────────────►│   Go Backend (Gin)        │ │
+│  │   Vite 8         │                │                           │ │
+│  │   Leaflet Map    │                │  POST /checkin            │ │
+│  │   Transparency   │                │  POST /review             │ │
+│  │   Panel          │                │  GET  /recommend          │ │
+│  │   Wallet Modal   │                │  GET  /token-balance      │ │
+│  │   Review Form    │                │  GET  /explain/:poiId     │ │
+│  └──────────────────┘                └──────────┬────────────────┘ │
+│                                                  │ ethers.js        │
+│                                                  ▼                  │
+│  ┌──────────────────────────────────────────────────────────────┐   │
+│  │            Ethereum Testnet (Hardhat / Sepolia)              │   │
+│  │                                                              │   │
+│  │   TrustToken (ERC-20)     UserRegistry     StakingContract   │   │
+│  │   ModelHashRegistry       GeoRecommender   PoR Oracle        │   │
+│  └──────────────────────────────────────────────────────────────┘   │
+│                                                  ▲                  │
+│  ┌─────────────────────────┐    SHA-256 hash     │                  │
+│  │   Flower FL Server      │────────────────────►│                  │
+│  │   FedAvg Aggregator     │                                        │
+│  │   3 × Client Nodes      │◄── Local training (no raw data sent)   │
+│  │   DP noise ε = 1.0      │                                        │
+│  └─────────────────────────┘                                        │
+│                                                                     │
+│  ┌─────────────────────────┐                                        │
+│  │   MongoDB (off-chain)   │  POI metadata · user profiles          │
+│  └─────────────────────────┘                                        │
+└─────────────────────────────────────────────────────────────────────┘
+```
 
-1. The user opens the app and sees a map of NYC points of interest.
-2. The UI highlights recommended POIs for the active profile.
-3. The user clicks a POI and can check in to earn tokens.
-4. The user can also submit a review and earn additional reward tokens.
-5. The user can open the recommendation explanation panel to see:
-   - proximity score
-   - community rating
-   - model score
+### Request Flow (Happy Path)
 
-This makes the system easy to understand and builds trust in the recommendation engine.
+```
+User opens app
+    └─► Load 34k POIs from pois.json (Leaflet map)
+    └─► Load recommendations.json → highlight top-5 POIs per profile
+User clicks "Why? →" on a recommended POI
+    └─► Transparency Panel opens
+        ├─ Proximity Score  (25% weight) — geographic distance
+        ├─ Community Rating (25% weight) — relative check-in volume
+        └─ FL Model Score   (50% weight) — federated learning confidence
+User clicks "Check in"
+    └─► POST /checkin → smart contract mints +1 TC
+User clicks "Write Review"
+    └─► Review hashed → POST /review → smart contract mints +5 TC
+        └─► Wallet modal shows updated balance + ledger entry
+```
+
+---
+
+## Component Breakdown
+
+### `frontend/` — React + Vite UI
+
+| File | Purpose |
+|---|---|
+| `src/App.jsx` | App shell, all state, modal triggers |
+| `src/App.css` | Full glassmorphism dark design system |
+| `src/PoiMap.jsx` | Leaflet map with colour-coded circle markers |
+| `src/PoiDetailsPanel.jsx` | **"Why was this recommended?"** transparency panel |
+| `src/index.css` | CSS reset + design tokens |
+| `public/pois.json` | ~34k NYC POI records |
+| `public/recommendations.json` | 3 profiles × 5 recommendations + defence metadata |
+
+### `backend/` — Go REST API
+
+| Path | Role |
+|---|---|
+| `cmd/server/` | Entry point — starts Gin HTTP server |
+| `internal/handlers/` | Route handlers (checkin, review, recommend, etc.) |
+| `internal/blockchain/` | ethers.js bridge for on-chain calls |
+| `internal/db/` | MongoDB connection and queries |
+
+### `contracts/` — Solidity Smart Contracts
+
+| Contract | Purpose |
+|---|---|
+| `TrustToken.sol` | ERC-20 token: mint (+1 TC check-in, +5 TC review), burn, transfer |
+| `UserRegistry.sol` | Register users, store check-in hashes, verify identity |
+| `StakingContract.sol` | Business stake deposits; slash on bad behaviour |
+| `ModelHashRegistry.sol` | Store SHA-256 hash of FL model weights per round |
+| `GeoRecommender.sol` | Geofenced recommendation contract + PoR oracle |
+
+### `federated/` — Flower FL Pipeline
+
+| File | Role |
+|---|---|
+| `flower_server.py` | Flower server — runs FedAvg aggregation |
+| `client.py` | Simulated FL client with local training + DP noise |
+| `model.py` | Collaborative filtering model (PyTorch) |
+| `defense.py` | Bot detection + adversarial client filtering |
+
+### `data/`
+
+| File | Description |
+|---|---|
+| `raw/dataset_TSMC2014_NYC.txt` | Original Foursquare NYC check-in dataset |
+| `processed/foursquare_nyc_clean.csv` | Cleaned, geocoded POI records |
+| `preprocess.py` | Data cleaning pipeline |
+
+---
 
 ## API Documentation
 
-These are the main backend routes. They let the frontend and other services interact with TrustChain.
+All endpoints are served by the Go backend at `http://localhost:8080`.
+
+---
 
 ### `POST /checkin`
-Simulates a user checking in at a location.
 
-Request body example:
+Record a user check-in at a POI and mint **+1 TC** on-chain.
+
+**Request body:**
 ```json
 {
-  "userId": "user123",
-  "poiId": "poi_abc",
-  "timestamp": "2026-07-13T12:34:56Z"
+  "userId":    "user_0xABC123",
+  "poiId":     "poi_0042",
+  "lat":        40.7549,
+  "lng":       -73.9840,
+  "timestamp": "2026-07-14T14:34:00Z"
 }
 ```
 
-Response example:
+**Response `200 OK`:**
 ```json
 {
-  "success": true,
+  "success":      true,
   "tokensAwarded": 1,
-  "newBalance": 121
+  "newBalance":   121,
+  "txHash":       "0xDEF456..."
 }
 ```
+
+**Errors:** `400` invalid body · `409` duplicate check-in · `503` blockchain unavailable
+
+---
 
 ### `POST /review`
-Records a user review and grants reward tokens.
 
-Request body example:
+Submit a written review (hashed on-chain) and mint **+5 TC**.
+
+**Request body:**
 ```json
 {
-  "userId": "user123",
-  "poiId": "poi_abc",
-  "rating": 5,
-  "comment": "Great place!"
+  "userId":  "user_0xABC123",
+  "poiId":   "poi_0042",
+  "rating":  5,
+  "comment": "Fantastic transit hub, always on time.",
+  "profile": "commuter"
 }
 ```
 
-Response example:
+**Response `200 OK`:**
 ```json
 {
-  "success": true,
+  "success":      true,
   "tokensAwarded": 5,
-  "reviewId": "review_001"
+  "reviewId":     "review_001",
+  "commentHash":  "sha256:a3f7b2...",
+  "txHash":       "0xGHI789..."
 }
 ```
 
-### `GET /recommend`
-Returns recommended places for the user profile.
+> ℹ️ Raw review text is **never** stored on-chain. Only a SHA-256 hash is recorded, preserving privacy while enabling verification.
 
-Response example:
+---
+
+### `GET /recommend?userId=user_0xABC123&profile=commuter`
+
+Return the top-N personalised POI recommendations for a user profile.
+
+**Response `200 OK`:**
 ```json
 {
-  "profileId": "commuter",
+  "profile": "commuter",
   "recommendations": [
-    {"id":"poi_001","name":"Station","score":0.92},
-    {"id":"poi_002","name":"Cafe","score":0.86}
+    {
+      "id":       "poi_001",
+      "name":     "Grand Central Terminal",
+      "category": "Transit Station",
+      "score":    0.92,
+      "lat":      40.7527,
+      "lng":     -73.9772
+    },
+    {
+      "id":       "poi_002",
+      "name":     "Times Square Subway",
+      "category": "Transit Station",
+      "score":    0.86,
+      "lat":      40.7590,
+      "lng":     -73.9845
+    }
   ]
 }
 ```
 
-### `GET /token-balance?userId=user123`
-Returns the user's current token balance.
+---
 
-Response example:
+### `GET /token-balance?userId=user_0xABC123`
+
+Fetch on-chain TC token balance for a user wallet address.
+
+**Response `200 OK`:**
 ```json
 {
-  "userId": "user123",
-  "balance": 125
+  "userId":  "user_0xABC123",
+  "balance": 125,
+  "unit":    "TC"
 }
 ```
 
-## Extra Features
+---
 
-### Transparency explanation
-The frontend includes a panel that explains why a POI was recommended, showing:
-- proximity score
-- community rating
-- model score
+### `GET /explain/:poiId?profile=commuter`
 
-This helps a non-technical user understand the recommendation logic.
+Return the full transparency score breakdown for a specific POI and profile.  
+This is the data backing the **"Why was this recommended?"** panel in the UI.
 
-### Defense metadata
-The system can also attach a defense shield summary to recommendations:
+**Response `200 OK`:**
 ```json
 {
-  "defenseShield": {
-    "flaggedBots": 4,
-    "retentionRate": 84.3
-  }
+  "poi":       "poi_0042",
+  "name":      "Grand Central Terminal",
+  "composite": 84,
+  "breakdown": {
+    "proximity": {
+      "score":   91,
+      "weight":  0.25,
+      "formula": "max(0, 110 - dist_degrees * 55)"
+    },
+    "community": {
+      "score":   78,
+      "weight":  0.25,
+      "formula": "(poi.checkins / max_checkins_dataset) * 100"
+    },
+    "modelScore": {
+      "score":   82,
+      "weight":  0.50,
+      "formula": "FL_model.predict(poi_id, profile) * 100"
+    }
+  },
+  "modelHash": "sha256:a3f7b2c9...",
+  "dpEpsilon": 1.0,
+  "porVerified": true
 }
 ```
-This shows how many suspicious bot actions were filtered out.
 
-### Mock oracle and geo-fencing
-A Task 5 extension introduces a mock oracle service that:
-- accepts geolocation requests
-- calls the federated model for POI scores
-- signs and forwards results to the geo recommendation contract
+---
 
-This is a simplified version of how a real system could connect geo queries to blockchain-based ranking.
+### `GET /health`
 
-## What to read first
+Service health check.
 
-If you want to understand the project quickly, start here:
-1. `README.md` — overall project explanation and setup
-2. `frontend/` — user-facing app and UI flow
-3. `backend/` — API logic and data routing
-4. `federated/` — recommendation model and defense logic
-5. `contracts/` — blockchain trust and recommendation contracts
-6. `data/` — raw and processed datasets used by the system
+```json
+{ "status": "ok", "version": "1.0.0" }
+```
 
-## Notes
+---
 
-This README is designed so that someone new to the project can understand the purpose, the pieces, and how to run it locally. The code contains the working implementation when run alongside the frontend, backend, federated model, and data files.
+## UI Feature Guide
+
+### 🗺️ Map Dashboard
+
+The main view shows all ~34k NYC POIs as colour-coded circle markers:
+
+| Colour | Meaning |
+|---|---|
+| 🟠 Orange | Recommended for active profile (prominent, with double halo) |
+| 🟢 Green | Currently selected POI |
+| 🔵 Blue (faint) | All other POIs in the dataset |
+
+Click any marker to select it. Click recommended markers to open the full details panel.
+
+---
+
+### 💰 Token Wallet
+
+Click **"💰 Wallet"** in the top bar to open the wallet modal:
+
+- **Balance card** — your current TC token balance with animated shimmer
+- **Stats row** — total check-ins, reviews, and tokens earned
+- **Transaction ledger** — chronological on-chain event history (check-ins + reviews)
+
+---
+
+### ✍️ Review Submission Form
+
+Opens when you click **"✍️ Review (+5 TC)"** on any selected POI:
+
+- **5-star rating** — keyboard accessible, with live label (Poor / Fair / Good / Great / Excellent)
+- **Written feedback** — text area with 300-character limit and live counter
+- **Privacy note** — confirms review is hashed and only the hash goes on-chain
+- **Submit button** — disabled until text is entered; mints +5 TC on success
+
+---
+
+### 🔍 "Why Was This Recommended?" Panel
+
+Click **"Why? →"** next to any recommendation, or **"📊 Scores"** on the selected location card.
+
+The panel shows:
+
+| Section | Detail |
+|---|---|
+| **Header** | "⛓️ Blockchain-Verified Transparency" eyebrow + POI name |
+| **Composite score** | Weighted formula banner with live computed score |
+| **📡 Proximity Score** | Animated ring gauge + bar + plain-English rationale + formula |
+| **👥 Community Rating** | Same — relative check-in volume vs. full dataset |
+| **🤖 FL Model Score** | Same — federated learning confidence for active profile |
+| **On-chain proof** | DP ε badge · PoR Verified badge · hash storage explanation |
+| **Actions** | Check-in (+1 TC) · Write Review (+5 TC) directly from the panel |
+
+---
+
+### 🛡️ Defence Shield Banner
+
+If the loaded `recommendations.json` contains a `meta.defenseShield` block (output by `S4_DEFENSE_INTEGRATION.py`), a red banner appears at the top showing:
+
+- Number of bot accounts flagged and blocked
+- % of clean data retained after filtering
+- DP ε value applied
+
+---
+
+## Dataset
+
+**Foursquare NYC Check-in Dataset (TSMC 2014)**
+
+| Property | Value |
+|---|---|
+| Source | Foursquare via TSMC 2014 research dataset |
+| Total POIs | ~34,000 |
+| City | New York City |
+| Categories | Transit, Food & Drink, Parks, Culture, Hotels, Shops |
+| Check-in range | 0 – ~50,000 per POI |
+| Profiles | Commuter · Explorer · Social |
+
+---
+
+## Team
+
+| Student | Role | Key Deliverables |
+|---|---|---|
+| Priyadharshini (S1) | Blockchain Lead | TrustToken ERC-20 · UserRegistry · StakingContract · ModelHashRegistry · GeoRecommender · PoR oracle · unit tests · gas benchmarks |
+| Amber (S2) | ML/AI Lead | Flower FL pipeline (FedAvg + DP) · collaborative filtering model · adversarial defence research |
+| Siddhartha (S3) | Backend Lead | Go REST API · ethers.js blockchain bridge · MongoDB integration · latency benchmarking · mock oracle endpoint |
+| Rishu Kishan (S4) | Frontend / Research Lead | React + Leaflet map UI · glassmorphism design system · **"Why was this recommended?" transparency panel** · token wallet · review form · defence shield integration · dataset pipeline · README + project documentation |
+
+---
+
+> **Repository structure:** `frontend/` · `backend/` · `contracts/` · `federated/` · `data/` · `docs/`  
+> **Final report:** [`docs/FINAL_REPORT.md`](docs/FINAL_REPORT.md)

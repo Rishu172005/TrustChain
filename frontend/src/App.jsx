@@ -417,39 +417,83 @@ function App() {
 
         {/* ══ WALLET MODAL ═════════════════════════════════════════════════ */}
         {showWallet && (
-          <div className="modal-overlay" onClick={() => setShowWallet(false)}>
-            <div className="modal" onClick={(e) => e.stopPropagation()}>
+          <div className="modal-overlay" onClick={() => setShowWallet(false)} role="dialog" aria-modal="true" aria-label="TrustChain Wallet">
+            <div className="modal wallet-modal" onClick={(e) => e.stopPropagation()}>
               <div className="modal-header">
                 <h2>💰 TrustChain Wallet</h2>
-                <button type="button" className="modal-close" onClick={() => setShowWallet(false)}>×</button>
+                <button type="button" className="modal-close" onClick={() => setShowWallet(false)} aria-label="Close wallet">×</button>
               </div>
               <div className="modal-content">
+
+                {/* Balance card */}
                 <div className="wallet-card">
                   <p className="wallet-label">Cryptographic Balance</p>
-                  <p className="wallet-amount">{tokenBalance} <span style={{ fontSize: '1.5rem', opacity: 0.7 }}>TC</span></p>
+                  <p className="wallet-amount">
+                    {tokenBalance} <span style={{ fontSize: '1.5rem', opacity: 0.7 }}>TC</span>
+                  </p>
                   <p className="wallet-sub">TrustChain Tokens · Proof-of-Recommendation</p>
+                  <div className="wallet-card-shimmer" />
                 </div>
+
+                {/* Earned stats */}
+                <div className="wallet-stats-row">
+                  <div className="wallet-stat">
+                    <span className="wallet-stat__icon">✅</span>
+                    <div>
+                      <span className="wallet-stat__label">Check-ins</span>
+                      <strong className="wallet-stat__val">{checkInHistory.filter(e => e.type !== 'review').length}</strong>
+                    </div>
+                  </div>
+                  <div className="wallet-stat">
+                    <span className="wallet-stat__icon">✍️</span>
+                    <div>
+                      <span className="wallet-stat__label">Reviews</span>
+                      <strong className="wallet-stat__val">{checkInHistory.filter(e => e.type === 'review').length}</strong>
+                    </div>
+                  </div>
+                  <div className="wallet-stat">
+                    <span className="wallet-stat__icon">🪙</span>
+                    <div>
+                      <span className="wallet-stat__label">Total Earned</span>
+                      <strong className="wallet-stat__val">{checkInHistory.reduce((s, e) => s + e.tokensEarned, 0)} TC</strong>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Transaction ledger */}
                 <div className="transaction-list">
-                  <h3>Transaction Ledger</h3>
+                  <div className="wallet-ledger-header">
+                    <h3>Transaction Ledger</h3>
+                    {checkInHistory.length > 0 && (
+                      <span className="wallet-ledger-count">{checkInHistory.length} events</span>
+                    )}
+                  </div>
                   {checkInHistory.length > 0 ? (
-                    checkInHistory.slice(0, 8).map((entry, idx) => (
+                    checkInHistory.slice(0, 10).map((entry, idx) => (
                       <div key={idx} className="transaction-item">
-                        <span style={{ fontSize: '1.1rem' }}>{entry.type === 'review' ? '✍️' : '✅'}</span>
+                        <div className="tx-icon-wrap">
+                          <span>{entry.type === 'review' ? '✍️' : '✅'}</span>
+                        </div>
                         <div style={{ flex: 1, minWidth: 0 }}>
-                          <strong style={{ display: 'block', color: '#ffffff', fontSize: '0.88rem' }}>{entry.name}</strong>
-                          <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
-                            {new Date(entry.timestamp).toLocaleString()}
+                          <strong style={{ display: 'block', color: '#ffffff', fontSize: '0.85rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            {entry.name}
+                          </strong>
+                          <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
+                            {entry.profile} · {new Date(entry.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                           </span>
                         </div>
                         <span className="token-gain">+{entry.tokensEarned} TC</span>
                       </div>
                     ))
                   ) : (
-                    <p style={{ color: 'var(--text-secondary)', textAlign: 'center', padding: '24px', fontSize: '0.9rem' }}>
-                      No transactions yet. Check in at a POI to earn tokens!
-                    </p>
+                    <div className="wallet-empty-state">
+                      <span style={{ fontSize: '2rem' }}>🪙</span>
+                      <p>No transactions yet.</p>
+                      <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Check in at a POI to earn your first TC tokens!</p>
+                    </div>
                   )}
                 </div>
+
               </div>
             </div>
           </div>
@@ -457,47 +501,80 @@ function App() {
 
         {/* ══ REVIEW FORM MODAL ════════════════════════════════════════════ */}
         {showReviewForm && selectedPoiForReview && (
-          <div className="modal-overlay" onClick={() => setShowReviewForm(false)}>
-            <div className="modal" onClick={(e) => e.stopPropagation()}>
+          <div className="modal-overlay" onClick={() => setShowReviewForm(false)} role="dialog" aria-modal="true" aria-label="Submit Review">
+            <div className="modal review-modal" onClick={(e) => e.stopPropagation()}>
               <div className="modal-header">
                 <h2>✍️ Submit Review</h2>
-                <button type="button" className="modal-close" onClick={() => setShowReviewForm(false)}>×</button>
+                <button type="button" className="modal-close" onClick={() => setShowReviewForm(false)} aria-label="Close review form">×</button>
               </div>
               <form onSubmit={handleSubmitReview} className="modal-content">
+
+                {/* POI context header */}
                 <div className="review-poi-header">
                   <span className="review-poi-icon">{categoryIcon(selectedPoiForReview.category)}</span>
-                  <div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
                     <h3 className="review-poi-name">{selectedPoiForReview.name}</h3>
-                    <p className="review-poi-meta">{selectedPoiForReview.category} · {selectedPoiForReview.checkins?.toLocaleString()} check-ins</p>
+                    <p className="review-poi-meta">
+                      <span className="poi-details-category-badge">{selectedPoiForReview.category}</span>
+                      &nbsp;·&nbsp; {selectedPoiForReview.checkins?.toLocaleString()} check-ins
+                    </p>
                   </div>
                 </div>
 
+                {/* Reward banner */}
                 <div className="review-reward-note">
-                  🪙 You'll earn <strong>+5 TC</strong> tokens for this on-chain review
+                  🪙 You'll earn <strong>+5 TC</strong> tokens for this cryptographically recorded on-chain review
                 </div>
 
-                <label className="section-label" style={{ display: 'block', marginBottom: '10px' }}>Your Rating</label>
-                <div className="rating-stars">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <span
-                      key={star}
-                      className={`star-btn ${star <= reviewRating ? 'filled' : ''}`}
-                      onClick={() => setReviewRating(star)}
-                    >★</span>
-                  ))}
+                {/* Star rating */}
+                <div className="review-field-block">
+                  <label className="section-label" style={{ display: 'block', marginBottom: '10px' }}>Your Rating</label>
+                  <div className="rating-stars" role="radiogroup" aria-label="Star rating">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <span
+                        key={star}
+                        role="radio"
+                        aria-checked={star <= reviewRating}
+                        aria-label={`${star} star${star > 1 ? 's' : ''}`}
+                        tabIndex={0}
+                        className={`star-btn ${star <= reviewRating ? 'filled' : ''}`}
+                        onClick={() => setReviewRating(star)}
+                        onKeyDown={(e) => e.key === 'Enter' && setReviewRating(star)}
+                      >★</span>
+                    ))}
+                    <span className="review-rating-label">
+                      {['', 'Poor', 'Fair', 'Good', 'Great', 'Excellent'][reviewRating]}
+                    </span>
+                  </div>
                 </div>
 
-                <label className="section-label" htmlFor="review-comment" style={{ display: 'block', marginBottom: '8px' }}>Written Feedback</label>
-                <textarea
-                  id="review-comment"
-                  className="review-textarea"
-                  placeholder="Describe your experience…"
-                  value={reviewText}
-                  onChange={(e) => setReviewText(e.target.value)}
-                  required
-                />
+                {/* Text area */}
+                <div className="review-field-block">
+                  <div className="review-label-row">
+                    <label className="section-label" htmlFor="review-comment">Written Feedback</label>
+                    <span className="review-char-count" style={{ color: reviewText.length > 200 ? '#f87171' : 'var(--text-muted)' }}>
+                      {reviewText.length}/300
+                    </span>
+                  </div>
+                  <textarea
+                    id="review-comment"
+                    className="review-textarea"
+                    placeholder="Describe your experience at this location…"
+                    value={reviewText}
+                    onChange={(e) => setReviewText(e.target.value)}
+                    maxLength={300}
+                    required
+                  />
+                </div>
 
-                <button type="submit" className="primary-button">Submit Review · Earn +5 TC</button>
+                {/* Privacy note */}
+                <p className="review-privacy-note">
+                  🔒 Your review is hashed and stored on-chain. Raw text is never uploaded. Differential Privacy (ε = 1.0) protects your data.
+                </p>
+
+                <button type="submit" className="primary-button" disabled={!reviewText.trim()}>
+                  Submit Review · Earn +5 TC
+                </button>
               </form>
             </div>
           </div>
