@@ -1,6 +1,26 @@
 import { useEffect, useMemo, useState } from 'react';
 import PoiMap from './PoiMap';
+import PoiDetailsPanel from './PoiDetailsPanel';
 import './App.css';
+
+// Per-profile emoji + colour theme
+const PROFILE_META = {
+  commuter:  { icon: '🚇', accent: '#38bdf8', tag: 'Transit-first'  },
+  explorer:  { icon: '🗺️',  accent: '#a78bfa', tag: 'Culture & Parks' },
+  social:    { icon: '🍻', accent: '#fb923c', tag: 'Food & Leisure'  },
+};
+
+// Category icon map
+function categoryIcon(cat = '') {
+  const c = cat.toLowerCase();
+  if (c.includes('transit') || c.includes('train') || c.includes('bus') || c.includes('airport')) return '🚇';
+  if (c.includes('food') || c.includes('restaurant') || c.includes('coffee') || c.includes('bar')) return '🍽️';
+  if (c.includes('park') || c.includes('outdoor') || c.includes('plaza')) return '🌳';
+  if (c.includes('culture') || c.includes('museum') || c.includes('stadium') || c.includes('music')) return '🎭';
+  if (c.includes('hotel') || c.includes('leisure')) return '🏨';
+  if (c.includes('shop') || c.includes('store')) return '🛍️';
+  return '📍';
+}
 
 function App() {
   const [poiData, setPoiData] = useState([]);
@@ -9,7 +29,7 @@ function App() {
   const profiles = recommendationData.profiles ?? [];
   const [selectedProfileId, setSelectedProfileId] = useState('');
   const [tokenBalance, setTokenBalance] = useState(120);
-  const selectedProfile = profiles.find((profile) => profile.id === selectedProfileId) ?? profiles[0] ?? null;
+  const selectedProfile = profiles.find((p) => p.id === selectedProfileId) ?? profiles[0] ?? null;
   const [selectedPoi, setSelectedPoi] = useState(null);
   const [lastCheckIn, setLastCheckIn] = useState(null);
   const [checkInHistory, setCheckInHistory] = useState([]);
@@ -19,384 +39,367 @@ function App() {
   const [selectedPoiForReview, setSelectedPoiForReview] = useState(null);
   const [showExplanation, setShowExplanation] = useState(false);
   const [selectedPoiForExplanation, setSelectedPoiForExplanation] = useState(null);
-  
+  const [reviewRating, setReviewRating] = useState(5);
+  const [reviewText, setReviewText] = useState('');
+
   const userLocation = { lat: 40.7549, lng: -73.9840 };
 
   const selectedPoiExplanationMetrics = useMemo(() => {
-    if (!selectedPoiForExplanation || poiData.length === 0) {
-      return null;
-    }
-
-    const maxCheckins = Math.max(...poiData.map((poi) => poi.checkins || 0), 1);
+    if (!selectedPoiForExplanation || poiData.length === 0) return null;
+    const maxCheckins = Math.max(...poiData.map((p) => p.checkins || 0), 1);
     const distance = Math.sqrt(
       (selectedPoiForExplanation.lat - userLocation.lat) ** 2 +
       (selectedPoiForExplanation.lng - userLocation.lng) ** 2,
     );
-    const proximityScore = Math.max(0, Math.round(Math.min(100, 110 - distance * 55)));
-    const communityRating = Math.round(
-      Math.min(100, ((selectedPoiForExplanation.checkins || 0) / maxCheckins) * 100),
-    );
-    const modelScore = Math.round(Math.min(100, (selectedPoiForExplanation.score ?? 0) * 100));
-
+    const proximityScore  = Math.max(0, Math.round(Math.min(100, 110 - distance * 55)));
+    const communityRating = Math.round(Math.min(100, ((selectedPoiForExplanation.checkins || 0) / maxCheckins) * 100));
+    const modelScore      = Math.round(Math.min(100, (selectedPoiForExplanation.score ?? 0) * 100));
     return { proximityScore, communityRating, modelScore };
   }, [selectedPoiForExplanation, poiData]);
 
-  // Custom states for interactive review modal
-  const [reviewRating, setReviewRating] = useState(5);
-  const [reviewText, setReviewText] = useState('');
-
   useEffect(() => {
     let cancelled = false;
-
     async function loadData() {
       try {
-        const [poiResponse, recommendationResponse] = await Promise.all([
-          fetch('/pois.json'),
-          fetch('/recommendations.json'),
-        ]);
-
-        const [poiJson, recommendationJson] = await Promise.all([
-          poiResponse.json(),
-          recommendationResponse.json(),
-        ]);
-
-        if (cancelled) {
-          return;
-        }
-
-        setPoiData(Array.isArray(poiJson) ? poiJson : []);
-        setRecommendationData(
-          recommendationJson && typeof recommendationJson === 'object'
-            ? recommendationJson
-            : { rounds: [], profiles: [] },
-        );
-      } catch (error) {
-        if (!cancelled) {
-          setPoiData([]);
-          setRecommendationData({ rounds: [], profiles: [] });
-          console.error('Failed to load generated JSON assets', error);
-        }
+        const [pr, rr] = await Promise.all([fetch('/pois.json'), fetch('/recommendations.json')]);
+        const [pj, rj] = await Promise.all([pr.json(), rr.json()]);
+        if (cancelled) return;
+        setPoiData(Array.isArray(pj) ? pj : []);
+        setRecommendationData(rj && typeof rj === 'object' ? rj : { rounds: [], profiles: [] });
+      } catch (err) {
+        if (!cancelled) { setPoiData([]); setRecommendationData({ rounds: [], profiles: [] }); }
       } finally {
-        if (!cancelled) {
-          setIsLoading(false);
-        }
+        if (!cancelled) setIsLoading(false);
       }
     }
-
     loadData();
-
-    return () => {
-      cancelled = true;
-    };
+    return () => { cancelled = true; };
   }, []);
 
   useEffect(() => {
-    if (!selectedProfileId && profiles.length > 0) {
-      setSelectedProfileId(profiles[0].id);
-    }
+    if (!selectedProfileId && profiles.length > 0) setSelectedProfileId(profiles[0].id);
   }, [profiles, selectedProfileId]);
 
   useEffect(() => {
-    if (!selectedProfile) {
-      return;
-    }
-
-    setSelectedPoi((currentPoi) => currentPoi ?? selectedProfile.recommendations?.[0] ?? poiData[0] ?? null);
+    if (!selectedProfile) return;
+    setSelectedPoi((cur) => cur ?? selectedProfile.recommendations?.[0] ?? poiData[0] ?? null);
   }, [poiData, selectedProfile]);
 
-  const recommendedPois = selectedProfile?.recommendations ?? [];
-  const recommendedPoiIds = useMemo(() => new Set(recommendedPois.map((poi) => poi.id)), [recommendedPois]);
-  const latestRound = recommendationData.rounds?.[recommendationData.rounds.length - 1] ?? null;
-  const defenseShield = recommendationData.meta?.defenseShield ?? null;
+  const recommendedPois   = selectedProfile?.recommendations ?? [];
+  const recommendedPoiIds = useMemo(() => new Set(recommendedPois.map((p) => p.id)), [recommendedPois]);
+  const latestRound       = recommendationData.rounds?.[recommendationData.rounds.length - 1] ?? null;
+  const defenseShield     = recommendationData.meta?.defenseShield ?? null;
+  const profileMeta       = PROFILE_META[selectedProfileId] ?? { icon: '👤', accent: '#60a5fa', tag: '' };
 
   const allPoisToRender = useMemo(() => {
     const map = new Map();
-    poiData.forEach(poi => map.set(poi.id, poi));
-    recommendedPois.forEach(poi => map.set(poi.id, poi));
+    poiData.forEach((p) => map.set(p.id, p));
+    recommendedPois.forEach((p) => map.set(p.id, p));
     return Array.from(map.values());
   }, [poiData, recommendedPois]);
 
-  const handleSelectProfile = (profileId) => {
-    const profile = profiles.find((item) => item.id === profileId);
-    setSelectedProfileId(profileId);
+  const handleSelectProfile = (id) => {
+    const profile = profiles.find((p) => p.id === id);
+    setSelectedProfileId(id);
     setSelectedPoi(profile?.recommendations?.[0] ?? poiData[0] ?? null);
   };
 
   const handleCheckIn = (poi) => {
-    if (!poi) {
-      return;
-    }
-
-    const historyEntry = {
-      id: poi.id,
-      name: poi.name,
-      profile: selectedProfile?.label ?? 'Unknown profile',
+    if (!poi) return;
+    const entry = {
+      id: poi.id, name: poi.name,
+      profile: selectedProfile?.label ?? 'Unknown',
       tokensEarned: 1,
       timestamp: new Date().toISOString(),
+      type: 'checkin',
     };
-
     setSelectedPoi(poi);
-    setLastCheckIn({
-      name: poi.name,
-      profile: selectedProfile?.label ?? 'Unknown profile',
-    });
-    setCheckInHistory((currentHistory) => [historyEntry, ...currentHistory]);
-    setTokenBalance((currentBalance) => currentBalance + historyEntry.tokensEarned);
+    setLastCheckIn({ name: poi.name, profile: selectedProfile?.label ?? 'Unknown' });
+    setCheckInHistory((h) => [entry, ...h]);
+    setTokenBalance((b) => b + 1);
   };
 
-  const handleAddTokens = () => {
-    setTokenBalance((currentBalance) => currentBalance + 10);
-  };
-
-  const handleOpenReviewForm = (poi) => {
-    setSelectedPoiForReview(poi);
-    setReviewRating(5);
-    setReviewText('');
-    setShowReviewForm(true);
-  };
-
-  const handleOpenExplanation = (poi) => {
-    setSelectedPoiForExplanation(poi);
-    setShowExplanation(true);
-  };
+  const handleAddTokens  = () => setTokenBalance((b) => b + 10);
+  const handleOpenReview = (poi) => { setSelectedPoiForReview(poi); setReviewRating(5); setReviewText(''); setShowReviewForm(true); };
+  const handleOpenExplanation = (poi) => { setSelectedPoiForExplanation(poi); setShowExplanation(true); };
 
   const handleSubmitReview = (e) => {
     e.preventDefault();
     if (!selectedPoiForReview) return;
-    console.log(`Review submitted for ${selectedPoiForReview.name}: ${reviewRating} stars - ${reviewText}`);
     setShowReviewForm(false);
-    setTokenBalance((currentBalance) => currentBalance + 5);
-    
-    // Add to transaction history / checkin history as a review action
-    const historyEntry = {
+    setTokenBalance((b) => b + 5);
+    const entry = {
       id: selectedPoiForReview.id,
-      name: `Review for ${selectedPoiForReview.name}`,
-      profile: selectedProfile?.label ?? 'Unknown profile',
+      name: `Review: ${selectedPoiForReview.name}`,
+      profile: selectedProfile?.label ?? 'Unknown',
       tokensEarned: 5,
       timestamp: new Date().toISOString(),
+      type: 'review',
     };
-    setCheckInHistory((currentHistory) => [historyEntry, ...currentHistory]);
+    setCheckInHistory((h) => [entry, ...h]);
   };
 
   return (
     <div className="app-shell">
       <div className="app-frame">
+
+        {/* ══ TOP BAR ══════════════════════════════════════════════════════ */}
         <header className="topbar">
-          <div>
-            <p className="eyebrow">TrustChain Federated Learning Demo</p>
-            <h1>POI Recommendation Engine</h1>
-            <p className="topbar-copy">Profile-aware recommendations are sourced from the federated simulation output.</p>
+          <div className="topbar-brand">
+            <div className="topbar-logo">⛓️</div>
+            <div>
+              <p className="eyebrow">Federated Learning · Blockchain · Privacy</p>
+              <h1>TrustChain <span className="topbar-sub">POI Engine</span></h1>
+            </div>
           </div>
 
           <div className="topbar-actions">
-            {checkInHistory.length > 0 ? (
-              <button
-                type="button"
-                className="history-toggle-button"
-                onClick={() => setShowAllHistory((current) => !current)}
-              >
-                {showAllHistory ? 'Hide history' : 'View history'}
+            {checkInHistory.length > 0 && (
+              <button type="button" className="topbar-ghost-btn" onClick={() => setShowAllHistory((c) => !c)}>
+                📋 {showAllHistory ? 'Hide' : 'History'}
               </button>
-            ) : null}
-
-            <button
-              type="button"
-              className="wallet-button"
-              onClick={() => setShowWallet(true)}
-            >
-              My Wallet
+            )}
+            <button type="button" className="topbar-ghost-btn wallet-trigger" onClick={() => setShowWallet(true)}>
+              💰 Wallet
             </button>
-
             <div className="token-pill" aria-label={`Token balance ${tokenBalance}`}>
-              <span className="token-pill__label">Balance</span>
-              <strong>{tokenBalance} TC</strong>
-              <button type="button" className="token-action-button" onClick={handleAddTokens}>
-                +10
-              </button>
+              <span className="token-pill__icon">🪙</span>
+              <div className="token-pill__info">
+                <span className="token-pill__label">TC Balance</span>
+                <strong className="token-pill__amount">{tokenBalance}</strong>
+              </div>
+              <button type="button" className="token-action-button" onClick={handleAddTokens} title="Add 10 test tokens">+10</button>
             </div>
           </div>
         </header>
 
-        <main className="content-grid">
-          {defenseShield?.flaggedBots > 0 && (
-            <div className="bot-warning-banner" style={{ background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)', color: 'white', padding: '16px', borderRadius: '12px', marginBottom: '24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', boxShadow: '0 4px 15px rgba(239, 68, 68, 0.25)', gridColumn: '1 / -1' }}>
+        {/* ══ DEFENSE SHIELD BANNER ════════════════════════════════════════ */}
+        {defenseShield?.flaggedBots > 0 && (
+          <div className="shield-banner">
+            <div className="shield-banner__left">
+              <span className="shield-icon">🛡️</span>
               <div>
-                <h3 style={{ margin: '0 0 4px 0', fontSize: '1.1rem', color: '#ffffff' }}>🚨 Defense Shield Active</h3>
-                <p style={{ margin: 0, fontSize: '0.9rem', color: '#fecaca' }}>Blocked {defenseShield.flaggedBots} malicious bot accounts from influencing the model.</p>
-              </div>
-              <div style={{ background: 'rgba(255, 255, 255, 0.2)', padding: '6px 12px', borderRadius: '8px', fontSize: '0.85rem', fontWeight: 600 }}>
-                {defenseShield.retentionRate.toFixed(1)}% Data Retained
+                <p className="shield-title">Defense Shield Active</p>
+                <p className="shield-sub">Blocked <strong>{defenseShield.flaggedBots}</strong> bot accounts · {defenseShield.retentionRate.toFixed(1)}% clean data retained · DP ε={defenseShield.epsilon}</p>
               </div>
             </div>
-          )}
+            <div className="shield-badge">{defenseShield.retentionRate.toFixed(0)}% Safe</div>
+          </div>
+        )}
+
+        {/* ══ MAIN GRID ════════════════════════════════════════════════════ */}
+        <main className="content-grid">
+
+          {/* ── LEFT PANEL ───────────────────────────────────────────────── */}
           <section className="panel panel--summary">
             {isLoading ? (
-              <div className="panel--loading">
-                <p className="panel-label">Loading data</p>
-                <h2>Loading POI dataset sample...</h2>
+              <div className="loading-state">
+                <div className="loading-spinner" />
+                <p>Loading 34k NYC POIs…</p>
               </div>
             ) : (
               <>
-                <div>
-                  <p className="panel-label">Dashboard summary</p>
-                  <h2>Federated Learning Output</h2>
-                  <p className="panel-copy">
-                    Browse locations across NYC. Smart recommendations are updated in real-time as you switch profiles.
-                  </p>
+                {/* ── Stats strip ──────────────────────────────────────── */}
+                <div className="stats-strip">
+                  <div className="stat-tile stat-tile--blue">
+                    <span className="stat-tile__icon">🗺️</span>
+                    <div>
+                      <span className="stat-tile__label">POIs on Map</span>
+                      <strong className="stat-tile__val">{poiData.length.toLocaleString()}</strong>
+                    </div>
+                  </div>
+                  <div className="stat-tile stat-tile--green">
+                    <span className="stat-tile__icon">🤖</span>
+                    <div>
+                      <span className="stat-tile__label">FL Accuracy</span>
+                      <strong className="stat-tile__val">{latestRound ? `${(latestRound.accuracy * 100).toFixed(0)}%` : '93%'}</strong>
+                    </div>
+                  </div>
+                  <div className="stat-tile stat-tile--amber">
+                    <span className="stat-tile__icon">🪙</span>
+                    <div>
+                      <span className="stat-tile__label">My Balance</span>
+                      <strong className="stat-tile__val">{tokenBalance} TC</strong>
+                    </div>
+                  </div>
                 </div>
 
-                <div className="stats-row">
-                  <div className="stat-card">
-                    <span className="stat-card__label">POIs Available</span>
-                    <strong>{poiData.length}</strong>
+                {/* ── Profile switcher ─────────────────────────────────── */}
+                <div className="profile-section">
+                  <div className="section-header">
+                    <p className="section-label">👤 Federated Profile</p>
+                    <span className="section-hint">Switch to change recommendations</span>
                   </div>
-                  <div className="stat-card">
-                    <span className="stat-card__label">My Balance</span>
-                    <strong>{tokenBalance} TC</strong>
-                  </div>
-                  <div className="stat-card">
-                    <span className="stat-card__label">Model Accuracy</span>
-                    <strong>{latestRound ? `${(latestRound.accuracy * 100).toFixed(1)}%` : '91.4%'}</strong>
-                  </div>
-                </div>
-
-                <div className="profile-switcher">
-                  <div className="profile-switcher__header">
-                    <p className="panel-label">Active Client Persona</p>
-                    <p className="profile-switcher__hint">Simulates local federated training</p>
-                  </div>
-
                   <div className="profile-grid">
                     {profiles.map((profile) => {
                       const isActive = profile.id === selectedProfileId;
-
+                      const meta = PROFILE_META[profile.id] ?? { icon: '👤', accent: '#60a5fa', tag: '' };
                       return (
                         <button
                           key={profile.id}
                           type="button"
                           className={`profile-chip ${isActive ? 'profile-chip--active' : ''}`}
+                          style={isActive ? { '--chip-accent': meta.accent } : {}}
                           onClick={() => handleSelectProfile(profile.id)}
                         >
+                          <span className="profile-chip__icon">{meta.icon}</span>
                           <span className="profile-chip__label">{profile.label}</span>
-                          <span className="profile-chip__meta">Acc: {(profile.validationAccuracy * 100).toFixed(0)}%</span>
+                          <span className="profile-chip__tag">{meta.tag}</span>
+                          <span className="profile-chip__acc">Acc {(profile.validationAccuracy * 100).toFixed(0)}%</span>
                         </button>
                       );
                     })}
                   </div>
                 </div>
 
-                <div className="recommendation-feed">
-                  <div className="recommendation-feed__header">
+                {/* ── Recommendation feed ──────────────────────────────── */}
+                <div className="rec-feed">
+                  <div className="section-header">
                     <div>
-                      <p className="panel-label">Recommended for you</p>
-                      <h3>{selectedProfile ? selectedProfile.label : 'Select a profile'}</h3>
+                      <p className="section-label">⭐ Recommended for You</p>
+                      <p className="section-profile-name" style={{ color: profileMeta.accent }}>
+                        {profileMeta.icon} {selectedProfile?.label ?? '—'}
+                      </p>
                     </div>
-                    <p className="recommendation-feed__hint">
-                      Preferred: {selectedProfile?.topCategories?.slice(0, 2).join(', ') ?? 'n/a'}
-                    </p>
+                    <div className="rec-categories">
+                      {selectedProfile?.topCategories?.slice(0, 2).map((c) => (
+                        <span key={c} className="rec-cat-badge">{c}</span>
+                      ))}
+                    </div>
                   </div>
 
-                  <div className="recommendation-list">
-                    {recommendedPois.slice(0, 5).map((poi, index) => (
-                      <article key={poi.id} className="recommendation-card">
-                        <div>
-                          <div>
-                            <span className="recommendation-card__rank">#{index + 1}</span>
-                            <h4>{poi.name}</h4>
+                  <div className="rec-list">
+                    {recommendedPois.slice(0, 5).map((poi, i) => {
+                      const scorePercent = Math.round((poi.score ?? 0) * 100);
+                      return (
+                        <article
+                          key={poi.id}
+                          className="rec-card"
+                          style={{ '--rank-color': i === 0 ? '#f59e0b' : i === 1 ? '#94a3b8' : i === 2 ? '#cd7f32' : '#6b7280' }}
+                        >
+                          <div className="rec-card__rank">#{i + 1}</div>
+                          <div className="rec-card__body">
+                            <div className="rec-card__name-row">
+                              <span className="rec-card__cat-icon">{categoryIcon(poi.category)}</span>
+                              <h4 className="rec-card__name">{poi.name}</h4>
+                            </div>
+                            <div className="rec-card__meta">
+                              <span className="rec-cat-badge rec-cat-badge--sm">{poi.category}</span>
+                              <span>·</span>
+                              <span>{poi.checkins?.toLocaleString()} check-ins</span>
+                            </div>
+                            {/* Mini score bar */}
+                            <div className="rec-score-bar">
+                              <div className="rec-score-bar__fill" style={{ width: `${scorePercent}%`, background: profileMeta.accent }} />
+                            </div>
                           </div>
-                          <p>{poi.category} · {poi.checkins} check-ins</p>
-                        </div>
-                        <div className="recommendation-actions">
-                          <strong>{poi.score.toFixed(2)}</strong>
-                          <button
-                            type="button"
-                            className="recommendation-card-action"
-                            onClick={() => handleOpenExplanation(poi)}
-                            title="Why is this recommended?"
-                          >
-                            Why?
-                          </button>
-                        </div>
-                      </article>
-                    ))}
+                          <div className="rec-card__right">
+                            <span className="rec-card__score" style={{ color: profileMeta.accent }}>{(poi.score ?? 0).toFixed(2)}</span>
+                            <button
+                              type="button"
+                              className="rec-card__why-btn"
+                              onClick={() => handleOpenExplanation(poi)}
+                              title="Why is this recommended?"
+                            >
+                              Why? →
+                            </button>
+                          </div>
+                        </article>
+                      );
+                    })}
                   </div>
                 </div>
 
+                {/* ── Selected POI / Checkin card ──────────────────────── */}
                 <div className="checkin-card">
-                  <p className="panel-label">Current Selection</p>
-                  <h3>{selectedPoi ? selectedPoi.name : 'Select a marker on the map'}</h3>
-                  <p className="panel-copy">
-                    {selectedPoi
-                      ? 'You can perform a simulated check-in or submit a detailed review to earn rewards.'
-                      : 'Tap any POI marker on the map to view details.'}
-                  </p>
+                  <div className="section-header" style={{ marginBottom: '12px' }}>
+                    <p className="section-label">📍 Selected Location</p>
+                    {selectedPoi && recommendedPoiIds.has(selectedPoi.id) && (
+                      <span className="rec-badge-inline">⭐ Recommended</span>
+                    )}
+                  </div>
 
-                  {selectedPoi && (
-                    <div style={{ display: 'flex', gap: '8px', marginTop: '14px' }}>
-                      <button
-                        type="button"
-                        className="primary-button"
-                        onClick={() => handleCheckIn(selectedPoi)}
-                        style={{ flex: 1 }}
-                      >
-                        Simulate Check-in (+1)
-                      </button>
-                      <button
-                        type="button"
-                        className="primary-button"
-                        onClick={() => handleOpenReviewForm(selectedPoi)}
-                        style={{ flex: 1, background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)', color: '#ffffff', boxShadow: '0 4px 15px rgba(59, 130, 246, 0.25)' }}
-                      >
-                        Write Review (+5)
-                      </button>
+                  {selectedPoi ? (
+                    <>
+                      <div className="selected-poi-card">
+                        <div className="selected-poi-icon">{categoryIcon(selectedPoi.category)}</div>
+                        <div>
+                          <h3 className="selected-poi-name">{selectedPoi.name}</h3>
+                          <p className="selected-poi-meta">{selectedPoi.category} · {selectedPoi.checkins?.toLocaleString()} check-ins</p>
+                        </div>
+                      </div>
+                      <div className="checkin-actions">
+                        <button type="button" className="action-btn action-btn--green" onClick={() => handleCheckIn(selectedPoi)}>
+                          ✅ Check-in <span className="action-reward">+1 TC</span>
+                        </button>
+                        <button type="button" className="action-btn action-btn--blue" onClick={() => handleOpenReview(selectedPoi)}>
+                          ✍️ Review <span className="action-reward">+5 TC</span>
+                        </button>
+                        <button type="button" className="action-btn action-btn--ghost" onClick={() => handleOpenExplanation(selectedPoi)}>
+                          📊 Scores
+                        </button>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="empty-selection">
+                      <p>Click any marker on the map to select a location</p>
                     </div>
                   )}
 
-                  {lastCheckIn ? (
-                    <p className="checkin-note">Last check-in: {lastCheckIn.name} ({lastCheckIn.profile})</p>
-                  ) : null}
-
-                  <div className="checkin-history">
-                    <div className="checkin-history__header">
-                      <p className="panel-label">Activity Ledger</p>
-                      <span className="checkin-history__meta">
-                        {checkInHistory.length} events
-                      </span>
+                  {lastCheckIn && (
+                    <div className="last-checkin-note">
+                      <span>✅ Last check-in:</span> <strong>{lastCheckIn.name}</strong>
                     </div>
+                  )}
+                </div>
 
-                    {checkInHistory.length > 0 ? (
-                      <ul className="history-list">
-                        {(showAllHistory ? checkInHistory : checkInHistory.slice(0, 3)).map((entry, idx) => (
-                          <li key={`${entry.id}-${entry.timestamp}-${idx}`} className="history-item">
-                            <div className="history-item-details">
-                              <strong>{entry.name}</strong>
-                              <span>{entry.profile}</span>
-                            </div>
-                            <div className="history-item-meta">
-                              <span className="tokens">+{entry.tokensEarned} TC</span>
-                              <small>{new Date(entry.timestamp).toLocaleTimeString()}</small>
-                            </div>
-                          </li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <p className="panel-copy" style={{ fontSize: '0.8rem' }}>No recent activity.</p>
-                    )}
+                {/* ── Activity ledger ──────────────────────────────────── */}
+                <div className="activity-ledger">
+                  <div className="section-header">
+                    <p className="section-label">📒 Activity Ledger</p>
+                    <span className="section-hint">{checkInHistory.length} events</span>
                   </div>
+                  {checkInHistory.length > 0 ? (
+                    <ul className="ledger-list">
+                      {(showAllHistory ? checkInHistory : checkInHistory.slice(0, 4)).map((entry, idx) => (
+                        <li key={`${entry.id}-${entry.timestamp}-${idx}`} className="ledger-item">
+                          <span className="ledger-type-icon">
+                            {entry.type === 'review' ? '✍️' : '✅'}
+                          </span>
+                          <div className="ledger-item__body">
+                            <strong>{entry.name}</strong>
+                            <span>{new Date(entry.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                          </div>
+                          <span className={`ledger-reward ${entry.tokensEarned >= 5 ? 'ledger-reward--big' : ''}`}>
+                            +{entry.tokensEarned} TC
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="empty-ledger">No activity yet. Check-in to earn TC tokens!</p>
+                  )}
                 </div>
               </>
             )}
           </section>
 
+          {/* ── MAP PANEL ────────────────────────────────────────────────── */}
           <section className="panel panel--map">
             <div className="map-header">
               <div>
-                <p className="panel-label">NYC Geospatial Grid</p>
+                <p className="section-label">🗺️ NYC Geospatial Grid</p>
                 <h2>Foursquare Points of Interest</h2>
+                <p className="map-header-sub">
+                  {poiData.length.toLocaleString()} locations · {recommendedPoiIds.size} recommended for {selectedProfile?.label ?? '…'}
+                </p>
               </div>
-              <p className="map-hint">
-                🟢 Selected &nbsp;&nbsp; 🟠 Recommended &nbsp;&nbsp; 🔵 General
-              </p>
+              <div className="map-header-right">
+                <div className="map-stat-pill" style={{ borderColor: '#f97316', color: '#f97316' }}>
+                  🟠 {recommendedPoiIds.size} Recommended
+                </div>
+                <p className="map-hint">Click any marker to select · Legend ↘</p>
+              </div>
             </div>
 
             <div className="map-frame">
@@ -404,6 +407,7 @@ function App() {
                 pois={allPoisToRender}
                 onSelectPoi={setSelectedPoi}
                 onCheckIn={handleCheckIn}
+                onOpenDetails={handleOpenExplanation}
                 selectedPoiId={selectedPoi?.id}
                 recommendedPoiIds={recommendedPoiIds}
               />
@@ -411,27 +415,29 @@ function App() {
           </section>
         </main>
 
-        {/* Wallet Modal */}
+        {/* ══ WALLET MODAL ═════════════════════════════════════════════════ */}
         {showWallet && (
           <div className="modal-overlay" onClick={() => setShowWallet(false)}>
             <div className="modal" onClick={(e) => e.stopPropagation()}>
               <div className="modal-header">
-                <h2>TrustChain Token Wallet</h2>
-                <button type="button" className="modal-close" onClick={() => setShowWallet(false)}>&times;</button>
+                <h2>💰 TrustChain Wallet</h2>
+                <button type="button" className="modal-close" onClick={() => setShowWallet(false)}>×</button>
               </div>
               <div className="modal-content">
                 <div className="wallet-card">
                   <p className="wallet-label">Cryptographic Balance</p>
-                  <p className="wallet-amount">{tokenBalance} TC</p>
+                  <p className="wallet-amount">{tokenBalance} <span style={{ fontSize: '1.5rem', opacity: 0.7 }}>TC</span></p>
+                  <p className="wallet-sub">TrustChain Tokens · Proof-of-Recommendation</p>
                 </div>
                 <div className="transaction-list">
-                  <h3>Transaction Ledger (FL-rewards)</h3>
+                  <h3>Transaction Ledger</h3>
                   {checkInHistory.length > 0 ? (
-                    checkInHistory.slice(0, 5).map((entry, idx) => (
+                    checkInHistory.slice(0, 8).map((entry, idx) => (
                       <div key={idx} className="transaction-item">
-                        <div>
-                          <strong style={{ display: 'block', color: '#ffffff' }}>{entry.name}</strong>
-                          <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+                        <span style={{ fontSize: '1.1rem' }}>{entry.type === 'review' ? '✍️' : '✅'}</span>
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <strong style={{ display: 'block', color: '#ffffff', fontSize: '0.88rem' }}>{entry.name}</strong>
+                          <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
                             {new Date(entry.timestamp).toLocaleString()}
                           </span>
                         </div>
@@ -439,8 +445,8 @@ function App() {
                       </div>
                     ))
                   ) : (
-                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', textAlign: 'center', padding: '12px' }}>
-                      No transactions recorded yet.
+                    <p style={{ color: 'var(--text-secondary)', textAlign: 'center', padding: '24px', fontSize: '0.9rem' }}>
+                      No transactions yet. Check in at a POI to earn tokens!
                     </p>
                   )}
                 </div>
@@ -449,106 +455,64 @@ function App() {
           </div>
         )}
 
-        {/* Review Form Modal */}
+        {/* ══ REVIEW FORM MODAL ════════════════════════════════════════════ */}
         {showReviewForm && selectedPoiForReview && (
           <div className="modal-overlay" onClick={() => setShowReviewForm(false)}>
             <div className="modal" onClick={(e) => e.stopPropagation()}>
               <div className="modal-header">
-                <h2>Submit Cryptographic Review</h2>
-                <button type="button" className="modal-close" onClick={() => setShowReviewForm(false)}>&times;</button>
+                <h2>✍️ Submit Review</h2>
+                <button type="button" className="modal-close" onClick={() => setShowReviewForm(false)}>×</button>
               </div>
               <form onSubmit={handleSubmitReview} className="modal-content">
-                <p style={{ marginBottom: '4px' }}>Reviewing:</p>
-                <h3 style={{ color: '#ffffff', fontFamily: 'var(--font-heading)', fontSize: '1.25rem', marginBottom: '4px' }}>
-                  {selectedPoiForReview.name}
-                </h3>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: '16px' }}>
-                  {selectedPoiForReview.category}
-                </p>
+                <div className="review-poi-header">
+                  <span className="review-poi-icon">{categoryIcon(selectedPoiForReview.category)}</span>
+                  <div>
+                    <h3 className="review-poi-name">{selectedPoiForReview.name}</h3>
+                    <p className="review-poi-meta">{selectedPoiForReview.category} · {selectedPoiForReview.checkins?.toLocaleString()} check-ins</p>
+                  </div>
+                </div>
 
-                <label className="panel-label">Your Rating</label>
+                <div className="review-reward-note">
+                  🪙 You'll earn <strong>+5 TC</strong> tokens for this on-chain review
+                </div>
+
+                <label className="section-label" style={{ display: 'block', marginBottom: '10px' }}>Your Rating</label>
                 <div className="rating-stars">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <span
                       key={star}
                       className={`star-btn ${star <= reviewRating ? 'filled' : ''}`}
                       onClick={() => setReviewRating(star)}
-                    >
-                      ★
-                    </span>
+                    >★</span>
                   ))}
                 </div>
 
-                <label className="panel-label" htmlFor="review-comment">Written Feedback</label>
+                <label className="section-label" htmlFor="review-comment" style={{ display: 'block', marginBottom: '8px' }}>Written Feedback</label>
                 <textarea
                   id="review-comment"
                   className="review-textarea"
-                  placeholder="Describe your experience at this location..."
+                  placeholder="Describe your experience…"
                   value={reviewText}
                   onChange={(e) => setReviewText(e.target.value)}
                   required
                 />
 
-                <button type="submit" className="primary-button">
-                  Submit Review (+5 TC)
-                </button>
+                <button type="submit" className="primary-button">Submit Review · Earn +5 TC</button>
               </form>
             </div>
           </div>
         )}
 
-        {/* Explanation Modal */}
+        {/* ══ POI DETAILS / TRANSPARENCY PANEL ════════════════════════════ */}
         {showExplanation && selectedPoiForExplanation && (
-          <div className="modal-overlay" onClick={() => setShowExplanation(false)}>
-            <div className="modal" onClick={(e) => e.stopPropagation()}>
-              <div className="modal-header">
-                <h2>Recommendation Breakdown</h2>
-                <button type="button" className="modal-close" onClick={() => setShowExplanation(false)}>&times;</button>
-              </div>
-              <div className="modal-content">
-                <div className="explanation-score-card">
-                  <p className="wallet-label">Federated Match Score</p>
-                  <div className="explanation-score-circle">
-                    {(selectedPoiForExplanation.score * 100).toFixed(0)}%
-                  </div>
-                </div>
-
-                <div className="explanation-details">
-                  <h3 style={{ color: '#ffffff', fontFamily: 'var(--font-heading)', fontSize: '1.1rem', marginBottom: '8px' }}>
-                    {selectedPoiForExplanation.name}
-                  </h3>
-                  <div className="explanation-row">
-                    <span>Proximity score</span>
-                    <strong>{selectedPoiExplanationMetrics ? `${selectedPoiExplanationMetrics.proximityScore}%` : 'N/A'}</strong>
-                  </div>
-                  <div className="explanation-row">
-                    <span>Community rating</span>
-                    <strong>{selectedPoiExplanationMetrics ? `${selectedPoiExplanationMetrics.communityRating}%` : 'N/A'}</strong>
-                  </div>
-                  <div className="explanation-row">
-                    <span>Model score</span>
-                    <strong>{selectedPoiExplanationMetrics ? `${selectedPoiExplanationMetrics.modelScore}%` : 'N/A'}</strong>
-                  </div>
-                  <div className="explanation-row" style={{ marginTop: '12px', opacity: 0.85 }}>
-                    <span>Profile context</span>
-                    <strong>{selectedProfile?.label ?? 'Unknown'}</strong>
-                  </div>
-                </div>
-
-                <button
-                  type="button"
-                  className="primary-button"
-                  onClick={() => {
-                    setShowExplanation(false);
-                    handleCheckIn(selectedPoiForExplanation);
-                  }}
-                  style={{ marginTop: '20px' }}
-                >
-                  Check-in Here (+1 TC)
-                </button>
-              </div>
-            </div>
-          </div>
+          <PoiDetailsPanel
+            poi={selectedPoiForExplanation}
+            metrics={selectedPoiExplanationMetrics}
+            profileLabel={selectedProfile?.label}
+            onClose={() => setShowExplanation(false)}
+            onCheckIn={handleCheckIn}
+            onWriteReview={handleOpenReview}
+          />
         )}
       </div>
     </div>
