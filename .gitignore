@@ -24,7 +24,9 @@ data/processed/
 *.log
 
 # OS files
-.DS_Storefrontend/node_modules/
+.DS_Store
+backend/.DS_Store
+frontend/node_modules/
 data/
 frontend/src/*.json
 .venv311/
