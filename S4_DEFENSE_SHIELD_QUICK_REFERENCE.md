@@ -27,6 +27,7 @@ private_grads = apply_differential_privacy(model_gradients, epsilon=1.0, sensiti
 # Send private_grads to server (not raw gradients)
 ```
 
+
 ---
 
 ## 🚀 Copy-Paste Integration Template

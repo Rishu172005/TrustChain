@@ -18,8 +18,8 @@ from flwr.server.client_manager import ClientManager
 from flwr.server.strategy import FedAvg
 
 ROOT = Path(__file__).resolve().parent.parent
-PUBLIC_DIR = ROOT / "frontend" / "public"
-RECOMMENDATION_OUTPUT_PATH = PUBLIC_DIR / "recommendations.json"
+SRC_DIR = ROOT / "frontend" / "src"
+RECOMMENDATION_OUTPUT_PATH = SRC_DIR / "recommendations.json"
 
 ROUNDS = 5
 CLIENTS = 3
