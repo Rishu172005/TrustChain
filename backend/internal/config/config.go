@@ -37,8 +37,10 @@ type LogConfig struct {
 
 // ProviderConfig holds external provider selection.
 type ProviderConfig struct {
-	Blockchain     string // mock | polygon | hardhat
-	Recommendation string // mock | federated | external
+	Blockchain            string // mock | polygon | hardhat
+	Recommendation        string // mock | federated | external
+	HardhatRPCURL         string // used when Blockchain=hardhat
+	HardhatDeploymentPath string // path to deployments/localhost.json
 }
 
 // Load reads configuration from environment variables and an optional .env file.
@@ -58,6 +60,8 @@ func Load() (*Config, error) {
 	v.SetDefault("LOG_LEVEL", "info")
 	v.SetDefault("BLOCKCHAIN_PROVIDER", "mock")
 	v.SetDefault("RECOMMENDATION_PROVIDER", "mock")
+	v.SetDefault("HARDHAT_RPC_URL", "http://127.0.0.1:8545")
+	v.SetDefault("HARDHAT_DEPLOYMENT_PATH", "../contracts/trustchain-task6-s1/deployments/localhost.json")
 
 	v.AutomaticEnv()
 	v.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
@@ -82,8 +86,10 @@ func Load() (*Config, error) {
 			Level: v.GetString("LOG_LEVEL"),
 		},
 		Providers: ProviderConfig{
-			Blockchain:     v.GetString("BLOCKCHAIN_PROVIDER"),
-			Recommendation: v.GetString("RECOMMENDATION_PROVIDER"),
+			Blockchain:            v.GetString("BLOCKCHAIN_PROVIDER"),
+			Recommendation:        v.GetString("RECOMMENDATION_PROVIDER"),
+			HardhatRPCURL:         v.GetString("HARDHAT_RPC_URL"),
+			HardhatDeploymentPath: v.GetString("HARDHAT_DEPLOYMENT_PATH"),
 		},
 	}
 

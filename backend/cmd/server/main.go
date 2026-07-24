@@ -59,6 +59,17 @@ func main() {
 		blockchainProvider = blockchain.NewPolygonProvider("", "")
 		blockchainProviderName = "polygon"
 		log.Info().Msg("blockchain provider: polygon (stub)")
+	case "hardhat":
+		hp, err := blockchain.NewHardhatProvider(cfg.Providers.HardhatRPCURL, cfg.Providers.HardhatDeploymentPath)
+		if err != nil {
+			log.Warn().Err(err).Msg("hardhat provider init failed — falling back to mock (run deploy.js first)")
+			blockchainProvider = blockchain.NewMockBlockchainProvider()
+			blockchainProviderName = "mock (hardhat-fallback)"
+		} else {
+			blockchainProvider = hp
+			blockchainProviderName = "hardhat"
+			log.Info().Str("rpc", cfg.Providers.HardhatRPCURL).Msg("blockchain provider: hardhat")
+		}
 	default:
 		blockchainProvider = blockchain.NewMockBlockchainProvider()
 		blockchainProviderName = "mock"

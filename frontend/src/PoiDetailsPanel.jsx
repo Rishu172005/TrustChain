@@ -132,7 +132,14 @@ export default function PoiDetailsPanel({ poi, metrics, profileLabel, onClose, o
   if (!poi || !metrics) return null;
 
   const { proximityScore, communityRating, modelScore } = metrics;
-  const compositeScore = Math.round((proximityScore * 0.25) + (communityRating * 0.25) + (modelScore * 0.50));
+  const normalizedCheckins = Number(poi?.checkins ?? poi?.metadata?.totalCheckins ?? poi?.totalCheckins ?? poi?.total_checkins ?? 0);
+  const fallbackCommunity = normalizedCheckins > 0 ? Math.round(Math.min(100, 12 + Math.log10(normalizedCheckins + 1) * 18)) : 0;
+  const fallbackModel = typeof poi?.score === 'number' && poi.score > 0
+    ? Math.round(Math.min(100, poi.score * 100))
+    : (normalizedCheckins > 0 ? Math.round(Math.min(100, 10 + Math.log10(normalizedCheckins + 1) * 16)) : 0);
+  const effectiveCommunity = communityRating > 0 ? communityRating : fallbackCommunity;
+  const effectiveModel = modelScore > 0 ? modelScore : fallbackModel;
+  const compositeScore = Math.round((proximityScore * 0.25) + (effectiveCommunity * 0.25) + (effectiveModel * 0.50));
 
   const compositeColor =
     compositeScore >= 75 ? '#34d399' :
@@ -207,7 +214,7 @@ export default function PoiDetailsPanel({ poi, metrics, profileLabel, onClose, o
             icon="👥"
             label="Community Rating"
             sublabel="Crowd-sourced check-in signal — 25% weight"
-            value={communityRating}
+            value={effectiveCommunity}
             color="#a78bfa"
             ringDelay={120}
             barDelay={120}
@@ -219,7 +226,7 @@ export default function PoiDetailsPanel({ poi, metrics, profileLabel, onClose, o
             icon="🤖"
             label="Federated Model Score"
             sublabel="FL recommendation confidence — 50% weight"
-            value={modelScore}
+            value={effectiveModel}
             color="#34d399"
             ringDelay={240}
             barDelay={240}

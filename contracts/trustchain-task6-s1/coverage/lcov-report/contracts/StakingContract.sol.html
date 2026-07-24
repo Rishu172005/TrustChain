@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for contracts/StakingContract.sol</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">contracts/</a> StakingContract.sol
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">92.86% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>13/14</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">55% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>11/20</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">83.33% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>5/6</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">89.47% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>17/19</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line high'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+&nbsp;
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import "./TrustToken.sol";
+&nbsp;
+/// @title StakingContract
+/// @notice Lets businesses stake TrustToken to gain visibility within the
+/// platform instead of paying for advertising. Tokens can be slashed
+/// (withdrawn/burned) from bad actors by the owner/PoR mechanism, and
+/// businesses can unstake freely otherwise.
+contract StakingContract is Ownable, ReentrancyGuard {
+    TrustToken public immutable trustToken;
+&nbsp;
+    /// @notice Minimum stake required for a business to be considered "visible".
+    uint256 public minimumStake = 100 * 10 ** 18;
+&nbsp;
+    mapping(address =&gt; uint256) public stakedBalance;
+&nbsp;
+    event Staked(address indexed business, uint256 amount, uint256 newTotal);
+    event Unstaked(address indexed business, uint256 amount, uint256 newTotal);
+    event Slashed(address indexed business, uint256 amount, string reason);
+    event MinimumStakeUpdated(uint256 newMinimum);
+&nbsp;
+    constructor(address trustTokenAddress, address initialOwner) Ownable(initialOwner) {
+        trustToken = TrustToken(trustTokenAddress);
+    }
+&nbsp;
+    /// @notice Stake tokens to gain/increase visibility. Caller must have
+    /// approved this contract to spend `amount` beforehand.
+    function stake(uint256 amount) external <span class="missing-if-branch" title="else path not taken" >E</span>nonReentrant {
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(amount &gt; 0, "StakingContract: amount must be &gt; 0");
+&nbsp;
+        // Effects before interaction to guard against re-entrancy.
+        stakedBalance[msg.sender] += amount;
+&nbsp;
+        bool success = trustToken.transferFrom(msg.sender, address(this), amount);
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(success, "StakingContract: transferFrom failed");
+&nbsp;
+        emit Staked(msg.sender, amount, stakedBalance[msg.sender]);
+    }
+&nbsp;
+    /// @notice Withdraw staked tokens.
+    function unstake(uint256 amount) external <span class="missing-if-branch" title="else path not taken" >E</span>nonReentrant {
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(amount &gt; 0, "StakingContract: amount must be &gt; 0");
+        require(stakedBalance[msg.sender] &gt;= amount, "StakingContract: insufficient stake");
+&nbsp;
+        stakedBalance[msg.sender] -= amount;
+&nbsp;
+        bool success = trustToken.transfer(msg.sender, amount);
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(success, "StakingContract: transfer failed");
+&nbsp;
+        emit Unstaked(msg.sender, amount, stakedBalance[msg.sender]);
+    }
+&nbsp;
+    /// @notice Penalize a business for manipulation/bad behavior by burning
+    /// part of its stake. Intended to be called by the owner, or later by
+    /// the PoR consensus contract once it exists (add as a controller then).
+    function slash(address business, uint256 amount, string calldata reason) external onlyOwner {
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(stakedBalance[business] &gt;= amount, "StakingContract: insufficient stake to slash");
+&nbsp;
+        stakedBalance[business] -= amount;
+        trustToken.burnFrom(address(this), amount);
+&nbsp;
+        emit Slashed(business, amount, reason);
+    }
+&nbsp;
+    function isVisible(address business) external view returns (bool) {
+        return stakedBalance[business] &gt;= minimumStake;
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function setMinimumStake(uint256 newMinimum) external onlyOwner {</span>
+        minimumStake = newMinimum;
+<span class="cstat-no" title="statement not covered" >        emit MinimumStakeUpdated(newMinimum);</span>
+    }
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri Jul 24 2026 12:57:41 GMT+0530 (India Standard Time)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>

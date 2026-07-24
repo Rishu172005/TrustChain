@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-08T16:07:37.941945+00:00",
+  "generatedAt": "2026-07-24T15:55:29.627633+00:00",
   "meta": {
     "model": "Federated collaborative filtering",
     "rounds": 5,
@@ -94,7 +94,7 @@
           "id": "4840fe6bf964a52030501fe3",
           "name": "Bus Station",
           "category": "Transit",
-          "lat": 40.75722129839835,
+          "lat": 40.75722129839836,
           "lng": -73.99154663085938,
           "checkins": 515,
           "score": 0.4184
@@ -112,7 +112,7 @@
           "id": "4a513b17f964a520d2b01fe3",
           "name": "Train Station",
           "category": "Transit",
-          "lat": 40.699023442824625,
+          "lat": 40.69902344282463,
           "lng": -73.81001472473143,
           "checkins": 269,
           "score": 0.3934

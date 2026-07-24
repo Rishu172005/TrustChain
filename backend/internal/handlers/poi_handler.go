@@ -71,8 +71,8 @@ func (h *POIHandler) List(c *gin.Context) {
 		response.UnprocessableEntity(c, err.Error())
 		return
 	}
-	if err := validator.Limit(limit, 1, 100); err != nil {
-		response.UnprocessableEntity(c, "limit must be between 1 and 100")
+	if err := validator.Limit(limit, 1, 500); err != nil {
+		response.UnprocessableEntity(c, "limit must be between 1 and 500")
 		return
 	}
 

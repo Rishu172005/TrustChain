@@ -51,15 +51,19 @@ func NewCheckInService(
 	}
 }
 
-// CreateCheckIn validates the request, confirms the POI exists, persists the
+// CreateCheckIn validates the request, confirms the POI exists (if in DB), persists the
 // check-in, and submits a blockchain transaction.
+// NOTE: If the POI is not in MongoDB (e.g. demo mode with static data), the service
+// logs a warning but still submits the blockchain transaction.
 func (s *CheckInService) CreateCheckIn(ctx context.Context, req CheckInRequest) (*CheckInResult, error) {
 	poi, err := s.poiRepo.FindByID(ctx, req.POIID)
 	if err != nil {
-		return nil, fmt.Errorf("looking up poi: %w", err)
+		// Non-fatal: log and continue — the blockchain tx should still fire.
+		s.log.Warn().Err(err).Str("poiId", req.POIID).Msg("POI lookup failed; proceeding with check-in anyway")
 	}
 	if poi == nil {
-		return nil, ErrPOINotFound
+		// POI not in DB (demo mode). Log and continue — don't block the tx.
+		s.log.Info().Str("poiId", req.POIID).Msg("POI not found in DB; check-in proceeding in demo mode")
 	}
 
 	userOID, err := primitive.ObjectIDFromHex(req.UserID)

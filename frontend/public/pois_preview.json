@@ -35,7 +35,7 @@
     "id": "4840fe6bf964a52030501fe3",
     "name": "Bus Station",
     "category": "Transit",
-    "lat": 40.75722129839835,
+    "lat": 40.75722129839836,
     "lng": -73.99154663085938,
     "checkins": 515
   },
@@ -91,7 +91,7 @@
     "id": "4a513b17f964a520d2b01fe3",
     "name": "Train Station",
     "category": "Transit",
-    "lat": 40.699023442824625,
+    "lat": 40.69902344282463,
     "lng": -73.81001472473143,
     "checkins": 269
   },
@@ -251,7 +251,7 @@
     "id": "412d2800f964a520df0c1fe3",
     "name": "Park",
     "category": "Outdoor",
-    "lat": 40.771425615335595,
+    "lat": 40.7714256153356,
     "lng": -73.97350072860723,
     "checkins": 152
   },
@@ -483,7 +483,7 @@
     "id": "4a36c1b9f964a520dd9d1fe3",
     "name": "Medical Center",
     "category": "Business",
-    "lat": 40.741673048141315,
+    "lat": 40.74167304814132,
     "lng": -73.97428784381152,
     "checkins": 122
   },
@@ -507,7 +507,7 @@
     "id": "49d60947f964a520a85c1fe3",
     "name": "Stadium",
     "category": "Culture",
-    "lat": 40.756457364677075,
+    "lat": 40.75645736467708,
     "lng": -73.8460636138916,
     "checkins": 120
   },
@@ -587,7 +587,7 @@
     "id": "49f76cc2f964a5209d6c1fe3",
     "name": "Train Station",
     "category": "Transit",
-    "lat": 40.734200760779835,
+    "lat": 40.73420076077984,
     "lng": -74.16483829470191,
     "checkins": 116
   },
@@ -611,7 +611,7 @@
     "id": "40f1d480f964a5206a0a1fe3",
     "name": "Park",
     "category": "Outdoor",
-    "lat": 40.74706188749891,
+    "lat": 40.74706188749892,
     "lng": -74.00519371032715,
     "checkins": 114
   },
@@ -619,7 +619,7 @@
     "id": "4ba8fa3df964a520ecff39e3",
     "name": "Office",
     "category": "Business",
-    "lat": 40.74211268500875,
+    "lat": 40.74211268500876,
     "lng": -73.98972048733542,
     "checkins": 113
   },
@@ -699,7 +699,7 @@
     "id": "4bd7282e5631c9b6e315a730",
     "name": "Office",
     "category": "Business",
-    "lat": 40.965214605874344,
+    "lat": 40.96521460587434,
     "lng": -74.06837948377257,
     "checkins": 108
   },
@@ -723,7 +723,7 @@
     "id": "4531059cf964a520683b1fe3",
     "name": "Department Store",
     "category": "Culture",
-    "lat": 40.762324800574554,
+    "lat": 40.76232480057456,
     "lng": -73.9678144454956,
     "checkins": 105
   },
@@ -787,7 +787,7 @@
     "id": "4ca4e519a6e08cfa884d6c94",
     "name": "Neighborhood",
     "category": "Other",
-    "lat": 40.762032253711986,
+    "lat": 40.76203225371199,
     "lng": -73.98515224456787,
     "checkins": 103
   },
@@ -867,7 +867,7 @@
     "id": "49e4ec34f964a5206e631fe3",
     "name": "Mall",
     "category": "Retail",
-    "lat": 40.726966066290515,
+    "lat": 40.72696606629052,
     "lng": -74.0383243560791,
     "checkins": 99
   },
@@ -955,7 +955,7 @@
     "id": "4d8f74cf1716a143e3ed4af7",
     "name": "Park",
     "category": "Outdoor",
-    "lat": 40.965416983333334,
+    "lat": 40.96541698333333,
     "lng": -74.06291968333333,
     "checkins": 96
   },
@@ -995,7 +995,7 @@
     "id": "4f22c7bde4b0b2f98daff0dc",
     "name": "Pool",
     "category": "Other",
-    "lat": 40.965355019034625,
+    "lat": 40.96535501903463,
     "lng": -74.06283213352812,
     "checkins": 93
   },
@@ -1131,7 +1131,7 @@
     "id": "4f1a558ae4b0d7904185f778",
     "name": "Bar",
     "category": "Food",
-    "lat": 40.965416942233624,
+    "lat": 40.96541694223362,
     "lng": -74.06288376421803,
     "checkins": 89
   },
@@ -1139,7 +1139,7 @@
     "id": "43bba61df964a520eb2c1fe3",
     "name": "Food & Drink Shop",
     "category": "Food",
-    "lat": 40.734852286139734,
+    "lat": 40.73485228613973,
     "lng": -73.99108529090881,
     "checkins": 89
   },
@@ -1475,7 +1475,7 @@
     "id": "4e71561b7d8b53db1bc11bce",
     "name": "Home (private)",
     "category": "Other",
-    "lat": 40.579124179746714,
+    "lat": 40.57912417974672,
     "lng": -73.82426211435131,
     "checkins": 77
   },
