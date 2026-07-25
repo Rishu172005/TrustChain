@@ -1,43 +1,52 @@
 # TrustChain Backend
 
-A production-quality Go backend for TrustChain — a decentralised location
-recommendation platform that uses blockchain-anchored trust and federated
-learning to solve privacy, integrity, and incentive problems in existing
-recommendation systems.
+A production-quality Go REST API for TrustChain — a decentralised location recommendation platform combining blockchain-anchored trust, federated learning, and differential privacy.
+
+**Status: Fully integrated with Hardhat blockchain (live token minting on check-in)**
 
 ---
 
 ## Quick Start
 
-The backend service can be run locally from the repository.
+### With Hardhat (full integration)
+```bash
+# 1. Start Hardhat node (in contracts/trustchain-task3-s1)
+npx hardhat node --port 8545
 
+# 2. Deploy contracts
+npx hardhat run scripts/deploy.js --network localhost
+
+# 3. Start backend
+cd backend
+cp .env.example .env
+BLOCKCHAIN_PROVIDER=hardhat go run ./cmd/server
+```
+
+### Mock mode (no blockchain required)
 ```bash
 cd backend
 cp .env.example .env
-docker compose up --build
+go run ./cmd/server     # defaults to BLOCKCHAIN_PROVIDER=mock
 ```
 
-The API is available at `http://localhost:8080/api/v1`.
+API available at `http://localhost:8080/api/v1`
 
-Verify the server is running:
+---
+
+## Health Check
 
 ```bash
 curl http://localhost:8080/api/v1/health
 ```
-
-Expected response:
-
 ```json
 {
   "success": true,
-  "message": "Service is healthy",
   "data": {
     "status": "healthy",
     "version": "1.0.0",
-    "uptime": "2s",
     "checks": {
-      "database": { "status": "healthy", "latencyMs": 1 },
-      "blockchainProvider": { "status": "healthy", "provider": "mock" },
+      "blockchainProvider": { "status": "healthy", "provider": "hardhat" },
+      "database": { "status": "healthy", "latencyMs": 0 },
       "recommendationProvider": { "status": "healthy", "provider": "mock" }
     }
   }
@@ -51,53 +60,53 @@ Expected response:
 | Component | Technology |
 |---|---|
 | Language | Go 1.22 |
-| HTTP Framework | Gin |
-| Database | MongoDB 7 (Atlas in production, Docker in development) |
+| HTTP Framework | Gin 1.10 |
+| Database | MongoDB 7 (Atlas / Docker) |
 | Logging | zerolog (structured JSON) |
 | Configuration | Viper |
+| Blockchain (live) | Hardhat JSON-RPC — raw `eth_call` / `eth_sendTransaction` |
+| Blockchain (stub) | PolygonProvider (interface-complete, returns stubs) |
 | Containerisation | Docker + Docker Compose |
-| API Documentation | OpenAPI 3.0 |
 
 ---
 
 ## Project Structure
 
 ```
-cmd/server/              Application entry point and dependency injection
-internal/config/         Configuration loading via Viper
-internal/models/         Domain entities (User, POI, CheckIn, Review)
+cmd/server/              Entrypoint — dependency injection, provider selection
+internal/config/         Viper config loading
+internal/models/         Domain entities (CheckIn, Review, POI, User)
 internal/ports/          Interface contracts for all external systems
-internal/repositories/   MongoDB data access implementations
-internal/services/       Business logic layer
-internal/handlers/       HTTP request handlers (Gin)
-internal/middleware/     CORS, logging, security headers
-internal/blockchain/     BlockchainProvider implementations
+internal/repositories/   MongoDB data access (POI, CheckIn, Review)
+internal/services/       Business logic (CheckIn, Review, POI, Health)
+internal/handlers/       HTTP handlers (Gin) — one per endpoint
+internal/middleware/     CORS, request logging, security headers
+internal/blockchain/     BlockchainProvider implementations:
+│                          hardhat_provider.go  ← live (JSON-RPC, no SDK)
+│                          mock_provider.go     ← fake tx hashes (default)
+│                          polygon_provider.go  ← stub for future mainnet
 internal/recommendation/ RecommendationProvider implementations
-internal/database/       MongoDB connection and index management
-pkg/logger/               Structured logger initialisation
-pkg/validator/            Input validation helpers
-pkg/response/             Standard JSON response helpers
-tests/                     Unit and integration tests
-docs/                      Architecture, API, database, and deployment guides
-scripts/                   MongoDB seed data
+internal/database/       MongoDB connection + index management
+pkg/logger/              Structured logger init
+pkg/validator/           Input validation (ObjectID, coordinates, rating)
+pkg/response/            Standard JSON response helpers
+docs/                    Architecture, API spec, DB design, deployment guide
 ```
 
 ---
 
 ## Environment Variables
 
-Copy `.env.example` to `.env` and adjust as needed.
-
 | Variable | Default | Description |
 |---|---|---|
 | `PORT` | `8080` | HTTP server port |
-| `SHUTDOWN_TIMEOUT` | `10` | Graceful shutdown timeout in seconds |
 | `MONGODB_URI` | `mongodb://localhost:27017` | MongoDB connection string |
 | `DATABASE_NAME` | `trustchain` | MongoDB database name |
-| `MONGODB_CONNECT_TIMEOUT` | `10` | Connection timeout in seconds |
-| `LOG_LEVEL` | `info` | Log level: debug, info, warn, error |
-| `BLOCKCHAIN_PROVIDER` | `mock` | Provider: mock, polygon, hardhat |
-| `RECOMMENDATION_PROVIDER` | `mock` | Provider: mock, federated, external |
+| `LOG_LEVEL` | `info` | debug / info / warn / error |
+| `BLOCKCHAIN_PROVIDER` | `mock` | `mock` \| `polygon` \| `hardhat` |
+| `RECOMMENDATION_PROVIDER` | `mock` | `mock` \| `federated` |
+| `HARDHAT_RPC_URL` | `http://127.0.0.1:8545` | Hardhat node RPC endpoint |
+| `HARDHAT_DEPLOYMENT_PATH` | `../contracts/trustchain-task3-s1/deployments/localhost.json` | Path to deployment addresses |
 
 ---
 
@@ -105,50 +114,65 @@ Copy `.env.example` to `.env` and adjust as needed.
 
 | Method | Path | Description |
 |---|---|---|
-| `GET` | `/api/v1/health` | Service health check |
-| `POST` | `/api/v1/checkin` | Submit a check-in |
-| `POST` | `/api/v1/review` | Submit a review |
-| `GET` | `/api/v1/recommend` | Get POI recommendations |
-| `GET` | `/api/v1/token-balance` | Get blockchain token balance |
-| `GET` | `/api/v1/pois` | List points of interest |
+| `GET` | `/api/v1/health` | Full health check (DB + blockchain + reco provider) |
+| `POST` | `/api/v1/checkin` | Record check-in; fires on-chain tx + mints TRUST tokens |
+| `POST` | `/api/v1/review` | Submit review; persists in MongoDB |
+| `GET` | `/api/v1/recommend` | Get personalised POI recommendations |
+| `GET` | `/api/v1/token-balance` | Read on-chain TRUST balance (`?wallet=0x...`) |
+| `GET` | `/api/v1/pois` | List POIs from MongoDB (`?limit=N`) |
 
-All endpoints return:
+All responses:
 ```json
-{ "success": true, "message": "...", "data": {} }
-```
-or on failure:
-```json
+{ "success": true,  "message": "...", "data": {} }
 { "success": false, "message": "...", "error": "..." }
 ```
 
-Full API documentation: [`docs/api-spec.md`](docs/api-spec.md)
+---
+
+## Blockchain Integration (HardhatProvider)
+
+`internal/blockchain/hardhat_provider.go` implements `ports.BlockchainProvider` using **raw Ethereum JSON-RPC** — no go-ethereum SDK dependency needed.
+
+### How it works
+1. Reads contract addresses from `deployments/localhost.json` (written by `deploy.js`)
+2. Computes function selectors at runtime: `keccak256("functionName(types)")[:4]`
+3. ABI-encodes arguments with proper zero-padding (32-byte words)
+4. Calls `eth_call` for reads, `eth_sendTransaction` for writes (Hardhat auto-unlocks accounts)
+
+### Check-in flow
+```
+POST /api/v1/checkin
+  → CheckInService.CreateCheckIn()
+  → HardhatProvider.SubmitCheckin()   eth_sendTransaction → UserRegistry.checkIn(bytes32)
+  → HardhatProvider.RewardUser()      eth_sendTransaction → TrustToken.mint(wallet, 10e18)
+  → GET /api/v1/token-balance         eth_call → TrustToken.balanceOf(wallet) → 10 TRUST
+```
+
+### Switching providers
+```bash
+BLOCKCHAIN_PROVIDER=mock     # MockBlockchainProvider (fake hashes, no node needed)
+BLOCKCHAIN_PROVIDER=hardhat  # HardhatProvider (live txs, requires running node)
+BLOCKCHAIN_PROVIDER=polygon  # PolygonProvider (stub — implement for mainnet)
+```
 
 ---
 
 ## Running Tests
 
 ```bash
-# All tests
-go test ./...
-
-# With coverage
-go test -coverprofile=coverage.out ./...
-go tool cover -html=coverage.out -o coverage.html
-
-# With race detector
-go test -race ./...
-
-# Verbose
-go test -v ./...
+go test ./...                          # all tests
+go test -v ./...                       # verbose
+go test -race ./...                    # race detector
+go test -coverprofile=cover.out ./...  # coverage
+go tool cover -html=cover.out          # open in browser
 ```
 
 ---
 
-## Running Locally Without Docker
-
-Requirements: Go 1.22+, MongoDB running on localhost:27017.
+## Running Without Docker
 
 ```bash
+# Requirements: Go 1.22+, MongoDB on localhost:27017
 cp .env.example .env
 go mod download
 go run ./cmd/server
@@ -156,40 +180,15 @@ go run ./cmd/server
 
 ---
 
-## Documentation Index
+## Documentation
 
 | Document | Description |
 |---|---|
-| [`docs/architecture.md`](docs/architecture.md) | System design, layer responsibilities, dependency graph |
-| [`docs/api-spec.md`](docs/api-spec.md) | Complete API reference with request/response examples |
-| [`docs/database-design.md`](docs/database-design.md) | Collection schemas, indexes, and design decisions |
-| [`docs/deployment-guide.md`](docs/deployment-guide.md) | Docker, environment setup, production checklist |
-| [`docs/contributing.md`](docs/contributing.md) | Development workflow, conventions, PR process |
-
----
-
-## Provider Swap Guide
-
-Switch any external system by changing one environment variable.
-
-**Blockchain:**
-```bash
-BLOCKCHAIN_PROVIDER=polygon   # use PolygonProvider
-BLOCKCHAIN_PROVIDER=mock      # use MockBlockchainProvider (default)
-```
-
-**Recommendation Engine:**
-```bash
-RECOMMENDATION_PROVIDER=federated  # use FederatedLearningProvider
-RECOMMENDATION_PROVIDER=mock       # use MockRecommendationProvider (default)
-```
-
-No code changes required. Restart the server after changing the variable.
-
-Note: `PolygonProvider` and `FederatedLearningProvider` are interface-complete
-stubs that return descriptive "not yet implemented" errors. Implement the
-methods in `internal/blockchain/polygon_provider.go` and
-`internal/recommendation/fl_provider.go` before switching to them in production.
+| [`docs/architecture.md`](docs/architecture.md) | Layered architecture, dependency flow, provider pattern |
+| [`docs/api-spec.md`](docs/api-spec.md) | Full OpenAPI-style reference with examples |
+| [`docs/database-design.md`](docs/database-design.md) | MongoDB schema, indexes, design decisions |
+| [`docs/deployment-guide.md`](docs/deployment-guide.md) | Docker, env setup, production checklist |
+| [`docs/contributing.md`](docs/contributing.md) | Dev workflow, conventions, PR process |
 
 ---
 

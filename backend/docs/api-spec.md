@@ -60,8 +60,8 @@ Returns the operational status of the service and all its dependencies.
     "version": "1.0.0",
     "uptime": "3h24m11s",
     "checks": {
-      "database": { "status": "healthy", "latencyMs": 2 },
-      "blockchainProvider": { "status": "healthy", "provider": "mock" },
+      "database": { "status": "healthy", "latencyMs": 0 },
+      "blockchainProvider": { "status": "healthy", "provider": "hardhat" },
       "recommendationProvider": { "status": "healthy", "provider": "mock" }
     }
   }
@@ -124,9 +124,11 @@ transaction placeholder.
 | Status | Condition |
 |---|---|
 | `400` | Malformed JSON |
-| `404` | POI with given `poiId` does not exist |
 | `422` | Invalid ObjectID format, coordinates out of range |
 | `500` | Database write failure |
+
+> **Note:** If the POI does not exist in MongoDB (demo mode with static JSON data),
+> the check-in proceeds and returns 201. The blockchain tx is still submitted.
 
 ---
 
@@ -229,17 +231,19 @@ GET /api/v1/recommend?userId=64f1a2b3c4d5e6f7a8b9c0d1&limit=5&category=cafe
 
 ## GET /token-balance
 
-Returns the blockchain token balance for a user's wallet.
+Returns the on-chain TRUST token balance for an Ethereum wallet address.
+When `BLOCKCHAIN_PROVIDER=hardhat` the value comes from a live `balanceOf()` call
+to the deployed `TrustToken` contract.
 
 **Query Parameters**
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `userId` | string | yes | 24-character hex ObjectID |
+| `wallet` | string | yes | Ethereum address (`0x...`, 42 chars) |
 
 **Example**
 ```
-GET /api/v1/token-balance?userId=64f1a2b3c4d5e6f7a8b9c0d1
+GET /api/v1/token-balance?wallet=0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
 ```
 
 **Response 200**
@@ -248,23 +252,24 @@ GET /api/v1/token-balance?userId=64f1a2b3c4d5e6f7a8b9c0d1
   "success": true,
   "message": "Token balance retrieved successfully",
   "data": {
-    "provider": "mock",
-    "userId": "64f1a2b3c4d5e6f7a8b9c0d1",
-    "wallet": "0x64f1a2b3c4d5e6f7a8b9c0d1",
-    "balance": 100,
-    "symbol": "TCT",
+    "provider": "hardhat",
+    "wallet": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+    "balance": 40,
+    "symbol": "TRUST",
     "decimals": 18
   }
 }
 ```
 
+> `balance` is returned in whole tokens (wei ÷ 10¹⁸). Each check-in mints **10 TRUST**.
+
 **Error Responses**
 
 | Status | Condition |
 |---|---|
-| `400` | `userId` parameter missing |
-| `422` | `userId` is not a valid ObjectID |
-| `503` | Blockchain provider returned an error |
+| `400` | `wallet` parameter missing |
+| `503` | Blockchain provider returned an error or node is down |
+
 
 ---
 

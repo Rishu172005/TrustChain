@@ -41,14 +41,16 @@ func NewReviewService(
 	}
 }
 
-// CreateReview validates the submission, confirms the POI exists, and persists the review.
+// CreateReview validates the submission, confirms the POI exists (if in DB), and persists the review.
+// NOTE: If the POI is not in MongoDB (demo mode with static data) the service
+// logs a warning but still saves the review.
 func (s *ReviewService) CreateReview(ctx context.Context, req ReviewRequest) (*models.Review, error) {
 	poi, err := s.poiRepo.FindByID(ctx, req.POIID)
 	if err != nil {
-		return nil, fmt.Errorf("looking up poi: %w", err)
+		s.log.Warn().Err(err).Str("poiId", req.POIID).Msg("POI lookup failed; saving review anyway")
 	}
 	if poi == nil {
-		return nil, ErrPOINotFound
+		s.log.Info().Str("poiId", req.POIID).Msg("POI not in DB; saving review in demo mode")
 	}
 
 	userOID, err := primitive.ObjectIDFromHex(req.UserID)

@@ -47,15 +47,57 @@ TrustChain is a location-based recommendation system where users can:
 | Tool | Version | Purpose |
 |---|---|---|
 | Node.js + npm | 18+ | Frontend (React 19 + Vite 8) |
+| Node.js + npm | 18+ | Frontend (React 19 + Vite 8) |
 | Python | 3.11+ | Federated learning + data pipeline + defence logic |
 | Go | 1.22+ | Backend REST API (Gin) |
 | MongoDB | 7+ (Docker or Atlas) | Off-chain metadata storage |
-| Docker + Docker Compose | any | Backend containerised setup |
 | Git | any | Version control |
 
 ---
 
-### 1 · Frontend
+### 1 · Smart Contracts + Local Blockchain
+
+```bash
+cd contracts/trustchain-task3-s1
+npm install
+
+# Terminal A — keep running
+npx hardhat node --port 8545
+
+# Terminal B — deploy once per node restart
+npx hardhat run scripts/deploy.js --network localhost
+# → writes deployments/localhost.json (read by Go backend)
+```
+
+> Skip this step if you just want the frontend — it runs on static data without a blockchain.
+
+---
+
+### 2 · Backend
+
+**With Hardhat (live tokens):**
+```bash
+cd backend
+cp .env.example .env   # BLOCKCHAIN_PROVIDER=hardhat already set
+go run ./cmd/server
+```
+
+**Mock mode (no blockchain needed):**
+```bash
+cd backend
+BLOCKCHAIN_PROVIDER=mock go run ./cmd/server
+```
+
+API available at **http://localhost:8080/api/v1**
+
+```bash
+curl http://localhost:8080/api/v1/health
+# → { "data": { "blockchainProvider": { "provider": "hardhat" } } }
+```
+
+---
+
+### 3 · Frontend
 
 ```bash
 cd frontend
@@ -63,61 +105,22 @@ npm install
 npm run dev
 ```
 
-Open **http://localhost:5173** — the dashboard loads instantly from static JSON data in `frontend/src/`; no backend required for the map and recommendations.
-
-> ✅ **Verified:** `npm run build` succeeds. All POI and recommendation data is co-located in `frontend/src/` alongside the React components.
+Open **http://localhost:5173** — the map and recommendations load from static data immediately; the backend is polled in the background. A 🟢 **Live** indicator appears in the topbar when the backend is reachable.
 
 ---
 
-### 2 · Backend
+### 4 · Federated Learning Pipeline
 
-**With Docker (recommended):**
-```bash
-cd backend
-cp .env.example .env
-docker compose up --build
-```
-
-**Without Docker (Go 1.22+ and MongoDB required):**
-```bash
-cd backend
-cp .env.example .env
-go mod download
-go run ./cmd/server
-```
-
-The API server starts on **http://localhost:8080**. All routes are prefixed with `/api/v1`.
-
-Verify it is running:
-```bash
-curl http://localhost:8080/api/v1/health
-```
-
----
-
-### 3 · Federated Learning & Recommendation Pipeline
-
-**Generate recommendations (runs the full FL pipeline):**
 ```bash
 cd federated
-python3 task3.py
+pip install -r requirements.txt
+
+# Run full FL pipeline (server + 3 clients in one command)
+python launch_fl.py
+# → writes frontend/src/recommendations.json + frontend/public/recommendations.json
 ```
 
-This loads the Foursquare NYC dataset, runs 5-round FedAvg collaborative filtering across 3 simulated client nodes, and writes:
-- `frontend/src/pois.json` — all POI records
-- `frontend/src/recommendations.json` — profiles × recommendations + FL metadata
-- `frontend/src/user_profiles.json` — user preference score vectors
-
-**Run the live Flower FL server (optional):**
-```bash
-# Terminal 1 — server
-cd federated
-python3 flower_server.py
-
-# Terminals 2–4 — clients
-python3 flower_client.py 0 127.0.0.1:8080
-python3 flower_client.py 1 127.0.0.1:8080
-python3 flower_client.py 2 127.0.0.1:8080
+This runs 5 rounds of FedAvg across 3 user profiles (Commuter, Foodie, Tourist), applies Laplacian DP noise (ε=1.0), and outputs personalised recommendation scores.
 ```
 
 **Install Python dependencies:**
