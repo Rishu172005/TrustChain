@@ -56,11 +56,11 @@ func (h *TransactionHandler) Get(c *gin.Context) {
 	}
 
 	// Normalize hex string length to 24 hex chars for Mongo ObjectID matching
-	hexStr := strings.ReplaceAll(strings.ToLower(userID), "0x", "")
-	if len(hexStr) < 24 {
+	hexStr := strings.TrimPrefix(strings.ToLower(userID), "0x")
+	if len(hexStr) >= 24 {
+		hexStr = hexStr[:24]
+	} else {
 		hexStr = strings.Repeat("0", 24-len(hexStr)) + hexStr
-	} else if len(hexStr) > 24 {
-		hexStr = hexStr[len(hexStr)-24:]
 	}
 
 	var items []TransactionItem

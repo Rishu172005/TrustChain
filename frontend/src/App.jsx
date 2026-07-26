@@ -70,12 +70,25 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const profiles = recommendationData.profiles ?? [];
   const [selectedProfileId, setSelectedProfileId] = useState('');
-  const [tokenBalance, setTokenBalance] = useState(0);
+  const [tokenBalance, setTokenBalance] = useState(() => {
+    const saved = localStorage.getItem('tc_tokenBalance');
+    return saved != null ? Number(saved) : 0;
+  });
   const [backendOnline, setBackendOnline] = useState(false);
   const selectedProfile = profiles.find((p) => p.id === selectedProfileId) ?? profiles[0] ?? null;
   const [selectedPoi, setSelectedPoi] = useState(null);
-  const [lastCheckIn, setLastCheckIn] = useState(null);
-  const [checkInHistory, setCheckInHistory] = useState([]);
+  const [lastCheckIn, setLastCheckIn] = useState(() => {
+    try {
+      const saved = localStorage.getItem('tc_lastCheckIn');
+      return saved ? JSON.parse(saved) : null;
+    } catch (_) { return null; }
+  });
+  const [checkInHistory, setCheckInHistory] = useState(() => {
+    try {
+      const saved = localStorage.getItem('tc_checkInHistory');
+      return saved ? JSON.parse(saved) : [];
+    } catch (_) { return []; }
+  });
   const [showAllHistory, setShowAllHistory] = useState(false);
   const [showWallet, setShowWallet] = useState(false);
   const [showReviewForm, setShowReviewForm] = useState(false);
@@ -84,6 +97,21 @@ function App() {
   const [selectedPoiForExplanation, setSelectedPoiForExplanation] = useState(null);
   const [reviewRating, setReviewRating] = useState(5);
   const [reviewText, setReviewText] = useState('');
+
+  // ── Sync state to localStorage for offline / refresh persistence ──────────
+  useEffect(() => {
+    localStorage.setItem('tc_tokenBalance', String(tokenBalance));
+  }, [tokenBalance]);
+
+  useEffect(() => {
+    localStorage.setItem('tc_checkInHistory', JSON.stringify(checkInHistory));
+  }, [checkInHistory]);
+
+  useEffect(() => {
+    if (lastCheckIn) {
+      localStorage.setItem('tc_lastCheckIn', JSON.stringify(lastCheckIn));
+    }
+  }, [lastCheckIn]);
 
   // Demo wallet address (Hardhat account 0 — same address deploy.js uses).
   const DEMO_WALLET = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266';
@@ -100,8 +128,6 @@ function App() {
     const normalizedPoiData = poiData.map(normalizePoi);
     const maxCheckins = Math.max(...normalizedPoiData.map((p) => p.checkins || 0), 1);
 
-    // Build a lookup of recommended POIs so we can prefer their richer data
-    // (which includes the FL model score from recommendations.json).
     const recMap = new Map(recommendedPois.map((p) => [p.id, p]));
 
     const map = new Map();
@@ -129,7 +155,6 @@ function App() {
       }
     });
 
-    // Add any recommended POIs that aren't in the raw poiData.
     recommendedPois.forEach((p) => {
       if (!map.has(p.id)) {
         const normalizedRec = normalizePoi({ ...p, id: p.id, lat: p.lat, lng: p.lng, checkins: p.checkins || 0 });
@@ -147,8 +172,6 @@ function App() {
   const selectedPoiExplanationMetrics = useMemo(() => {
     if (!selectedPoiForExplanation || poiData.length === 0) return null;
 
-    // Use the enriched version from allPoisToRender (which has a derived score
-    // for non-recommended POIs) rather than the raw POI object.
     const enriched = allPoisToRender.find((p) => p.id === selectedPoiForExplanation.id)
       ?? selectedPoiForExplanation;
 
@@ -171,7 +194,8 @@ function App() {
       if (!res.ok) return;
       const json = await res.json();
       if (json.success && json.data?.balance != null) {
-        setTokenBalance(Number(json.data.balance));
+        const apiBal = Number(json.data.balance);
+        setTokenBalance((prev) => Math.max(prev, apiBal));
         setBackendOnline(true);
       }
     } catch (_) { /* backend offline — keep last value */ }
@@ -182,8 +206,16 @@ function App() {
       const res = await fetch(`/api/v1/transactions?wallet=${DEMO_WALLET}`);
       if (!res.ok) return;
       const json = await res.json();
-      if (json.success && Array.isArray(json.data?.transactions)) {
-        setCheckInHistory(json.data.transactions);
+      if (json.success && Array.isArray(json.data?.transactions) && json.data.transactions.length > 0) {
+        setCheckInHistory((prev) => {
+          const map = new Map();
+          json.data.transactions.forEach((tx) => map.set(tx.id || tx.timestamp, tx));
+          prev.forEach((item) => {
+            const key = item.id || item.timestamp;
+            if (!map.has(key)) map.set(key, item);
+          });
+          return Array.from(map.values()).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        });
       }
     } catch (_) { /* backend offline */ }
   };
@@ -677,7 +709,7 @@ function App() {
                     <span className="wallet-stat__icon">🪙</span>
                     <div>
                       <span className="wallet-stat__label">Total Earned</span>
-                      <strong className="wallet-stat__val">{checkInHistory.reduce((s, e) => s + e.tokensEarned, 0)} TC</strong>
+                      <strong className="wallet-stat__val">{Math.max(tokenBalance, checkInHistory.reduce((s, e) => s + (e.tokensEarned || 0), 0))} TC</strong>
                     </div>
                   </div>
                 </div>

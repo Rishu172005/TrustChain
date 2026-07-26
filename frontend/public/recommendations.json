@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-24T15:55:29.627633+00:00",
+  "generatedAt": "2026-07-26T14:35:00.000000+00:00",
   "meta": {
     "model": "Federated collaborative filtering",
     "rounds": 5,
@@ -61,7 +61,7 @@
           "lat": 40.750794799423865,
           "lng": -73.99357639021292,
           "checkins": 1081,
-          "score": 0.447
+          "score": 0.868
         },
         {
           "id": "42829c80f964a5206a221fe3",
@@ -70,7 +70,7 @@
           "lat": 40.75280620914171,
           "lng": -73.97717535495758,
           "checkins": 780,
-          "score": 0.4344
+          "score": 0.854
         },
         {
           "id": "43a52546f964a520532c1fe3",
@@ -79,7 +79,7 @@
           "lat": 40.645089355976346,
           "lng": -73.7845230102539,
           "checkins": 662,
-          "score": 0.4281
+          "score": 0.847
         },
         {
           "id": "4ace6c89f964a52078d020e3",
@@ -88,7 +88,7 @@
           "lat": 40.773839,
           "lng": -73.87122,
           "checkins": 545,
-          "score": 0.4206
+          "score": 0.8386
         },
         {
           "id": "4840fe6bf964a52030501fe3",
@@ -97,7 +97,7 @@
           "lat": 40.75722129839836,
           "lng": -73.99154663085938,
           "checkins": 515,
-          "score": 0.4184
+          "score": 0.8362
         },
         {
           "id": "4a737bf8f964a52091dc1fe3",
@@ -106,7 +106,7 @@
           "lat": 40.707149,
           "lng": -73.99057,
           "checkins": 435,
-          "score": 0.4119
+          "score": 0.829
         },
         {
           "id": "4a513b17f964a520d2b01fe3",
@@ -115,7 +115,7 @@
           "lat": 40.69902344282463,
           "lng": -73.81001472473143,
           "checkins": 269,
-          "score": 0.3934
+          "score": 0.8084
         },
         {
           "id": "4459d2f1f964a520d7321fe3",
@@ -124,7 +124,295 @@
           "lat": 40.68968493541091,
           "lng": -74.17938709259033,
           "checkins": 256,
-          "score": 0.3915
+          "score": 0.8063
+        },
+        {
+          "id": "4ad77a2bf964a520280b21e3",
+          "name": "Train Station",
+          "category": "Transit",
+          "lat": 40.71948548899754,
+          "lng": -74.0427017211914,
+          "checkins": 180,
+          "score": 0.7912
+        },
+        {
+          "id": "4b54d362f964a52058ce27e3",
+          "name": "Subway",
+          "category": "Transit",
+          "lat": 40.68990542829335,
+          "lng": -73.95177657844081,
+          "checkins": 172,
+          "score": 0.7893
+        },
+        {
+          "id": "4c5ef77bfff99c74eda954d3",
+          "name": "Food & Drink Shop",
+          "category": "Food",
+          "lat": 40.74186151409088,
+          "lng": -73.98943362953369,
+          "checkins": 160,
+          "score": 0.7862
+        },
+        {
+          "id": "42829c80f964a5205f221fe3",
+          "name": "Office",
+          "category": "Business",
+          "lat": 40.71370599034548,
+          "lng": -74.01420126337966,
+          "checkins": 145,
+          "score": 0.782
+        },
+        {
+          "id": "4b41e8f5f964a52019ca25e3",
+          "name": "Subway",
+          "category": "Transit",
+          "lat": 40.78577311803029,
+          "lng": -73.9509916305542,
+          "checkins": 144,
+          "score": 0.7817
+        },
+        {
+          "id": "4a021207f964a52029711fe3",
+          "name": "Bar",
+          "category": "Food",
+          "lat": 40.73743415035814,
+          "lng": -73.99128147407096,
+          "checkins": 143,
+          "score": 0.7814
+        },
+        {
+          "id": "4ae8906ef964a52071b021e3",
+          "name": "Train Station",
+          "category": "Transit",
+          "lat": 40.71267092713338,
+          "lng": -74.01193141937256,
+          "checkins": 135,
+          "score": 0.7789
+        },
+        {
+          "id": "4b6ee75af964a52011d02ce3",
+          "name": "College Academic Building",
+          "category": "Business",
+          "lat": 40.77079184896987,
+          "lng": -73.98592472076416,
+          "checkins": 132,
+          "score": 0.778
+        },
+        {
+          "id": "4a954328f964a520cf2220e3",
+          "name": "Office",
+          "category": "Business",
+          "lat": 40.70972827284494,
+          "lng": -74.01076978215657,
+          "checkins": 132,
+          "score": 0.778
+        },
+        {
+          "id": "43920486f964a520662b1fe3",
+          "name": "Bar",
+          "category": "Food",
+          "lat": 40.76362499327396,
+          "lng": -73.99757623672485,
+          "checkins": 130,
+          "score": 0.7773
+        },
+        {
+          "id": "4bedb01ce24d20a128d57114",
+          "name": "Subway",
+          "category": "Transit",
+          "lat": 40.816188,
+          "lng": -73.917947,
+          "checkins": 128,
+          "score": 0.7767
+        },
+        {
+          "id": "451287ebf964a520a1391fe3",
+          "name": "Office",
+          "category": "Business",
+          "lat": 40.74119771684408,
+          "lng": -74.00239165956324,
+          "checkins": 127,
+          "score": 0.7763
+        },
+        {
+          "id": "4b02c41cf964a520c14922e3",
+          "name": "Government Building",
+          "category": "Business",
+          "lat": 40.7117844949098,
+          "lng": -74.00208234786987,
+          "checkins": 126,
+          "score": 0.776
+        },
+        {
+          "id": "4a36c1b9f964a520dd9d1fe3",
+          "name": "Medical Center",
+          "category": "Business",
+          "lat": 40.74167304814132,
+          "lng": -73.97428784381152,
+          "checkins": 122,
+          "score": 0.7746
+        },
+        {
+          "id": "4abbe19ef964a520548520e3",
+          "name": "Train Station",
+          "category": "Transit",
+          "lat": 40.732267009830224,
+          "lng": -74.06304359436035,
+          "checkins": 121,
+          "score": 0.7743
+        },
+        {
+          "id": "4cd7f12a7bb06dcb988d9fb2",
+          "name": "Office",
+          "category": "Business",
+          "lat": 40.74226610630077,
+          "lng": -73.98446559906006,
+          "checkins": 120,
+          "score": 0.7739
+        },
+        {
+          "id": "4a8a998af964a5202b0a20e3",
+          "name": "Coffee Shop",
+          "category": "Food",
+          "lat": 40.70964742200671,
+          "lng": -74.01051729615469,
+          "checkins": 119,
+          "score": 0.7736
+        },
+        {
+          "id": "4b0737c3f964a520e4f922e3",
+          "name": "Subway",
+          "category": "Transit",
+          "lat": 40.75650612666626,
+          "lng": -73.98802757263184,
+          "checkins": 119,
+          "score": 0.7736
+        },
+        {
+          "id": "49b6d0b4f964a52012531fe3",
+          "name": "Office",
+          "category": "Business",
+          "lat": 40.74050711736373,
+          "lng": -73.98690838360204,
+          "checkins": 118,
+          "score": 0.7732
+        },
+        {
+          "id": "4a53d9a7f964a520c7b21fe3",
+          "name": "Office",
+          "category": "Business",
+          "lat": 40.74551752113523,
+          "lng": -73.99235129356384,
+          "checkins": 118,
+          "score": 0.7732
+        },
+        {
+          "id": "4ea4acaab80355a982afff79",
+          "name": "Bar",
+          "category": "Food",
+          "lat": 40.96535583001569,
+          "lng": -74.06285508050317,
+          "checkins": 116,
+          "score": 0.7725
+        },
+        {
+          "id": "43695300f964a5208c291fe3",
+          "name": "Building",
+          "category": "Business",
+          "lat": 40.74828059076867,
+          "lng": -73.98556262254715,
+          "checkins": 116,
+          "score": 0.7725
+        },
+        {
+          "id": "49f76cc2f964a5209d6c1fe3",
+          "name": "Train Station",
+          "category": "Transit",
+          "lat": 40.73420076077984,
+          "lng": -74.16483829470191,
+          "checkins": 116,
+          "score": 0.7725
+        },
+        {
+          "id": "477a3514f964a520214d1fe3",
+          "name": "American Restaurant",
+          "category": "Food",
+          "lat": 40.731155872068506,
+          "lng": -73.98872764725327,
+          "checkins": 114,
+          "score": 0.7717
+        },
+        {
+          "id": "4bec4056fd60a5932dba3af1",
+          "name": "Office",
+          "category": "Business",
+          "lat": 40.910894,
+          "lng": -74.031547,
+          "checkins": 114,
+          "score": 0.7717
+        },
+        {
+          "id": "4ba8fa3df964a520ecff39e3",
+          "name": "Office",
+          "category": "Business",
+          "lat": 40.74211268500876,
+          "lng": -73.98972048733542,
+          "checkins": 113,
+          "score": 0.7714
+        },
+        {
+          "id": "4a4d10fbf964a52082ad1fe3",
+          "name": "Subway",
+          "category": "Transit",
+          "lat": 40.67837610578439,
+          "lng": -73.90339851379395,
+          "checkins": 113,
+          "score": 0.7714
+        },
+        {
+          "id": "4ad78220f964a520960b21e3",
+          "name": "Subway",
+          "category": "Transit",
+          "lat": 40.71037756449118,
+          "lng": -74.00755405426025,
+          "checkins": 113,
+          "score": 0.7714
+        },
+        {
+          "id": "4bd7282e5631c9b6e315a730",
+          "name": "Office",
+          "category": "Business",
+          "lat": 40.96521460587434,
+          "lng": -74.06837948377257,
+          "checkins": 108,
+          "score": 0.7694
+        },
+        {
+          "id": "49de0156f964a52021601fe3",
+          "name": "Train Station",
+          "category": "Transit",
+          "lat": 40.805144639820114,
+          "lng": -73.93914699554443,
+          "checkins": 108,
+          "score": 0.7694
+        },
+        {
+          "id": "49e3a2b3f964a520a6621fe3",
+          "name": "Coffee Shop",
+          "category": "Food",
+          "lat": 40.74697,
+          "lng": -73.98138,
+          "checkins": 106,
+          "score": 0.7686
+        },
+        {
+          "id": "4a65a823f964a5208cc71fe3",
+          "name": "Train Station",
+          "category": "Transit",
+          "lat": 40.76147966168067,
+          "lng": -74.07551050186157,
+          "checkins": 105,
+          "score": 0.7682
         }
       ]
     },
@@ -133,7 +421,7 @@
       "label": "City Explorer",
       "description": "Looks for parks, landmarks, and cultural venues.",
       "seedUserId": "445",
-      "dominantCategory": "Other",
+      "dominantCategory": "Outdoor",
       "validationAccuracy": 0.99,
       "topCategories": [
         "Culture",
@@ -148,7 +436,7 @@
           "lat": 40.74218830848454,
           "lng": -73.98792418909154,
           "checkins": 433,
-          "score": 0.3658
+          "score": 0.8348
         },
         {
           "id": "49b7ed6df964a52030531fe3",
@@ -157,16 +445,7 @@
           "lat": 40.756489872673846,
           "lng": -73.98626804351807,
           "checkins": 428,
-          "score": 0.3654
-        },
-        {
-          "id": "3fd66200f964a520ddf01ee3",
-          "name": "Stadium",
-          "category": "Culture",
-          "lat": 40.82827721161922,
-          "lng": -73.92655344439045,
-          "checkins": 237,
-          "score": 0.3525
+          "score": 0.8343
         },
         {
           "id": "3fd66200f964a520def11ee3",
@@ -175,16 +454,16 @@
           "lat": 40.73528249691621,
           "lng": -73.99040315158283,
           "checkins": 304,
-          "score": 0.3522
+          "score": 0.8196
         },
         {
-          "id": "42911d00f964a520f5231fe3",
-          "name": "Train Station",
-          "category": "Transit",
-          "lat": 40.750794799423865,
-          "lng": -73.99357639021292,
-          "checkins": 1081,
-          "score": 0.3515
+          "id": "3fd66200f964a520ddf01ee3",
+          "name": "Stadium",
+          "category": "Culture",
+          "lat": 40.82827721161922,
+          "lng": -73.92655344439045,
+          "checkins": 237,
+          "score": 0.809
         },
         {
           "id": "3fd66200f964a52035e41ee3",
@@ -193,7 +472,16 @@
           "lat": 40.73169799836348,
           "lng": -73.98922693741638,
           "checkins": 210,
-          "score": 0.3479
+          "score": 0.8038
+        },
+        {
+          "id": "3fd66200f964a520d7f11ee3",
+          "name": "Park",
+          "category": "Outdoor",
+          "lat": 40.75372797263211,
+          "lng": -73.98368835767094,
+          "checkins": 209,
+          "score": 0.8036
         },
         {
           "id": "41102700f964a520d60b1fe3",
@@ -202,49 +490,259 @@
           "lat": 40.75061379403183,
           "lng": -73.98856401443481,
           "checkins": 184,
-          "score": 0.3428
+          "score": 0.7982
         },
         {
-          "id": "42829c80f964a5206a221fe3",
-          "name": "Train Station",
-          "category": "Transit",
-          "lat": 40.75280620914171,
-          "lng": -73.97717535495758,
-          "checkins": 780,
-          "score": 0.3389
-        }
-      ]
-    },
-    {
-      "id": "social",
-      "label": "Social Weekender",
-      "description": "Prioritizes food, leisure, and hangout-friendly places.",
-      "seedUserId": "730",
-      "dominantCategory": "Business",
-      "validationAccuracy": 0.99,
-      "topCategories": [
-        "Food",
-        "Leisure",
-        "Culture"
-      ],
-      "recommendations": [
-        {
-          "id": "4c5ef77bfff99c74eda954d3",
-          "name": "Food & Drink Shop",
-          "category": "Food",
-          "lat": 40.74186151409088,
-          "lng": -73.98943362953369,
-          "checkins": 160,
-          "score": 0.3614
+          "id": "42893400f964a52052231fe3",
+          "name": "Park",
+          "category": "Outdoor",
+          "lat": 40.66390776998241,
+          "lng": -73.970947265625,
+          "checkins": 168,
+          "score": 0.7943
         },
         {
-          "id": "4a0c2e7bf964a52014751fe3",
-          "name": "Hotel",
-          "category": "Leisure",
-          "lat": 40.76224486711165,
-          "lng": -73.9792871763928,
-          "checkins": 272,
-          "score": 0.3594
+          "id": "508af9ccf13627e878935855",
+          "name": "Other Great Outdoors",
+          "category": "Outdoor",
+          "lat": 40.78782018739577,
+          "lng": -73.79104614257812,
+          "checkins": 162,
+          "score": 0.7927
+        },
+        {
+          "id": "4ae6363ef964a520aba521e3",
+          "name": "Stadium",
+          "category": "Culture",
+          "lat": 40.75044987008408,
+          "lng": -73.99221103886612,
+          "checkins": 156,
+          "score": 0.7911
+        },
+        {
+          "id": "412d2800f964a520df0c1fe3",
+          "name": "Park",
+          "category": "Outdoor",
+          "lat": 40.7714256153356,
+          "lng": -73.97350072860723,
+          "checkins": 152,
+          "score": 0.79
+        },
+        {
+          "id": "40afe980f964a5203bf31ee3",
+          "name": "Movie Theater",
+          "category": "Culture",
+          "lat": 40.7569743825982,
+          "lng": -73.98877355904663,
+          "checkins": 151,
+          "score": 0.7897
+        },
+        {
+          "id": "43a72ba0f964a520672c1fe3",
+          "name": "Movie Theater",
+          "category": "Culture",
+          "lat": 40.73416736029532,
+          "lng": -73.99048715829849,
+          "checkins": 148,
+          "score": 0.7889
+        },
+        {
+          "id": "49e17f24f964a520d1611fe3",
+          "name": "Movie Theater",
+          "category": "Culture",
+          "lat": 40.77486674679395,
+          "lng": -73.98179484046595,
+          "checkins": 146,
+          "score": 0.7883
+        },
+        {
+          "id": "40abf500f964a52035f31ee3",
+          "name": "Park",
+          "category": "Outdoor",
+          "lat": 40.73083612189599,
+          "lng": -73.99764060974121,
+          "checkins": 137,
+          "score": 0.7856
+        },
+        {
+          "id": "4cf1a69a1d18a143dcf754ec",
+          "name": "Other Great Outdoors",
+          "category": "Outdoor",
+          "lat": 40.94269410852135,
+          "lng": -73.99635314941406,
+          "checkins": 131,
+          "score": 0.7837
+        },
+        {
+          "id": "49c64842f964a5202e571fe3",
+          "name": "Plaza",
+          "category": "Outdoor",
+          "lat": 40.76803326982161,
+          "lng": -73.98186922073364,
+          "checkins": 126,
+          "score": 0.782
+        },
+        {
+          "id": "49d60947f964a520a85c1fe3",
+          "name": "Stadium",
+          "category": "Culture",
+          "lat": 40.75645736467708,
+          "lng": -73.8460636138916,
+          "checkins": 120,
+          "score": 0.7799
+        },
+        {
+          "id": "40f1d480f964a5206a0a1fe3",
+          "name": "Park",
+          "category": "Outdoor",
+          "lat": 40.74706188749892,
+          "lng": -74.00519371032715,
+          "checkins": 114,
+          "score": 0.7777
+        },
+        {
+          "id": "4c45d0eb2d3ec9b61ec630ae",
+          "name": "Other Great Outdoors",
+          "category": "Outdoor",
+          "lat": 40.72768968623147,
+          "lng": -74.04474020004272,
+          "checkins": 110,
+          "score": 0.7762
+        },
+        {
+          "id": "49b79f54f964a5202c531fe3",
+          "name": "Plaza",
+          "category": "Outdoor",
+          "lat": 40.758728399405584,
+          "lng": -73.97855791454388,
+          "checkins": 110,
+          "score": 0.7762
+        },
+        {
+          "id": "4531059cf964a520683b1fe3",
+          "name": "Department Store",
+          "category": "Culture",
+          "lat": 40.76232480057456,
+          "lng": -73.9678144454956,
+          "checkins": 105,
+          "score": 0.7742
+        },
+        {
+          "id": "453cacc7f964a520153c1fe3",
+          "name": "Movie Theater",
+          "category": "Culture",
+          "lat": 40.74276195733468,
+          "lng": -73.97692322731018,
+          "checkins": 102,
+          "score": 0.773
+        },
+        {
+          "id": "4f93f1c8e5e828f50a2b81d1",
+          "name": "Residential Building (Apartment / Condo)",
+          "category": "Culture",
+          "lat": 40.758017730590645,
+          "lng": -73.9922547340393,
+          "checkins": 102,
+          "score": 0.773
+        },
+        {
+          "id": "4b842cf3f964a5209e2531e3",
+          "name": "Library",
+          "category": "Culture",
+          "lat": 40.73699909877152,
+          "lng": -73.99245220578715,
+          "checkins": 96,
+          "score": 0.7704
+        },
+        {
+          "id": "4d8f74cf1716a143e3ed4af7",
+          "name": "Park",
+          "category": "Outdoor",
+          "lat": 40.96541698333333,
+          "lng": -74.06291968333333,
+          "checkins": 96,
+          "score": 0.7704
+        },
+        {
+          "id": "4ddfe92e8877e0877e661125",
+          "name": "Other Great Outdoors",
+          "category": "Outdoor",
+          "lat": 40.89621269901943,
+          "lng": -73.87670483270945,
+          "checkins": 92,
+          "score": 0.7686
+        },
+        {
+          "id": "4b992b04f964a520726635e3",
+          "name": "Stadium",
+          "category": "Culture",
+          "lat": 40.68312,
+          "lng": -73.975979,
+          "checkins": 91,
+          "score": 0.7682
+        },
+        {
+          "id": "4cf526178333224b089d1e8e",
+          "name": "Music Venue",
+          "category": "Culture",
+          "lat": 40.96532194280211,
+          "lng": -74.06280344980541,
+          "checkins": 89,
+          "score": 0.7672
+        },
+        {
+          "id": "4c1836421436a593271a8d75",
+          "name": "Residential Building (Apartment / Condo)",
+          "category": "Culture",
+          "lat": 40.75756480347108,
+          "lng": -73.96864592496735,
+          "checkins": 80,
+          "score": 0.7627
+        },
+        {
+          "id": "4a4138ebf964a520f9a41fe3",
+          "name": "Movie Theater",
+          "category": "Culture",
+          "lat": 40.74490101607357,
+          "lng": -73.99805899339255,
+          "checkins": 79,
+          "score": 0.7622
+        },
+        {
+          "id": "4fa35553e4b0b487cc7af3fc",
+          "name": "Residential Building (Apartment / Condo)",
+          "category": "Culture",
+          "lat": 40.84476009028352,
+          "lng": -74.16051500174768,
+          "checkins": 77,
+          "score": 0.7611
+        },
+        {
+          "id": "49e36914f964a5207b621fe3",
+          "name": "Plaza",
+          "category": "Outdoor",
+          "lat": 40.74982540095488,
+          "lng": -73.98796319961548,
+          "checkins": 76,
+          "score": 0.7605
+        },
+        {
+          "id": "4e1e4ad845dd3be9c473415d",
+          "name": "Residential Building (Apartment / Condo)",
+          "category": "Culture",
+          "lat": 40.77221449847732,
+          "lng": -73.95037025468532,
+          "checkins": 76,
+          "score": 0.7605
+        },
+        {
+          "id": "4e5590b5814d6ce5cc849483",
+          "name": "Residential Building (Apartment / Condo)",
+          "category": "Culture",
+          "lat": 40.8706300946324,
+          "lng": -74.09792627389562,
+          "checkins": 76,
+          "score": 0.7605
         },
         {
           "id": "42911d00f964a520f5231fe3",
@@ -253,7 +751,103 @@
           "lat": 40.750794799423865,
           "lng": -73.99357639021292,
           "checkins": 1081,
-          "score": 0.3575
+          "score": 0.379
+        },
+        {
+          "id": "42829c80f964a5206a221fe3",
+          "name": "Train Station",
+          "category": "Transit",
+          "lat": 40.75280620914171,
+          "lng": -73.97717535495758,
+          "checkins": 780,
+          "score": 0.365
+        },
+        {
+          "id": "43a52546f964a520532c1fe3",
+          "name": "Airport",
+          "category": "Transit",
+          "lat": 40.645089355976346,
+          "lng": -73.7845230102539,
+          "checkins": 662,
+          "score": 0.358
+        },
+        {
+          "id": "4ace6c89f964a52078d020e3",
+          "name": "Airport",
+          "category": "Transit",
+          "lat": 40.773839,
+          "lng": -73.87122,
+          "checkins": 545,
+          "score": 0.3496
+        },
+        {
+          "id": "4840fe6bf964a52030501fe3",
+          "name": "Bus Station",
+          "category": "Transit",
+          "lat": 40.75722129839836,
+          "lng": -73.99154663085938,
+          "checkins": 515,
+          "score": 0.3472
+        }
+      ]
+    },
+    {
+      "id": "social",
+      "label": "Social Weekender",
+      "description": "Prioritizes food, leisure, and hangout-friendly places.",
+      "seedUserId": "730",
+      "dominantCategory": "Food",
+      "validationAccuracy": 0.99,
+      "topCategories": [
+        "Food",
+        "Leisure",
+        "Culture"
+      ],
+      "recommendations": [
+        {
+          "id": "4a0c2e7bf964a52014751fe3",
+          "name": "Hotel",
+          "category": "Leisure",
+          "lat": 40.76224486711165,
+          "lng": -73.9792871763928,
+          "checkins": 272,
+          "score": 0.8209
+        },
+        {
+          "id": "4b696ecdf964a5201fa22be3",
+          "name": "Gym / Fitness Center",
+          "category": "Leisure",
+          "lat": 40.74109555804945,
+          "lng": -73.99270534515381,
+          "checkins": 166,
+          "score": 0.7998
+        },
+        {
+          "id": "4a888403f964a520bb0620e3",
+          "name": "Gym / Fitness Center",
+          "category": "Leisure",
+          "lat": 40.738949,
+          "lng": -73.989828,
+          "checkins": 163,
+          "score": 0.799
+        },
+        {
+          "id": "4c5ef77bfff99c74eda954d3",
+          "name": "Food & Drink Shop",
+          "category": "Food",
+          "lat": 40.74186151409088,
+          "lng": -73.98943362953369,
+          "checkins": 160,
+          "score": 0.7982
+        },
+        {
+          "id": "49c943d2f964a5204f581fe3",
+          "name": "Gym / Fitness Center",
+          "category": "Leisure",
+          "lat": 40.74621884426983,
+          "lng": -73.98151935953092,
+          "checkins": 155,
+          "score": 0.7968
         },
         {
           "id": "4a021207f964a52029711fe3",
@@ -262,7 +856,34 @@
           "lat": 40.73743415035814,
           "lng": -73.99128147407096,
           "checkins": 143,
-          "score": 0.3571
+          "score": 0.7934
+        },
+        {
+          "id": "4ad854bbf964a5200b1121e3",
+          "name": "Gym / Fitness Center",
+          "category": "Leisure",
+          "lat": 40.781333,
+          "lng": -73.97965,
+          "checkins": 139,
+          "score": 0.7922
+        },
+        {
+          "id": "4558b83bf964a5204b3d1fe3",
+          "name": "Gym / Fitness Center",
+          "category": "Leisure",
+          "lat": 40.74272121548715,
+          "lng": -73.99276210416295,
+          "checkins": 138,
+          "score": 0.7919
+        },
+        {
+          "id": "439c437bf964a520f02b1fe3",
+          "name": "Hotel",
+          "category": "Leisure",
+          "lat": 40.75853784442297,
+          "lng": -73.98560285568237,
+          "checkins": 134,
+          "score": 0.7906
         },
         {
           "id": "43920486f964a520662b1fe3",
@@ -271,7 +892,16 @@
           "lat": 40.76362499327396,
           "lng": -73.99757623672485,
           "checkins": 130,
-          "score": 0.3534
+          "score": 0.7893
+        },
+        {
+          "id": "4e80a57429c2299aa3addd5d",
+          "name": "Gym / Fitness Center",
+          "category": "Leisure",
+          "lat": 40.94709963333333,
+          "lng": -74.072561,
+          "checkins": 127,
+          "score": 0.7883
         },
         {
           "id": "4a8a998af964a5202b0a20e3",
@@ -280,7 +910,16 @@
           "lat": 40.70964742200671,
           "lng": -74.01051729615469,
           "checkins": 119,
-          "score": 0.35
+          "score": 0.7856
+        },
+        {
+          "id": "4aca718ff964a520f6c120e3",
+          "name": "Gym / Fitness Center",
+          "category": "Leisure",
+          "lat": 40.76695833299644,
+          "lng": -73.95777486481806,
+          "checkins": 118,
+          "score": 0.7852
         },
         {
           "id": "4ea4acaab80355a982afff79",
@@ -289,7 +928,7 @@
           "lat": 40.96535583001569,
           "lng": -74.06285508050317,
           "checkins": 116,
-          "score": 0.349
+          "score": 0.7845
         },
         {
           "id": "477a3514f964a520214d1fe3",
@@ -298,7 +937,232 @@
           "lat": 40.731155872068506,
           "lng": -73.98872764725327,
           "checkins": 114,
-          "score": 0.3484
+          "score": 0.7837
+        },
+        {
+          "id": "49bd4e25f964a52067541fe3",
+          "name": "Gym / Fitness Center",
+          "category": "Leisure",
+          "lat": 40.72424,
+          "lng": -73.997779,
+          "checkins": 112,
+          "score": 0.783
+        },
+        {
+          "id": "49e3a2b3f964a520a6621fe3",
+          "name": "Coffee Shop",
+          "category": "Food",
+          "lat": 40.74697,
+          "lng": -73.98138,
+          "checkins": 106,
+          "score": 0.7806
+        },
+        {
+          "id": "4c0d8f2e7189c9287e3dd7b6",
+          "name": "Gym / Fitness Center",
+          "category": "Leisure",
+          "lat": 40.927690347587664,
+          "lng": -73.99642919691247,
+          "checkins": 99,
+          "score": 0.7777
+        },
+        {
+          "id": "4d0304fc54d0236ac1a2e6d5",
+          "name": "Hotel",
+          "category": "Leisure",
+          "lat": 40.96550875,
+          "lng": -74.06288358333333,
+          "checkins": 98,
+          "score": 0.7773
+        },
+        {
+          "id": "41390580f964a520dc1a1fe3",
+          "name": "Food & Drink Shop",
+          "category": "Food",
+          "lat": 40.742016043363805,
+          "lng": -74.00516336676101,
+          "checkins": 97,
+          "score": 0.7769
+        },
+        {
+          "id": "4b20ed51f964a5206c3524e3",
+          "name": "Coffee Shop",
+          "category": "Food",
+          "lat": 40.70813495353977,
+          "lng": -73.83076429367065,
+          "checkins": 96,
+          "score": 0.7764
+        },
+        {
+          "id": "4c225ae47e85c9283ee5bb21",
+          "name": "Food & Drink Shop",
+          "category": "Food",
+          "lat": 40.74174,
+          "lng": -73.99365,
+          "checkins": 92,
+          "score": 0.7746
+        },
+        {
+          "id": "428d2880f964a520b5231fe3",
+          "name": "Hotel",
+          "category": "Leisure",
+          "lat": 40.75673068586622,
+          "lng": -73.97406974625711,
+          "checkins": 92,
+          "score": 0.7746
+        },
+        {
+          "id": "4ef6571c722e34060e72b97f",
+          "name": "American Restaurant",
+          "category": "Food",
+          "lat": 40.96532877881822,
+          "lng": -74.06292392141155,
+          "checkins": 90,
+          "score": 0.7737
+        },
+        {
+          "id": "4f1a558ae4b0d7904185f778",
+          "name": "Bar",
+          "category": "Food",
+          "lat": 40.96541694223362,
+          "lng": -74.06288376421803,
+          "checkins": 89,
+          "score": 0.7732
+        },
+        {
+          "id": "43bba61df964a520eb2c1fe3",
+          "name": "Food & Drink Shop",
+          "category": "Food",
+          "lat": 40.73485228613973,
+          "lng": -73.99108529090881,
+          "checkins": 89,
+          "score": 0.7732
+        },
+        {
+          "id": "4bfd7c4bb68d0f4785dbe857",
+          "name": "Food & Drink Shop",
+          "category": "Food",
+          "lat": 40.7645026089675,
+          "lng": -73.9740800857544,
+          "checkins": 89,
+          "score": 0.7732
+        },
+        {
+          "id": "4a6dff78f964a5208dd31fe3",
+          "name": "Food & Drink Shop",
+          "category": "Food",
+          "lat": 40.74681866964715,
+          "lng": -73.94420526985277,
+          "checkins": 88,
+          "score": 0.7727
+        },
+        {
+          "id": "4eda64ced5fb8f213a5d740e",
+          "name": "Gym / Fitness Center",
+          "category": "Leisure",
+          "lat": 40.74611901545656,
+          "lng": -73.99307012557983,
+          "checkins": 88,
+          "score": 0.7727
+        },
+        {
+          "id": "4bd75116304fce72985e33ab",
+          "name": "Hotel",
+          "category": "Leisure",
+          "lat": 40.667260667168485,
+          "lng": -73.7982988357544,
+          "checkins": 86,
+          "score": 0.7718
+        },
+        {
+          "id": "4f6320a7e4b0b3b496002a34",
+          "name": "Food & Drink Shop",
+          "category": "Food",
+          "lat": 40.884835891587976,
+          "lng": -74.21012257381425,
+          "checkins": 80,
+          "score": 0.7687
+        },
+        {
+          "id": "4b3febc4f964a52019b225e3",
+          "name": "Coffee Shop",
+          "category": "Food",
+          "lat": 40.61930119062167,
+          "lng": -73.98981804937846,
+          "checkins": 78,
+          "score": 0.7676
+        },
+        {
+          "id": "4c2cdf2d8ef52d7fed9933ba",
+          "name": "Hotel",
+          "category": "Leisure",
+          "lat": 40.75850533742767,
+          "lng": -73.98914337158203,
+          "checkins": 77,
+          "score": 0.7671
+        },
+        {
+          "id": "4d59fbb724466ea8c4507d9f",
+          "name": "Bar",
+          "category": "Food",
+          "lat": 40.863929,
+          "lng": -74.079579,
+          "checkins": 76,
+          "score": 0.7665
+        },
+        {
+          "id": "4b39446cf964a520655925e3",
+          "name": "Bar",
+          "category": "Food",
+          "lat": 40.85785364392424,
+          "lng": -74.14799451828003,
+          "checkins": 75,
+          "score": 0.766
+        },
+        {
+          "id": "4b48c4a8f964a520195626e3",
+          "name": "Food & Drink Shop",
+          "category": "Food",
+          "lat": 40.7373,
+          "lng": -74.03744,
+          "checkins": 75,
+          "score": 0.766
+        },
+        {
+          "id": "4a5f5a54f964a52071bf1fe3",
+          "name": "Gym / Fitness Center",
+          "category": "Leisure",
+          "lat": 40.70819,
+          "lng": -74.00648,
+          "checkins": 75,
+          "score": 0.766
+        },
+        {
+          "id": "40a2ba80f964a520fef21ee3",
+          "name": "Bar",
+          "category": "Food",
+          "lat": 40.75006726071233,
+          "lng": -74.00270154186394,
+          "checkins": 74,
+          "score": 0.7654
+        },
+        {
+          "id": "4b1be8cef964a520defe23e3",
+          "name": "Coffee Shop",
+          "category": "Food",
+          "lat": 40.972154374213545,
+          "lng": -73.96090507507324,
+          "checkins": 74,
+          "score": 0.7654
+        },
+        {
+          "id": "4d2cc14bb47d2c0fd1608594",
+          "name": "Gym / Fitness Center",
+          "category": "Leisure",
+          "lat": 40.74167309464583,
+          "lng": -73.99576350140552,
+          "checkins": 74,
+          "score": 0.7654
         }
       ]
     }

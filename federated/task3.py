@@ -266,7 +266,7 @@ def build_synthetic_profiles(pois: list[dict[str, object]]) -> list[dict[str, ob
                 for key in set(template["bias"]) | set(family_popularity)
             }
         )
-        recommendations = score_pois(pois, blended_bias, round_boost=0.1 + (index * 0.05))[:8]
+        recommendations = score_pois(pois, blended_bias, round_boost=0.12 + (index * 0.04))[:40]
         profiles.append(
             {
                 "id": template["id"],
@@ -334,7 +334,7 @@ def build_recommendation_payload(df: pd.DataFrame, pois: list[dict[str, object]]
                 for key in set(profile["bias"]) | set(family_popularity)
             }
         )
-        recommendations = score_pois(pois, blended_bias, round_boost=0.12 + (index * 0.04))[:8]
+        recommendations = score_pois(pois, blended_bias, round_boost=0.12 + (index * 0.04))[:40]
         profile_payloads.append(
             {
                 "id": profile["id"],
