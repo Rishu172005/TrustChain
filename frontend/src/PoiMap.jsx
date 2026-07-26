@@ -31,25 +31,7 @@ export default function PoiMap({
 
   // Render recommended + selected LAST so they sit on top of general dots
   const sortedPois = useMemo(() => {
-    const recommended = [];
-    const general = [];
-
-    pois.forEach((p) => {
-      if (p.id === selectedPoiId || recommendedPoiIds.has(p.id)) {
-        recommended.push(p);
-      } else {
-        general.push(p);
-      }
-    });
-
-    let sampledGeneral = general;
-    if (general.length > 500) {
-      const step = Math.ceil(general.length / 500);
-      sampledGeneral = general.filter((_, idx) => idx % step === 0);
-    }
-
-    const combined = [...sampledGeneral, ...recommended];
-    return combined.sort((a, b) => {
+    return [...pois].sort((a, b) => {
       const rank = (p) => (selectedPoiId === p.id ? 2 : recommendedPoiIds.has(p.id) ? 1 : 0);
       return rank(a) - rank(b);
     });
@@ -61,6 +43,7 @@ export default function PoiMap({
         center={nycCenter}
         zoom={12}
         scrollWheelZoom
+        preferCanvas={true}
         style={{ height: '100%', width: '100%' }}
       >
         <TileLayer
