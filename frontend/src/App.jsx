@@ -350,6 +350,7 @@ function App() {
     if (!selectedPoiForReview) return;
     setShowReviewForm(false);
     setTokenBalance((b) => b + 5);
+    const bodyText = reviewText.trim() || 'Great location!';
     const entry = {
       id: selectedPoiForReview.id,
       name: `Review: ${selectedPoiForReview.name}`,
@@ -357,6 +358,8 @@ function App() {
       tokensEarned: 5,
       timestamp: new Date().toISOString(),
       type: 'review',
+      rating: reviewRating,
+      review: bodyText,
     };
     setCheckInHistory((h) => [entry, ...h]);
 
@@ -369,7 +372,7 @@ function App() {
           userId:  toObjectId(DEMO_WALLET),
           poiId:   toObjectId(selectedPoiForReview.id ?? selectedPoiForReview.name ?? ''),
           rating:  reviewRating,
-          review:  reviewText,
+          review:  bodyText,
         }),
       });
       if (res.ok) {
@@ -614,24 +617,44 @@ function App() {
                     <span className="section-hint">{checkInHistory.length} events</span>
                   </div>
                   {checkInHistory.length > 0 ? (
-                    <ul className="ledger-list">
-                      {(showAllHistory ? checkInHistory : checkInHistory.slice(0, 4)).map((entry, idx) => (
-                        <li key={`${entry.id}-${entry.timestamp}-${idx}`} className="ledger-item">
-                          <span className="ledger-type-icon">
-                            {entry.type === 'review' ? '✍️' : '✅'}
-                          </span>
-                          <div className="ledger-item__body">
-                            <strong>{entry.name}</strong>
-                            <span>{new Date(entry.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                          </div>
-                          <span className={`ledger-reward ${entry.tokensEarned >= 5 ? 'ledger-reward--big' : ''}`}>
-                            +{entry.tokensEarned} TC
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
+                    <>
+                      <ul className="ledger-list">
+                        {(showAllHistory ? checkInHistory : checkInHistory.slice(0, 4)).map((entry, idx) => (
+                          <li key={`${entry.id}-${entry.timestamp}-${idx}`} className="ledger-item">
+                            <span className="ledger-type-icon">
+                              {entry.type === 'review' ? '✍️' : '✅'}
+                            </span>
+                            <div className="ledger-item__body">
+                              <strong>{entry.name}</strong>
+                              <span>
+                                {entry.rating ? `⭐ ${entry.rating}/5 · ` : ''}
+                                {new Date(entry.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                              </span>
+                              {entry.review && (
+                                <p style={{ fontSize: '0.72rem', color: 'var(--text-muted)', margin: '2px 0 0 0', fontStyle: 'italic' }}>
+                                  "{entry.review}"
+                                </p>
+                              )}
+                            </div>
+                            <span className={`ledger-reward ${entry.tokensEarned >= 5 ? 'ledger-reward--big' : ''}`}>
+                              +{entry.tokensEarned} TC
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                      {checkInHistory.length > 4 && (
+                        <button
+                          type="button"
+                          className="topbar-ghost-btn"
+                          onClick={() => setShowAllHistory(!showAllHistory)}
+                          style={{ width: '100%', marginTop: '8px', fontSize: '0.75rem', textAlign: 'center' }}
+                        >
+                          {showAllHistory ? 'Show Less' : `Show All (${checkInHistory.length} events)`}
+                        </button>
+                      )}
+                    </>
                   ) : (
-                    <p className="empty-ledger">No activity yet. Check-in to earn TC tokens!</p>
+                    <p className="empty-ledger">No activity yet. Check-in or write a review to earn TC tokens!</p>
                   )}
                 </div>
               </>

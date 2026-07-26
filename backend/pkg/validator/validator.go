@@ -38,12 +38,9 @@ func Rating(r int32) error {
 	return nil
 }
 
-// ReviewBody returns an error if the review text is empty or exceeds 2000 chars.
+// ReviewBody returns an error if the review text exceeds 2000 chars.
 func ReviewBody(body string) error {
 	trimmed := strings.TrimSpace(body)
-	if trimmed == "" {
-		return errors.New("review body cannot be empty")
-	}
 	if len(trimmed) > 2000 {
 		return errors.New("review body cannot exceed 2000 characters")
 	}
