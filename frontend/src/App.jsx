@@ -301,41 +301,56 @@ function App() {
   };
 
   const handleCheckIn = async (poi) => {
-    if (!poi) return;
-    const entry = {
-      id: poi.id, name: poi.name,
-      profile: selectedProfile?.label ?? 'Unknown',
-      tokensEarned: 10,
-      timestamp: new Date().toISOString(),
-      type: 'checkin',
-    };
-    setSelectedPoi(poi);
-    setLastCheckIn({ name: poi.name, profile: selectedProfile?.label ?? 'Unknown' });
-    setCheckInHistory((h) => [entry, ...h]);
-    setTokenBalance((b) => b + 10); // optimistic update (10 TRUST per check-in)
+  if (!poi) return;
 
-    // POST to backend → records in MongoDB + submits to Hardhat
-    try {
-      const res = await fetch('/api/v1/checkin', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userId: toObjectId(DEMO_WALLET),
-          poiId:  toObjectId(poi.id ?? poi.name ?? ''),
-          latitude:  poi.lat ?? userLocation.lat,
-          longitude: poi.lng ?? userLocation.lng,
-        }),
-      });
-      if (res.ok) {
-        const json = await res.json();
-        if (json.data?.txHash) {
-          console.info('[TrustChain] check-in tx:', json.data.txHash);
-        }
-        fetchBalance();
-        fetchTransactions();
-      }
-    } catch (_) { /* backend offline — optimistic update already applied */ }
+  // 1. Build the entry payload
+  const entry = {
+    id: poi.id,
+    name: poi.name,
+    profile: selectedProfile?.label ?? 'Unknown',
+    tokensEarned: 10,
+    timestamp: new Date().toISOString(),
+    type: 'checkin',
   };
+
+  try {
+    // 2. Fire the network request over to the Go server (Port 8080)
+    const backendHost = `http://${window.location.hostname}:8080`;
+    const response = await fetch(`${backendHost}/api/v1/checkin`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+      userId: toObjectId(selectedProfile?.id || '1'),
+      poiId: toObjectId(poi.id),
+      latitude: poi.lat || 40.7128,
+      longitude: poi.lng || -74.0060
+    }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Backend check-in endpoint failed');
+    }
+
+    const data = await response.json();
+
+    // 3. If backend confirms it, update your UI state dynamically!
+    setSelectedPoi(poi);
+    setLastCheckIn({ name: poi.name, profile: entry.profile });
+    
+    // Update local history lists using actual backend confirmation
+    setCheckInHistory(prev => [entry, ...prev]);
+    if (data.new_balance) {
+      setWalletBalance(data.new_balance); // updates the token ledger!
+    }
+
+    console.log('Successfully recorded check-in on the engine backend:', data);
+  } catch (error) {
+    console.error('Connection integration failed:', error);
+    alert('Could not sync check-in to server. Is your Go backend running on port 8080?');
+  }
+};
 
   const handleAddTokens = () => setTokenBalance((b) => b + 10);
   const handleOpenReview = (poi) => { setSelectedPoiForReview(poi); setReviewRating(5); setReviewText(''); setShowReviewForm(true); };

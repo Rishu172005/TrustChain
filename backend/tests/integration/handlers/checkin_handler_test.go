@@ -47,6 +47,12 @@ func TestCheckinHandler_Create_Success(t *testing.T) {
 			c.ID = primitive.NewObjectID()
 			return nil
 		},
+		findByUserAndPOIFn: func(ctx context.Context, userID, poiID string) (*models.CheckIn, error) {
+			return nil, nil
+		},
+		findByIDFn: func(ctx context.Context, id string) (*models.CheckIn, error) {
+			return nil, nil
+		},
 	}
 	blockchain := &mockBlockchainProvider{
 		submitCheckinFn: func(_ context.Context, u, p string) (*ports.TxResult, error) {
@@ -85,9 +91,31 @@ func TestCheckinHandler_Create_Success(t *testing.T) {
 }
 
 func TestCheckinHandler_Create_MissingBody(t *testing.T) {
-	poiRepo := &mockPOIRepository{}
-	checkinRepo := &mockCheckInRepository{}
-	blockchain := &mockBlockchainProvider{}
+	poiRepo := &mockPOIRepository{
+		findByIDFn: func(ctx context.Context, id string) (*models.POI, error) {
+			return nil, nil
+		},
+	}
+
+	checkinRepo := &mockCheckInRepository{
+		insertFn: func(ctx context.Context, c *models.CheckIn) error {
+			return nil
+		},
+		findByUserAndPOIFn: func(ctx context.Context, userID, poiID string) (*models.CheckIn, error) {
+			return nil, nil
+		},
+		findByIDFn: func(ctx context.Context, id string) (*models.CheckIn, error) {
+			return nil, nil
+		},
+		findByUserFn: func(ctx context.Context, userID string) ([]models.CheckIn, error) { // No * here
+			return nil, nil
+		},
+	}
+	blockchain := &mockBlockchainProvider{
+		submitCheckinFn: func(ctx context.Context, u, p string) (*ports.TxResult, error) {
+			return &ports.TxResult{TxHash: "0xdeadbeef", Status: "pending"}, nil
+		},
+	}
 
 	svc := services.NewCheckInService(checkinRepo, poiRepo, blockchain, nopLogger())
 	router := buildCheckinRouter(svc)
@@ -149,7 +177,11 @@ func TestCheckinHandler_Create_POINotFound(t *testing.T) {
 	poiRepo := &mockPOIRepository{
 		findByIDFn: func(_ context.Context, id string) (*models.POI, error) { return nil, nil },
 	}
-	checkinRepo := &mockCheckInRepository{}
+	checkinRepo := &mockCheckInRepository{
+		insertFn: func(ctx context.Context, checkin *models.CheckIn) error {
+			return nil
+		},
+	}
 	blockchain := &mockBlockchainProvider{}
 
 	svc := services.NewCheckInService(checkinRepo, poiRepo, blockchain, nopLogger())

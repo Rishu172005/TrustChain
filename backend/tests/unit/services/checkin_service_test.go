@@ -26,6 +26,15 @@ func TestCheckInService_CreateCheckIn_Success(t *testing.T) {
 		insertFn: func(_ context.Context, c *models.CheckIn) error {
 			return nil
 		},
+		findByUserAndPOIFn: func(ctx context.Context, userID, poiID string) (*models.CheckIn, error) {
+			return nil, nil
+		},
+		findByIDFn: func(ctx context.Context, id string) (*models.CheckIn, error) {
+			return nil, nil
+		},
+		findByUserFn: func(ctx context.Context, userID string) ([]models.CheckIn, error) {
+			return nil, nil
+		},
 	}
 	blockchain := &mockBlockchainProvider{
 		submitCheckinFn: func(_ context.Context, uID, pID string) (*ports.TxResult, error) {
@@ -64,9 +73,16 @@ func TestCheckInService_CreateCheckIn_POINotFound(t *testing.T) {
 			return nil, nil // nil, nil means not found
 		},
 	}
-	checkinRepo := &mockCheckInRepository{}
-	blockchain := &mockBlockchainProvider{}
-
+	checkinRepo := &mockCheckInRepository{
+		insertFn: func(ctx context.Context, checkin *models.CheckIn) error {
+			return nil
+		},
+	}
+	blockchain := &mockBlockchainProvider{
+		submitCheckinFn: func(ctx context.Context, uID, pID string) (*ports.TxResult, error) {
+			return nil, nil
+		},
+	}
 	svc := services.NewCheckInService(checkinRepo, poiRepo, blockchain, zerolog.Nop())
 	_, err := svc.CreateCheckIn(context.Background(), services.CheckInRequest{
 		UserID:    validUserID(),

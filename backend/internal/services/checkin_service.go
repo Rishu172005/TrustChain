@@ -62,8 +62,8 @@ func (s *CheckInService) CreateCheckIn(ctx context.Context, req CheckInRequest) 
 		s.log.Warn().Err(err).Str("poiId", req.POIID).Msg("POI lookup failed; proceeding with check-in anyway")
 	}
 	if poi == nil {
-		// POI not in DB (demo mode). Log and continue — don't block the tx.
-		s.log.Info().Str("poiId", req.POIID).Msg("POI not found in DB; check-in proceeding in demo mode")
+		s.log.Warn().Str("poiId", req.POIID).Msg("POI not found in DB")
+		return nil, ErrPOINotFound
 	}
 
 	userOID, err := primitive.ObjectIDFromHex(req.UserID)

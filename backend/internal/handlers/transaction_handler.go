@@ -72,13 +72,17 @@ func (h *TransactionHandler) Get(c *gin.Context) {
 			if poi, err := h.poiRepo.FindByID(c.Request.Context(), ck.POIID.Hex()); err == nil && poi != nil {
 				poiName = poi.Name
 			}
+			txHash := ""
+			if ck.Blockchain.TxHash != nil {
+				txHash = *ck.Blockchain.TxHash
+			}
 			items = append(items, TransactionItem{
 				ID:           ck.ID.Hex(),
 				Type:         "checkin",
 				Name:         poiName,
 				TokensEarned: 10,
 				Timestamp:    ck.CreatedAt,
-				TxHash:       ck.Blockchain.TxHash,
+				TxHash:       txHash,
 			})
 		}
 	}

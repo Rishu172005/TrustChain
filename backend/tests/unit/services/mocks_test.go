@@ -37,6 +37,11 @@ type mockCheckInRepository struct {
 	insertFn           func(ctx context.Context, checkin *models.CheckIn) error
 	findByUserAndPOIFn func(ctx context.Context, userID, poiID string) (*models.CheckIn, error)
 	findByIDFn         func(ctx context.Context, id string) (*models.CheckIn, error)
+	findByUserFn       func(ctx context.Context, userID string) ([]models.CheckIn, error)
+}
+
+func (m *mockCheckInRepository) FindByUser(ctx context.Context, userID string) ([]models.CheckIn, error) {
+	return m.findByUserFn(ctx, userID)
 }
 
 func (m *mockCheckInRepository) Insert(ctx context.Context, checkin *models.CheckIn) error {

@@ -50,7 +50,8 @@ func (s *ReviewService) CreateReview(ctx context.Context, req ReviewRequest) (*m
 		s.log.Warn().Err(err).Str("poiId", req.POIID).Msg("POI lookup failed; saving review anyway")
 	}
 	if poi == nil {
-		s.log.Info().Str("poiId", req.POIID).Msg("POI not in DB; saving review in demo mode")
+		s.log.Warn().Str("poiId", req.POIID).Msg("POI not found in DB")
+		return nil, ErrPOINotFound
 	}
 
 	userOID, err := primitive.ObjectIDFromHex(req.UserID)
