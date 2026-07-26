@@ -220,32 +220,32 @@ function App() {
     } catch (_) { /* backend offline */ }
   };
 
-  // ── Data loading: backend API first, static files as fallback ──────────────
+  // ── Data loading: full 34k POI dataset + live backend status check ───────
   useEffect(() => {
     let cancelled = false;
     async function loadData() {
       try {
-        // 1. Try live backend for POIs
+        // 1. Always load full 34,117 NYC POI dataset
         let pois = [];
         try {
-          const res = await fetch('/api/v1/pois?limit=500');
+          const pr = await fetch('/pois.json');
+          if (pr.ok) {
+            pois = await pr.json();
+          }
+        } catch (_) { /* fallback */ }
+
+        // 2. Check if live backend API is online
+        try {
+          const res = await fetch('/api/v1/health');
           if (res.ok) {
             const json = await res.json();
-            const payload = Array.isArray(json.data) ? json.data : json.data?.pois;
-            if (json.success && Array.isArray(payload) && payload.length > 0) {
-              pois = payload;
+            if (json.success) {
               if (!cancelled) setBackendOnline(true);
             }
           }
-        } catch (_) { /* backend offline — fall through */ }
+        } catch (_) { /* offline */ }
 
-        // 2. Fall back to static pois.json (the full 34k dataset)
-        if (pois.length === 0) {
-          const pr = await fetch('/pois.json');
-          pois = await pr.json();
-        }
-
-        // 3. Recommendations file
+        // 3. Load recommendations file
         const rr = await fetch('/recommendations.json');
         const rj = await rr.json();
 

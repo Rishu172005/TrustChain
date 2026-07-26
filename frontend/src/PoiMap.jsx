@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { latLngBounds } from 'leaflet';
 import { CircleMarker, MapContainer, TileLayer, Popup, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -30,11 +30,30 @@ export default function PoiMap({
   const [tilesAvailable, setTilesAvailable] = useState(true);
 
   // Render recommended + selected LAST so they sit on top of general dots
-  const sortedPois = [...pois].sort((a, b) => {
-    const rank = (p) =>
-      selectedPoiId === p.id ? 2 : recommendedPoiIds.has(p.id) ? 1 : 0;
-    return rank(a) - rank(b);
-  });
+  const sortedPois = useMemo(() => {
+    const recommended = [];
+    const general = [];
+
+    pois.forEach((p) => {
+      if (p.id === selectedPoiId || recommendedPoiIds.has(p.id)) {
+        recommended.push(p);
+      } else {
+        general.push(p);
+      }
+    });
+
+    let sampledGeneral = general;
+    if (general.length > 500) {
+      const step = Math.ceil(general.length / 500);
+      sampledGeneral = general.filter((_, idx) => idx % step === 0);
+    }
+
+    const combined = [...sampledGeneral, ...recommended];
+    return combined.sort((a, b) => {
+      const rank = (p) => (selectedPoiId === p.id ? 2 : recommendedPoiIds.has(p.id) ? 1 : 0);
+      return rank(a) - rank(b);
+    });
+  }, [pois, recommendedPoiIds, selectedPoiId]);
 
   return (
     <div style={{ position: 'relative', height: '100%', width: '100%' }}>
