@@ -1,0 +1,36 @@
+# Node
+node_modules/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.venv311/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.coverage
+*.egg-info/
+
+# Build output
+dist/
+
+# Large datasets
+data/raw/
+data/processed/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+**/.DS_Store
+backend/.DS_Store
+frontend/node_modules/
+data/
+frontend/src/*.json
+.venv311/
+.venv/
+.venv311/
+.venv/

@@ -1,0 +1,59 @@
+name: trustchain
+
+services:
+
+  # ── MongoDB ──────────────────────────────────────────────────────────────────
+  mongo:
+    image: mongo:7.0
+    container_name: trustchain-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+      - ./scripts/seed.mongo.js:/docker-entrypoint-initdb.d/01_seed.js:ro
+    environment:
+      MONGO_INITDB_DATABASE: trustchain
+    healthcheck:
+      test:
+        - "CMD"
+        - "mongosh"
+        - "--quiet"
+        - "--eval"
+        - "if (db.adminCommand('ping').ok !== 1) { quit(1); }"
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 20s
+
+  # ── Backend ───────────────────────────────────────────────────────────────────
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: trustchain-backend
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env.example
+    environment:
+      MONGODB_URI: mongodb://mongo:27017
+      DATABASE_NAME: trustchain
+      LOG_LEVEL: info
+      BLOCKCHAIN_PROVIDER: mock
+      RECOMMENDATION_PROVIDER: mock
+    depends_on:
+      mongo:
+        condition: service_healthy
+    # NOTE: no in-container healthcheck is defined here. The runtime image is
+    # built FROM scratch (Phase 9 design decision — minimal attack surface)
+    # and contains no shell, wget, or curl binary to run a CMD/CMD-SHELL probe.
+    # Liveness should be checked externally, e.g.:
+    #   curl http://localhost:8080/api/v1/health
+    # or by adding a lightweight HTTP healthcheck at the orchestrator level
+    # (Kubernetes livenessProbe, an external uptime monitor, etc.).
+
+volumes:
+  mongo_data:
+    name: trustchain_mongo_data
