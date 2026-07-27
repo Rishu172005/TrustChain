@@ -1,0 +1,50 @@
+[
+  {
+    "_id": { "$oid": "42911d00f964a520f5231fe3" },
+    "name": "Central Perk Cafe",
+    "category": "cafe",
+    "isActive": true
+  },
+  {
+    "_id": { "$oid": "42911d00f964a520f5231fe4" },
+    "name": "Prospect Park",
+    "category": "park",
+    "isActive": true
+  },
+  {
+    "_id": { "$oid": "42911d00f964a520f5231fe5" },
+    "name": "Brooklyn Museum",
+    "category": "museum",
+    "isActive": true
+  },
+  {
+    "_id": { "$oid": "42911d00f964a520f5231fe6" },
+    "name": "Gotham Pizza",
+    "category": "restaurant",
+    "isActive": true
+  },
+  {
+    "_id": { "$oid": "42911d00f964a520f5231fe7" },
+    "name": "Metropolitan Library",
+    "category": "library",
+    "isActive": true
+  },
+  {
+    "_id": { "$oid": "42911d00f964a520f5231fe8" },
+    "name": "Empire Fitness",
+    "category": "gym",
+    "isActive": true
+  },
+  {
+    "_id": { "$oid": "42911d00f964a520f5231fe9" },
+    "name": "Broadway Cinema",
+    "category": "entertainment",
+    "isActive": true
+  },
+  {
+    "_id": { "$oid": "42911d00f964a520f5231fea" },
+    "name": "Subway Station Hub",
+    "category": "transit",
+    "isActive": true
+  }
+]

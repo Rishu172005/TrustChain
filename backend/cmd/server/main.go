@@ -9,6 +9,9 @@ import (
 	"syscall"
 	"time"
 
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
+
 	"github.com/gin-gonic/gin"
 
 	"github.com/trustchain/backend/internal/blockchain"
@@ -50,7 +53,7 @@ func main() {
 		log.Fatal().Err(err).Msg("failed to create mongodb indexes")
 	}
 	log.Info().Msg("mongodb connected and indexes verified")
-
+	seedDatabaseIfEmpty(context.Background(), dbClient.Database)
 	// ── Repositories ──────────────────────────────────────────────────────────
 	poiRepo := repositories.NewPOIRepository(dbClient.Database)
 	checkinRepo := repositories.NewCheckInRepository(dbClient.Database)
@@ -166,4 +169,46 @@ func main() {
 		log.Error().Err(err).Msg("forced shutdown")
 	}
 	log.Info().Msg("server stopped cleanly")
+
+}
+func seedDatabaseIfEmpty(ctx context.Context, database *mongo.Database) {
+	collection := database.Collection("pois")
+
+	count, err := collection.CountDocuments(ctx, bson.M{})
+	if err != nil {
+		fmt.Printf("⚠️ failed to count database documents during seeding check: %v\n", err)
+		return
+	}
+
+	if count > 0 {
+		fmt.Printf("ℹ️ database already populated (%d items), skipping auto-seed\n", count)
+		return
+	}
+
+	fmt.Println("ℹ️ database is empty! auto-seeding required POIs...")
+
+	byteValue, err := os.ReadFile("cmd/server/pois.json")
+	if err != nil {
+		fmt.Printf("⚠️ skipping auto-seed: cmd/server/pois.json not found: %v\n", err)
+		return
+	}
+
+	var rawDocs []bson.M
+	if err := bson.UnmarshalExtJSON(byteValue, true, &rawDocs); err != nil {
+		fmt.Printf("⚠️ failed to parse Extended JSON file: %v\n", err)
+		return
+	}
+
+	var docs []interface{}
+	for _, doc := range rawDocs {
+		docs = append(docs, doc)
+	}
+
+	_, err = collection.InsertMany(ctx, docs)
+	if err != nil {
+		fmt.Printf("⚠️ failed to insert auto-seed documents into MongoDB: %v\n", err)
+		return
+	}
+
+	fmt.Println("🎉 Successfully auto-seeded matching dataset to trustchain.pois collection!")
 }

@@ -2,7 +2,7 @@
 pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 /// @dev Minimal interface into TrustToken. Assumes TrustToken restricts mint/burn
 ///      to authorized "controller" contracts (per the Task 2 S1 design) and that
