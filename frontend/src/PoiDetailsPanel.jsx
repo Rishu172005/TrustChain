@@ -260,7 +260,7 @@ export default function PoiDetailsPanel({ poi, metrics, profileLabel, onClose, o
               onClick={() => { onCheckIn(poi); onClose(); }}
               id="poi-details-checkin-btn"
             >
-              ✅ Check-in &nbsp;<span style={{ opacity: 0.7 }}>(+1 TC)</span>
+              ✅ Check-in &nbsp;<span style={{ opacity: 0.7, fontSize: '0.75rem' }}>(+10 TC)</span>
             </button>
             <button
               type="button"

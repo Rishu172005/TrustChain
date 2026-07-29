@@ -59,11 +59,12 @@ func (s *CheckInService) CreateCheckIn(ctx context.Context, req CheckInRequest) 
 	poi, err := s.poiRepo.FindByID(ctx, req.POIID)
 	if err != nil {
 		// Non-fatal: log and continue — the blockchain tx should still fire.
-		s.log.Warn().Err(err).Str("poiId", req.POIID).Msg("POI lookup failed; proceeding with check-in anyway")
+		s.log.Warn().Err(err).Str("poiId", req.POIID).Msg("POI lookup failed; proceeding with check-in anyway (demo mode)")
 	}
 	if poi == nil {
-		s.log.Warn().Str("poiId", req.POIID).Msg("POI not found in DB")
-		return nil, ErrPOINotFound
+		// Demo mode: POI is from the static 34k Foursquare dataset, not seeded in MongoDB.
+		// Log a warning but allow the check-in and blockchain transaction to proceed.
+		s.log.Warn().Str("poiId", req.POIID).Msg("POI not found in DB — demo mode, proceeding anyway")
 	}
 
 	userOID, err := primitive.ObjectIDFromHex(req.UserID)

@@ -301,56 +301,59 @@ function App() {
   };
 
   const handleCheckIn = async (poi) => {
-  if (!poi) return;
+    if (!poi) return;
 
-  // 1. Build the entry payload
-  const entry = {
-    id: poi.id,
-    name: poi.name,
-    profile: selectedProfile?.label ?? 'Unknown',
-    tokensEarned: 10,
-    timestamp: new Date().toISOString(),
-    type: 'checkin',
+    // 1. Build the entry payload
+    const entry = {
+      id: poi.id,
+      name: poi.name,
+      profile: selectedProfile?.label ?? 'Unknown',
+      tokensEarned: 10,
+      timestamp: new Date().toISOString(),
+      type: 'checkin',
+    };
+
+    try {
+      // 2. Fire the network request through the Vite proxy → Go backend
+      const res = await fetch('/api/v1/checkin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: toObjectId(selectedProfile?.id || '1'),
+          poiId: toObjectId(poi.id),
+          latitude: poi.lat || 40.7128,
+          longitude: poi.lng || -74.0060,
+        }),
+      });
+
+      if (!res.ok) {
+        const errText = await res.text();
+        throw new Error(`Backend check-in failed (${res.status}): ${errText}`);
+      }
+
+      const data = await res.json();
+
+      // 3. Update UI state
+      setSelectedPoi(poi);
+      setLastCheckIn({ name: poi.name, profile: entry.profile });
+      setCheckInHistory((prev) => [entry, ...prev]);
+
+      // 4. Sync token balance from blockchain (or add locally)
+      if (data?.data?.new_balance != null) {
+        setTokenBalance((prev) => Math.max(prev, Number(data.data.new_balance)));
+      } else {
+        setTokenBalance((prev) => prev + 10);
+      }
+
+      // 5. Re-fetch blockchain balance + transactions after a short delay
+      setTimeout(() => { fetchBalance(); fetchTransactions(); }, 2000);
+
+      console.log('Check-in recorded on-chain:', data);
+    } catch (error) {
+      console.error('Check-in failed:', error);
+      alert(`Check-in error: ${error.message}`);
+    }
   };
-
-  try {
-    // 2. Fire the network request over to the Go server (Port 8080)
-    const backendHost = `http://${window.location.hostname}:8080`;
-    const response = await fetch(`${backendHost}/api/v1/checkin`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-      userId: toObjectId(selectedProfile?.id || '1'),
-      poiId: toObjectId(poi.id),
-      latitude: poi.lat || 40.7128,
-      longitude: poi.lng || -74.0060
-    }),
-    });
-
-    if (!response.ok) {
-      throw new Error('Backend check-in endpoint failed');
-    }
-
-    const data = await response.json();
-
-    // 3. If backend confirms it, update your UI state dynamically!
-    setSelectedPoi(poi);
-    setLastCheckIn({ name: poi.name, profile: entry.profile });
-    
-    // Update local history lists using actual backend confirmation
-    setCheckInHistory(prev => [entry, ...prev]);
-    if (data.new_balance) {
-      setWalletBalance(data.new_balance); // updates the token ledger!
-    }
-
-    console.log('Successfully recorded check-in on the engine backend:', data);
-  } catch (error) {
-    console.error('Connection integration failed:', error);
-    alert('Could not sync check-in to server. Is your Go backend running on port 8080?');
-  }
-};
 
   const handleAddTokens = () => setTokenBalance((b) => b + 10);
   const handleOpenReview = (poi) => { setSelectedPoiForReview(poi); setReviewRating(5); setReviewText(''); setShowReviewForm(true); };
@@ -602,7 +605,7 @@ function App() {
                       </div>
                       <div className="checkin-actions">
                         <button type="button" className="action-btn action-btn--green" onClick={() => handleCheckIn(selectedPoi)}>
-                          ✅ Check-in <span className="action-reward">+1 TC</span>
+                          ✅ Check-in <span className="action-reward">+10 TC</span>
                         </button>
                         <button type="button" className="action-btn action-btn--blue" onClick={() => handleOpenReview(selectedPoi)}>
                           ✍️ Review <span className="action-reward">+5 TC</span>

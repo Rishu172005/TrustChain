@@ -80,41 +80,65 @@ This gives all 34k POIs meaningful non-zero scores in the Transparency Panel.
 
 ## How to Run Everything
 
-### Step 1 — Smart Contracts
+> **Prerequisites:** MongoDB running locally on `mongodb://localhost:27017` and Node.js + Go installed.
+
+### Step 0 — Pull Latest Code
 ```bash
-cd contracts/trustchain-task3-s1
-npm install
-
-# Terminal A — keep running
-npx hardhat node --port 8545
-
-# Terminal B
-npx hardhat run scripts/deploy.js --network localhost
-```
-
-### Step 2 — Go Backend
-```bash
-cd backend
-BLOCKCHAIN_PROVIDER=hardhat \
-HARDHAT_RPC_URL=http://127.0.0.1:8545 \
-HARDHAT_DEPLOYMENT_PATH=../contracts/trustchain-task3-s1/deployments/localhost.json \
-go run ./cmd/server
-```
-
-### Step 3 — Frontend
-```bash
-cd frontend
-npm run dev
-# → http://localhost:5173
-```
-
-### Step 4 — Federated Learning (optional, to regenerate recommendations)
-```bash
-cd federated
-python launch_fl.py
+git pull origin main
 ```
 
 ---
+
+### Step 1 — Smart Contracts (Terminal A — keep running)
+```bash
+cd contracts/trustchain-task6-s1
+npm install
+
+# Start the local Hardhat blockchain — keep this terminal open
+npx hardhat node --port 8545
+```
+
+### Step 2 — Deploy Contracts (Terminal B — run once)
+```bash
+cd contracts/trustchain-task6-s1
+
+# Deploy TrustToken, UserRegistry, StakingContract, ProofOfRecommendation, GeoRecommender
+npx hardhat run scripts/deploy.js --network localhost
+# → writes deployments/localhost.json (backend reads this automatically)
+```
+
+---
+
+### Step 3 — Go Backend (Terminal C — keep running)
+```bash
+cd backend
+
+# All config is already set in backend/.env — no manual env vars needed
+go run ./cmd/server
+# → http://localhost:8080  (blockchain=hardhat, recommendations=federated)
+```
+
+---
+
+### Step 4 — Frontend (Terminal D — keep running)
+```bash
+cd frontend
+npm run dev
+# → http://localhost:5173  (Vite proxy routes /api → localhost:8080)
+```
+
+---
+
+### Step 5 — Federated Learning (optional — regenerate recommendations)
+```bash
+cd federated
+python launch_fl.py
+# → writes frontend/src/recommendations.json
+```
+
+
+---
+
 
 ## Architecture Data Flow
 
