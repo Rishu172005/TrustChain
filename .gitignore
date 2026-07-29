@@ -15,6 +15,10 @@ env/
 
 # Build output
 dist/
+artifacts/
+cache/
+contracts/trustchain-task4/artifacts/
+contracts/trustchain-task4/cache/
 
 # Large datasets
 data/raw/
@@ -34,3 +38,4 @@ frontend/src/*.json
 .venv/
 .venv311/
 .venv/
+

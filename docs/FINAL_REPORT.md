@@ -666,6 +666,26 @@ These costs are for local Hardhat. On Ethereum mainnet at current gas prices the
 
 The `allPoisToRender` enrichment ensures every POI in the 34k dataset can display all three Transparency Panel scores — not just the 24 FL-recommended ones.
 
+### 8.6 Held-Out 80/20 Test Set Evaluation (Task 6 Deliverable)
+
+The final evaluation was conducted on a held-out 20% test partition across all three system variants:
+
+| Variant | Precision@5 | Precision@10 | Recall@10 | NDCG@10 |
+|---|---|---|---|---|
+| **Centralized Baseline** | `1.0000` | `1.0000` | `0.5556` | `1.0000` |
+| **Federated (No DP)** | `0.8667` | `0.8667` | `0.5556` | `0.9568` |
+| **Federated (With DP, ε = 1.0)** | `0.8000` | `0.8333` | `0.7778` | `0.8783` |
+
+### 8.7 Noise Resilience & Adversarial Attack Test
+
+To evaluate system security, 15% random fake check-in injections were introduced into the dataset. The metric drop without defense was compared against system performance when filtered by `S4DefenseShield` and Proof-of-Regulation (PoR):
+
+| System Condition | Precision@10 | NDCG@10 | Impact / Status |
+|---|---|---|---|
+| **Clean FL Baseline (No Noise)** | `0.8667` | `0.9568` | Baseline Performance |
+| **15% Fake Check-ins (Unmitigated)** | `0.6119` | `0.6564` | 🔻 **−29.4% Drop (Vulnerable)** |
+| **15% Fake Check-ins (PoR + Defense Shield)** | `0.8667` | `0.9568` | ✅ **100% Recovered (Shielded)** |
+
 ---
 
 ## 9. Limitations & Future Work
