@@ -234,27 +234,49 @@ function App() {
           const liveScoreMap = new Map(
             json.data.recommendations.map((r) => [r.poiId, r.score])
           );
+          const liveNameScoreMap = new Map(
+            json.data.recommendations.map((r) => [r.name?.toLowerCase(), r.score])
+          );
 
-          // Update scores on existing recs; preserve everything else (esp. checkins)
+          // Lookup maps from the full 34k POI dataset
+          const poiByName = new Map(poiData.map((p) => [p.name?.toLowerCase(), p]));
+          const poiById = new Map(poiData.map((p) => [p.id, p]));
+
+          // 1. Update scores on existing recs (matching by ID or by Name); preserve checkins
           const merged = (profile.recommendations ?? []).map((rec) => {
-            const liveScore = liveScoreMap.get(rec.id);
-            return liveScore != null ? { ...rec, score: liveScore } : rec;
+            const liveScore = liveScoreMap.get(rec.id) ?? liveNameScoreMap.get(rec.name?.toLowerCase());
+            const matchedPoi = poiById.get(rec.id) || poiByName.get(rec.name?.toLowerCase());
+            const checkins = Math.max(rec.checkins || 0, matchedPoi?.checkins || 0);
+            return {
+              ...rec,
+              checkins,
+              score: liveScore != null ? liveScore : rec.score,
+            };
           });
 
-          // Append any brand-new IDs the backend returned ONLY if they have valid non-zero coordinates
+          // 2. Append any brand-new IDs/names from backend ONLY if valid coords & non-duplicate
           const existingIds = new Set(merged.map((r) => r.id));
+          const existingNames = new Set(merged.map((r) => r.name?.toLowerCase()));
+
           json.data.recommendations.forEach((r) => {
-            const lat = r.location?.latitude ?? r.lat ?? 0;
-            const lng = r.location?.longitude ?? r.lng ?? 0;
-            if (!existingIds.has(r.poiId) && (Math.abs(lat) > 0.001 || Math.abs(lng) > 0.001)) {
+            const matchedPoi = poiById.get(r.poiId) || poiByName.get(r.name?.toLowerCase());
+            const lat = r.location?.latitude ?? r.lat ?? matchedPoi?.lat ?? 0;
+            const lng = r.location?.longitude ?? r.lng ?? matchedPoi?.lng ?? 0;
+            const nameLower = r.name?.toLowerCase();
+
+            if (
+              !existingIds.has(r.poiId) &&
+              !existingNames.has(nameLower) &&
+              (Math.abs(lat) > 0.001 || Math.abs(lng) > 0.001)
+            ) {
               merged.push({
-                id:       r.poiId,
-                name:     r.name,
-                category: r.category,
+                id:       r.poiId || matchedPoi?.id || '',
+                name:     r.name || matchedPoi?.name || 'Unnamed POI',
+                category: r.category || matchedPoi?.category || 'Unknown',
                 score:    r.score,
                 lat,
                 lng,
-                checkins: r.checkins ?? 0,
+                checkins: r.checkins ?? matchedPoi?.checkins ?? 0,
               });
             }
           });
