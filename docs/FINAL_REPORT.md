@@ -506,6 +506,14 @@ Composite Score: 84 / 100
 
 The panel opens via `setSelectedPoiForExplanation(poi)` which triggers the `selectedPoiExplanationMetrics` useMemo. The `allPoisToRender` memo pre-enriches every POI with scores so the panel has zero loading delay. The `isRecommended` boolean flag renders an additional "FL Model — Verified" badge for POIs in the FL output.
 
+### 5.6 Geospatial & Real-Time Sync Hardening
+
+During system integration testing, three key production hardening fixes were implemented in the frontend application layer (`frontend/src/App.jsx`):
+
+1. **Zero-Coordinate Sanitization (Null Island Fix):** When live recommendations are received from the backend, items with missing or invalid coordinates previously defaulted to `(0.0, 0.0)` in the Atlantic Ocean. The geospatial rendering controller was hardened with coordinate bounding filters (`Math.abs(lat) > 0.001`), ensuring markers are mapped strictly within valid geographic regions.
+2. **Dual-Key Schema Reconciliation (ID & Name):** To bridge the gap between static dataset Foursquare IDs (24-character hex) and dynamic backend MongoDB ObjectIds, recommendation matching was upgraded to operate on dual keys (by ID and case-insensitive Name). This prevents live backend recommendation updates from inadvertently resetting POI check-in counts to 0.
+3. **Real-Time Check-In & Score Synchronization:** `handleCheckIn` and `handleSubmitReview` were updated to perform atomic state updates across `poiData`, `selectedPoi`, and `profile.recommendations`. Check-in interactions immediately increment the check-in counter (`+1`), apply a dynamic score boost (`+0.02`), and trigger immediate re-ranking across both offline and live backend modes.
+
 ---
 
 ## 6. Privacy & Security Design
