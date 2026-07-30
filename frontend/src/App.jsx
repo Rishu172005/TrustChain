@@ -201,6 +201,38 @@ function App() {
     } catch (_) { /* backend offline — keep last value */ }
   };
 
+  // ── Live recommendation refresh from backend ──────────────────────────────
+  const fetchRecommendations = async (profileId) => {
+    try {
+      const uid = profileId ?? selectedProfileId;
+      const res = await fetch(`/api/v1/recommend?userId=${encodeURIComponent(uid)}&limit=10`);
+      if (!res.ok) return;
+      const json = await res.json();
+      if (!json.success || !Array.isArray(json.data?.recommendations)) return;
+
+      // Map API shape → internal shape expected by the rest of the app
+      const liveRecs = json.data.recommendations.map((r) => ({
+        id:       r.poiId,
+        name:     r.name,
+        category: r.category,
+        score:    r.score,
+        lat:      r.location?.latitude  ?? 0,
+        lng:      r.location?.longitude ?? 0,
+        checkins: r.checkins ?? 0,
+      }));
+
+      // Patch only the active profile's recommendations; keep everything else intact
+      setRecommendationData((prev) => ({
+        ...prev,
+        profiles: prev.profiles.map((p) =>
+          p.id === uid ? { ...p, recommendations: liveRecs } : p
+        ),
+      }));
+
+      setBackendOnline(true);
+    } catch (_) { /* backend offline — keep static data */ }
+  };
+
   const fetchTransactions = async () => {
     try {
       const res = await fetch(`/api/v1/transactions?wallet=${DEMO_WALLET}`);
@@ -266,11 +298,14 @@ function App() {
   useEffect(() => {
     fetchBalance(); // immediate first call
     fetchTransactions();
+    fetchRecommendations(); // prime with live data on startup
     const interval = setInterval(() => {
       fetchBalance();
       fetchTransactions();
     }, 10_000);
-    return () => clearInterval(interval);
+    // Poll recommendations every 30 s when backend is available
+    const recInterval = setInterval(() => { fetchRecommendations(); }, 30_000);
+    return () => { clearInterval(interval); clearInterval(recInterval); };
   }, []);
 
   useEffect(() => {
@@ -348,6 +383,9 @@ function App() {
       // 5. Re-fetch blockchain balance + transactions after a short delay
       setTimeout(() => { fetchBalance(); fetchTransactions(); }, 2000);
 
+      // 6. Refresh recommendations so the list updates immediately after check-in
+      setTimeout(() => { fetchRecommendations(); }, 1500);
+
       console.log('Check-in recorded on-chain:', data);
     } catch (error) {
       console.error('Check-in failed:', error);
@@ -396,6 +434,8 @@ function App() {
       if (res.ok) {
         fetchBalance();
         fetchTransactions();
+        // Refresh recommendations so scores reflect the new review
+        setTimeout(() => { fetchRecommendations(); }, 1500);
       }
     } catch (_) { /* backend offline — review recorded locally */ }
   };

@@ -82,14 +82,52 @@ This gives all 34k POIs meaningful non-zero scores in the Transparency Panel.
 
 > **Prerequisites:** MongoDB running locally on `mongodb://localhost:27017` and Node.js + Go installed.
 
-### Step 0 — Pull Latest Code
+### ⚡ One-Command Launch (Recommended)
+
+A PowerShell launcher script (`Run-TrustChain.ps1`) is included in the project root. It starts **all services in the correct order** — Hardhat node, contract deployment, Go backend, and Vite frontend — each in its own terminal window.
+
+```powershell
+# From the TrustChain project root in PowerShell:
+
+# Standard launch (Hardhat + Deploy + Backend + Frontend)
+.\Run-TrustChain.ps1
+
+# Also launch Federated Learning to regenerate recommendations
+.\Run-TrustChain.ps1 -FL
+
+# Skip contract re-deployment (if contracts are already deployed)
+.\Run-TrustChain.ps1 -SkipDeploy
+```
+
+**What it does automatically:**
+
+| Step | Action |
+|---|---|
+| 1 | Starts `npx hardhat node --port 8545` in a new window |
+| ⏳ | Polls port 8545 until Hardhat is ready |
+| 2 | Runs `npx hardhat run scripts/deploy.js --network localhost` |
+| 3 | Starts `go run ./cmd/server` in a new window |
+| ⏳ | Polls `/api/v1/health` until the backend is up |
+| 4 | Starts `npm run dev` (Vite frontend) in a new window |
+| 5 | *(with `-FL` flag)* Starts `python launch_fl.py` in a new window |
+
+> It also **auto-installs npm dependencies** if `node_modules` is missing, so it works on a fresh clone.  
+> To stop everything, just close the individual terminal windows.
+
+---
+
+### Manual Launch (Step-by-step fallback)
+
+Use these steps if you need finer control or if the launcher doesn't work in your environment.
+
+#### Step 0 — Pull Latest Code
 ```bash
 git pull origin main
 ```
 
 ---
 
-### Step 1 — Smart Contracts (Terminal A — keep running)
+#### Step 1 — Smart Contracts (Terminal A — keep running)
 ```bash
 cd contracts/trustchain-task6-s1
 npm install
@@ -98,7 +136,7 @@ npm install
 npx hardhat node --port 8545
 ```
 
-### Step 2 — Deploy Contracts (Terminal B — run once)
+#### Step 2 — Deploy Contracts (Terminal B — run once)
 ```bash
 cd contracts/trustchain-task6-s1
 
@@ -109,7 +147,7 @@ npx hardhat run scripts/deploy.js --network localhost
 
 ---
 
-### Step 3 — Go Backend (Terminal C — keep running)
+#### Step 3 — Go Backend (Terminal C — keep running)
 ```bash
 cd backend
 
@@ -120,7 +158,7 @@ go run ./cmd/server
 
 ---
 
-### Step 4 — Frontend (Terminal D — keep running)
+#### Step 4 — Frontend (Terminal D — keep running)
 ```bash
 cd frontend
 npm run dev
@@ -129,13 +167,12 @@ npm run dev
 
 ---
 
-### Step 5 — Federated Learning (optional — regenerate recommendations)
+#### Step 5 — Federated Learning (optional — regenerate recommendations)
 ```bash
 cd federated
 python launch_fl.py
 # → writes frontend/src/recommendations.json
 ```
-
 
 ---
 
