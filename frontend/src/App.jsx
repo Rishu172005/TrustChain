@@ -142,7 +142,7 @@ function App() {
           ...rec,
           lat: p.lat ?? rec.lat,
           lng: p.lng ?? rec.lng,
-          checkins: p.checkins || rec.checkins || 0,
+          checkins: Math.max(p.checkins || 0, rec.checkins || 0),
           score: derivedScore,
           isRecommended: true,
         });
@@ -166,7 +166,9 @@ function App() {
       }
     });
 
-    return Array.from(map.values());
+    return Array.from(map.values()).filter(
+      (p) => p.lat != null && p.lng != null && (Math.abs(p.lat) > 0.001 || Math.abs(p.lng) > 0.001)
+    );
   }, [poiData, recommendedPois, selectedProfile]);
 
   const selectedPoiExplanationMetrics = useMemo(() => {
@@ -239,22 +241,25 @@ function App() {
             return liveScore != null ? { ...rec, score: liveScore } : rec;
           });
 
-          // Append any brand-new IDs the backend returned that aren't in the static list
+          // Append any brand-new IDs the backend returned ONLY if they have valid non-zero coordinates
           const existingIds = new Set(merged.map((r) => r.id));
           json.data.recommendations.forEach((r) => {
-            if (!existingIds.has(r.poiId)) {
+            const lat = r.location?.latitude ?? r.lat ?? 0;
+            const lng = r.location?.longitude ?? r.lng ?? 0;
+            if (!existingIds.has(r.poiId) && (Math.abs(lat) > 0.001 || Math.abs(lng) > 0.001)) {
               merged.push({
                 id:       r.poiId,
                 name:     r.name,
                 category: r.category,
                 score:    r.score,
-                lat:      r.location?.latitude  ?? 0,
-                lng:      r.location?.longitude ?? 0,
+                lat,
+                lng,
                 checkins: r.checkins ?? 0,
               });
             }
           });
 
+          merged.sort((a, b) => (b.score || 0) - (a.score || 0));
           return { ...profile, recommendations: merged };
         }),
       }));
@@ -403,15 +408,30 @@ function App() {
       setLastCheckIn({ name: poi.name, profile: entry.profile });
       setCheckInHistory((prev) => [entry, ...prev]);
 
-      // BUG FIX: increment the checkins counter on the matching POI in poiData
-      // so the displayed count updates immediately instead of staying frozen at
-      // the static value loaded from the JSON file.
+      // BUG FIX: increment the checkins counter and score on the matching POI in state
+      setSelectedPoi((cur) => (cur && cur.id === poi.id ? { ...cur, checkins: (Number(cur.checkins) || 0) + 1 } : cur));
       setPoiData((prev) =>
         prev.map((p) => {
           const pid = p?.id ?? p?.poiId ?? '';
           return pid === poi.id ? { ...p, checkins: (Number(p.checkins) || 0) + 1 } : p;
         })
       );
+      setRecommendationData((prev) => ({
+        ...prev,
+        profiles: (prev.profiles ?? []).map((prof) => {
+          if (prof.id !== selectedProfileId) return prof;
+          const updatedRecs = (prof.recommendations ?? []).map((r) => {
+            if (r.id === poi.id) {
+              const newCheckins = (Number(r.checkins) || 0) + 1;
+              const newScore = Math.min(0.99, Number(r.score || 0.3) + 0.02);
+              return { ...r, checkins: newCheckins, score: newScore };
+            }
+            return r;
+          });
+          updatedRecs.sort((a, b) => (b.score || 0) - (a.score || 0));
+          return { ...prof, recommendations: updatedRecs };
+        }),
+      }));
 
       // 4. Sync token balance from blockchain (or add locally)
       if (data?.data?.new_balance != null) {
@@ -460,6 +480,24 @@ function App() {
     };
     setCheckInHistory((h) => [entry, ...h]);
 
+    // Real-time recommendation score boost & re-rank based on rating
+    setRecommendationData((prev) => ({
+      ...prev,
+      profiles: (prev.profiles ?? []).map((prof) => {
+        if (prof.id !== selectedProfileId) return prof;
+        const updatedRecs = (prof.recommendations ?? []).map((r) => {
+          if (r.id === selectedPoiForReview.id) {
+            const scoreDelta = (reviewRating - 3) * 0.04;
+            const newScore = Math.max(0.05, Math.min(0.99, Number(r.score || 0.3) + scoreDelta));
+            return { ...r, score: newScore };
+          }
+          return r;
+        });
+        updatedRecs.sort((a, b) => (b.score || 0) - (a.score || 0));
+        return { ...prof, recommendations: updatedRecs };
+      }),
+    }));
+
     // POST review to backend → persists in MongoDB
     try {
       const res = await fetch('/api/v1/review', {
@@ -475,8 +513,8 @@ function App() {
       if (res.ok) {
         fetchBalance();
         fetchTransactions();
-        // Refresh recommendations so scores reflect the new review
-        setTimeout(() => { fetchRecommendations(); }, 1500);
+        // Refresh recommendations so backend scores reflect the new review
+        setTimeout(() => { fetchRecommendations(selectedProfileId); }, 1500);
       }
     } catch (_) { /* backend offline — review recorded locally */ }
   };
