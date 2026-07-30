@@ -181,11 +181,14 @@ function App() {
       (enriched.lng - userLocation.lng) ** 2,
     );
     const proximityScore = Math.max(0, Math.round(Math.min(100, 110 - distance * 55)));
-    const communityRating = Math.round(Math.min(100, ((enriched.checkins || 0) / maxCheckins) * 100));
-    const derivedModelScore = deriveModelScore(enriched, selectedProfile, maxCheckins, enriched.score);
+    // BUG FIX: use allPoisToRender (which has live merged checkins) for both
+    // the numerator AND the denominator so communityRating is never 0.
+    const maxCheckinsLive = Math.max(...allPoisToRender.map((p) => p.checkins || 0), 1);
+    const communityRating = Math.round(Math.min(100, ((enriched.checkins || 0) / maxCheckinsLive) * 100));
+    const derivedModelScore = deriveModelScore(enriched, selectedProfile, maxCheckinsLive, enriched.score);
     const modelScore = Math.round(Math.min(100, derivedModelScore * 100));
     return { proximityScore, communityRating, modelScore, isRecommended: enriched.isRecommended ?? false };
-  }, [selectedPoiForExplanation, poiData, allPoisToRender, selectedProfile]);
+  }, [selectedPoiForExplanation, allPoisToRender, selectedProfile]);
 
   // ── Token balance & transactions: poll backend ──────────────────────────────
   const fetchBalance = async () => {
@@ -210,23 +213,50 @@ function App() {
       const json = await res.json();
       if (!json.success || !Array.isArray(json.data?.recommendations)) return;
 
-      // Map API shape → internal shape expected by the rest of the app
-      const liveRecs = json.data.recommendations.map((r) => ({
-        id:       r.poiId,
-        name:     r.name,
-        category: r.category,
-        score:    r.score,
-        lat:      r.location?.latitude  ?? 0,
-        lng:      r.location?.longitude ?? 0,
-        checkins: r.checkins ?? 0,
-      }));
-
-      // Patch only the active profile's recommendations; keep everything else intact
+      // The backend may return a small set (e.g. 8) with different IDs and NO
+      // checkins field.  If we naively replace the existing 150-item static list
+      // with these 8 items every check-in, three things break:
+      //   1. Rec count drops from 150 → 8
+      //   2. checkins → 0  (backend omits the field)
+      //   3. Community Rating → 0  (0 / maxCheckins = 0)
+      //
+      // Fix: MERGE the live scores into the existing recs instead of replacing.
+      //   • Existing recs whose ID matches a live rec get their score updated.
+      //   • Existing recs with no live match keep their current score & checkins.
+      //   • Genuinely new IDs from the backend are appended (rare in practice).
       setRecommendationData((prev) => ({
         ...prev,
-        profiles: prev.profiles.map((p) =>
-          p.id === uid ? { ...p, recommendations: liveRecs } : p
-        ),
+        profiles: prev.profiles.map((profile) => {
+          if (profile.id !== uid) return profile;
+
+          const liveScoreMap = new Map(
+            json.data.recommendations.map((r) => [r.poiId, r.score])
+          );
+
+          // Update scores on existing recs; preserve everything else (esp. checkins)
+          const merged = (profile.recommendations ?? []).map((rec) => {
+            const liveScore = liveScoreMap.get(rec.id);
+            return liveScore != null ? { ...rec, score: liveScore } : rec;
+          });
+
+          // Append any brand-new IDs the backend returned that aren't in the static list
+          const existingIds = new Set(merged.map((r) => r.id));
+          json.data.recommendations.forEach((r) => {
+            if (!existingIds.has(r.poiId)) {
+              merged.push({
+                id:       r.poiId,
+                name:     r.name,
+                category: r.category,
+                score:    r.score,
+                lat:      r.location?.latitude  ?? 0,
+                lng:      r.location?.longitude ?? 0,
+                checkins: r.checkins ?? 0,
+              });
+            }
+          });
+
+          return { ...profile, recommendations: merged };
+        }),
       }));
 
       setBackendOnline(true);
@@ -373,6 +403,16 @@ function App() {
       setLastCheckIn({ name: poi.name, profile: entry.profile });
       setCheckInHistory((prev) => [entry, ...prev]);
 
+      // BUG FIX: increment the checkins counter on the matching POI in poiData
+      // so the displayed count updates immediately instead of staying frozen at
+      // the static value loaded from the JSON file.
+      setPoiData((prev) =>
+        prev.map((p) => {
+          const pid = p?.id ?? p?.poiId ?? '';
+          return pid === poi.id ? { ...p, checkins: (Number(p.checkins) || 0) + 1 } : p;
+        })
+      );
+
       // 4. Sync token balance from blockchain (or add locally)
       if (data?.data?.new_balance != null) {
         setTokenBalance((prev) => Math.max(prev, Number(data.data.new_balance)));
@@ -383,8 +423,9 @@ function App() {
       // 5. Re-fetch blockchain balance + transactions after a short delay
       setTimeout(() => { fetchBalance(); fetchTransactions(); }, 2000);
 
-      // 6. Refresh recommendations so the list updates immediately after check-in
-      setTimeout(() => { fetchRecommendations(); }, 1500);
+      // 6. BUG FIX: pass selectedProfileId explicitly so fetchRecommendations
+      // doesn't fall back to undefined and clobber the active profile's recs.
+      setTimeout(() => { fetchRecommendations(selectedProfileId); }, 1500);
 
       console.log('Check-in recorded on-chain:', data);
     } catch (error) {
