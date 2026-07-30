@@ -57,8 +57,7 @@ TrustChain is a location-based recommendation system where users can:
 
 | Tool | Version | Purpose |
 |---|---|---|
-| Node.js + npm | 18+ | Frontend (React 19 + Vite 8) |
-| Node.js + npm | 18+ | Frontend (React 19 + Vite 8) |
+| Node.js + npm | 18+ | Smart contracts (Hardhat) + Frontend (Vite) |
 | Python | 3.11+ | Federated learning + data pipeline + defence logic |
 | Go | 1.22+ | Backend REST API (Gin) |
 | MongoDB | 7+ (Docker or Atlas) | Off-chain metadata storage |
@@ -66,10 +65,40 @@ TrustChain is a location-based recommendation system where users can:
 
 ---
 
-### 1 · Smart Contracts + Local Blockchain
+### ⚡ One-Command Launch (Recommended — Windows PowerShell)
+
+A launcher script at the project root starts **every service in the correct order**, each in its own terminal window:
+
+```powershell
+# Standard launch: Hardhat node → deploy contracts → Go backend → Vite frontend
+.\Run-TrustChain.ps1
+
+# Also launch Federated Learning to regenerate recommendations
+.\Run-TrustChain.ps1 -FL
+
+# Skip contract re-deployment (if already deployed this session)
+.\Run-TrustChain.ps1 -SkipDeploy
+```
+
+| What it does | Detail |
+|---|---|
+| Starts Hardhat node | Polls port 8545 until ready |
+| Deploys contracts | Writes `deployments/localhost.json` automatically |
+| Starts Go backend | Polls `/api/v1/health` until up (allows time for Go compile) |
+| Starts Vite frontend | Opens at `http://localhost:5173` |
+| *(with -FL)* Starts FL | Runs `python launch_fl.py` |
+
+> Auto-installs npm dependencies if `node_modules` is missing — works on a fresh clone.  
+> See [`walkthrough.md`](walkthrough.md) for full details and manual step-by-step instructions.
+
+---
+
+### Manual Launch (step-by-step fallback)
+
+#### 1 · Smart Contracts + Local Blockchain
 
 ```bash
-cd contracts/trustchain-task3-s1
+cd contracts/trustchain-task6-s1
 npm install
 
 # Terminal A — keep running
@@ -77,26 +106,16 @@ npx hardhat node --port 8545
 
 # Terminal B — deploy once per node restart
 npx hardhat run scripts/deploy.js --network localhost
-# → writes deployments/localhost.json (read by Go backend)
+# → writes deployments/localhost.json (read automatically by Go backend)
 ```
 
-> Skip this step if you just want the frontend — it runs on static data without a blockchain.
+#### 2 · Backend
 
----
-
-### 2 · Backend
-
-**With Hardhat (live tokens):**
 ```bash
 cd backend
-cp .env.example .env   # BLOCKCHAIN_PROVIDER=hardhat already set
+# All config is in backend/.env — no manual env vars needed
 go run ./cmd/server
-```
-
-**Mock mode (no blockchain needed):**
-```bash
-cd backend
-BLOCKCHAIN_PROVIDER=mock go run ./cmd/server
+# → http://localhost:8080  (blockchain=hardhat, recommendations=federated)
 ```
 
 API available at **http://localhost:8080/api/v1**
@@ -106,21 +125,18 @@ curl http://localhost:8080/api/v1/health
 # → { "data": { "blockchainProvider": { "provider": "hardhat" } } }
 ```
 
----
-
-### 3 · Frontend
+#### 3 · Frontend
 
 ```bash
 cd frontend
 npm install
 npm run dev
+# → http://localhost:5173
 ```
 
-Open **http://localhost:5173** — the map and recommendations load from static data immediately; the backend is polled in the background. A 🟢 **Live** indicator appears in the topbar when the backend is reachable.
+Open **http://localhost:5173** — the map and recommendations load from static data immediately; the backend is polled every 10 s. A 🟢 **Live** indicator appears in the topbar when the backend is reachable. Recommendations auto-refresh after every check-in or review.
 
----
-
-### 4 · Federated Learning Pipeline
+#### 4 · Federated Learning (optional — regenerate recommendations)
 
 ```bash
 cd federated
@@ -128,37 +144,10 @@ pip install -r requirements.txt
 
 # Run full FL pipeline (server + 3 clients in one command)
 python launch_fl.py
-# → writes frontend/src/recommendations.json + frontend/public/recommendations.json
-```
-
-This runs 5 rounds of FedAvg across 3 user profiles (Commuter, Foodie, Tourist), applies Laplacian DP noise (ε=1.0), and outputs personalised recommendation scores.
-```
-
-**Install Python dependencies:**
-```bash
-cd federated
-python3 -m venv .venv
-source .venv/bin/activate       # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
+# → writes frontend/src/recommendations.json
 ```
 
 Requirements: `flwr==1.9.0`, `numpy==1.24.3`, `pandas==2.0.3`, `scikit-learn==1.3.0`
-
----
-
-### 4 · Smart Contracts (Hardhat)
-
-> ⚠️ The `contracts/` directory currently contains only a placeholder. Smart contract source files are maintained by S1 (Priyadharshini) and deployed on a local Hardhat testnet.
-
-Typical workflow once source files are present:
-```bash
-cd contracts
-npm install
-npx hardhat compile
-npx hardhat test
-npx hardhat node                                      # local testnet
-npx hardhat run scripts/deploy.js --network localhost
-```
 
 ---
 
@@ -241,9 +230,11 @@ User clicks "Why? →" on a recommended POI
         └─ FL Model Score   — federated learning confidence × 100
 User clicks "Check in"
     └─► POST /api/v1/checkin → smart contract mints +1 TC
+    └─► 1.5 s later: GET /api/v1/recommend → recommendation list refreshes live
 User clicks "Write Review"
     └─► Review hashed → POST /api/v1/review → smart contract mints +5 TC
         └─► Wallet modal shows updated balance + ledger entry
+    └─► 1.5 s later: GET /api/v1/recommend → scores recalculate based on new rating
 ```
 
 ---
@@ -289,9 +280,9 @@ User clicks "Write Review"
 | `docs/` | Architecture, API spec, database, deployment guides + `swagger.yaml` (OpenAPI 3.0) |
 | `scripts/` | MongoDB seed data (`seed.mongo.js`) |
 
-**Key env variables:** `BLOCKCHAIN_PROVIDER` (`mock` / `polygon`), `RECOMMENDATION_PROVIDER` (`mock` / `federated`), `MONGODB_URI`, `DATABASE_NAME`
+**Key env variables:** `BLOCKCHAIN_PROVIDER` (`mock` / `hardhat` / `polygon`), `RECOMMENDATION_PROVIDER` (`mock` / `federated`), `MONGODB_URI`, `DATABASE_NAME`
 
-> ⚠️ `BLOCKCHAIN_PROVIDER=hardhat` is **not implemented** in `main.go` — it falls through to `mock`. A `hardhat_provider.go` has not yet been created.
+> ✅ `BLOCKCHAIN_PROVIDER=hardhat` is fully implemented via `hardhat_provider.go`. Set in `backend/.env` (default). Connects to the local Hardhat node at `http://127.0.0.1:8545` and reads contract addresses from `deployments/localhost.json`.
 
 ### `contracts/` — Solidity Smart Contracts (S1)
 
@@ -965,7 +956,9 @@ App.jsx mounts
 | **Adversarial FL evaluation** | ✅ Complete | 15% poison injection test, PoR suppression measured |
 | **DP comparison table** | ✅ Complete | Precision@5, Precision@10, NDCG@10 across 3 system variants |
 | **Live Flower FL server** | ⚠️ Simulation | Fully runnable but uses simulated clients, not real devices |
-| **Backend ↔ blockchain (live)** | ⚠️ Mock only | Only `mock` and `polygon` (stub) providers exist; no `hardhat_provider.go` yet |
+| **Backend ↔ blockchain (live)** | ✅ Complete | `hardhat_provider.go` connects to local Hardhat node; real `balanceOf()` + `mint()` via JSON-RPC |
+| **Live recommendation refresh** | ✅ Complete | Frontend calls `/api/v1/recommend` after every check-in/review and polls every 30 s |
+| **One-command launcher** | ✅ Complete | `Run-TrustChain.ps1` starts all 4 services with health-check polling |
 | **IPFS model weight storage** | ❌ Future work | Hash stored on-chain; weights not yet on IPFS |
 | **Final report** | 🔄 In progress | Structure complete, placeholders being filled (due 21 July) |
 
